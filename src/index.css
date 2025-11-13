@@ -38,6 +38,11 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
+    /* Glassmorphism / Liquid Glass */
+    --glass-bg: 0 0% 100%;
+    --glass-border: 0 0% 92%;
+    --glass-blur: blur(12px);
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 13%;
     --sidebar-primary: 193 100% 31%;
@@ -51,6 +56,9 @@ All colors MUST be HSL.
   .dark {
     --background: 0 0% 10%;
     --foreground: 0 0% 98%;
+
+    --glass-bg: 0 0% 13%;
+    --glass-border: 0 0% 20%;
 
     --card: 0 0% 13%;
     --card-foreground: 0 0% 98%;
@@ -94,5 +102,14 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: hsla(var(--glass-bg) / 0.7);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid hsla(var(--glass-border) / 0.2);
   }
 }

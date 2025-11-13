@@ -15,10 +15,10 @@ const Welcome = () => {
             className="w-full max-w-sm mx-auto rounded-xl"
           />
           <div className="space-y-3">
-            <h1 className="text-4xl font-bold text-foreground">
+            <h1 className="text-2xl font-semibold text-foreground">
               Welcome to MedBox
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base text-muted-foreground font-normal">
               Your trusted companion to help you complete your medicine courses
             </p>
           </div>
@@ -27,7 +27,8 @@ const Welcome = () => {
         <Button 
           onClick={() => navigate("/signup")}
           size="lg"
-          className="w-full text-lg h-14 rounded-xl shadow-md hover:shadow-lg transition-all"
+          variant="glass"
+          className="w-full text-base h-12 rounded-full font-medium"
         >
           Get Started
         </Button>

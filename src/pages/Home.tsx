@@ -7,10 +7,10 @@ const Home = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-2xl font-semibold text-foreground">
             Welcome back!
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground font-normal">
             Stay on track with your medicines
           </p>
         </div>
@@ -22,13 +22,13 @@ const Home = () => {
                 <Pill className="w-6 h-6 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-foreground mb-1">
+                <h3 className="text-base font-semibold text-foreground mb-1">
                   No medicines added yet
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground font-normal mb-4">
                   Add your first medicine to start tracking
                 </p>
-                <Button className="rounded-xl">
+                <Button variant="glass" className="rounded-full font-medium">
                   Add Medicine
                 </Button>
               </div>
@@ -39,19 +39,19 @@ const Home = () => {
             <Card className="p-6 rounded-xl shadow-md">
               <div className="flex items-center gap-3 mb-2">
                 <Bell className="w-5 h-5 text-accent" />
-                <h3 className="font-semibold text-foreground">Reminders</h3>
+                <h3 className="text-base font-medium text-foreground">Reminders</h3>
               </div>
-              <p className="text-2xl font-bold text-foreground">0</p>
-              <p className="text-sm text-muted-foreground">Active today</p>
+              <p className="text-2xl font-semibold text-foreground">0</p>
+              <p className="text-sm text-muted-foreground font-normal">Active today</p>
             </Card>
 
             <Card className="p-6 rounded-xl shadow-md">
               <div className="flex items-center gap-3 mb-2">
                 <Calendar className="w-5 h-5 text-primary" />
-                <h3 className="font-semibold text-foreground">Streak</h3>
+                <h3 className="text-base font-medium text-foreground">Streak</h3>
               </div>
-              <p className="text-2xl font-bold text-foreground">0 days</p>
-              <p className="text-sm text-muted-foreground">Keep it up!</p>
+              <p className="text-2xl font-semibold text-foreground">0 days</p>
+              <p className="text-sm text-muted-foreground font-normal">Keep it up!</p>
             </Card>
           </div>
         </div>
