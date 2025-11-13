@@ -42,19 +42,19 @@ const VerifyOTP = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
-      <div className="max-w-md w-full space-y-8 animate-fade-in">
-        <button
-          onClick={() => navigate("/signup")}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back</span>
-        </button>
+    <div className="min-h-screen bg-background flex flex-col p-6 animate-fade-in">
+      <button
+        onClick={() => navigate("/signup")}
+        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span>Back</span>
+      </button>
 
-        <div className="bg-card rounded-xl p-8 shadow-md space-y-6">
+      <div className="flex-1 flex flex-col items-center justify-between max-w-md w-full mx-auto">
+        <div className="space-y-8 text-center w-full pt-12">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold text-foreground">
+            <h2 className="text-2xl font-semibold text-foreground">
               Verify your phone
             </h2>
             <p className="text-muted-foreground">
@@ -78,14 +78,6 @@ const VerifyOTP = () => {
               </InputOTP>
             </div>
 
-            <Button
-              onClick={handleVerify}
-              size="lg"
-              className="w-full h-12 rounded-xl shadow-md hover:shadow-lg transition-all"
-            >
-              Verify
-            </Button>
-
             <div className="text-center">
               <Button
                 onClick={handleResend}
@@ -97,6 +89,15 @@ const VerifyOTP = () => {
             </div>
           </div>
         </div>
+
+        <Button
+          onClick={handleVerify}
+          size="lg"
+          variant="glass"
+          className="w-full text-base h-12 rounded-full font-medium bg-[#90EE90]/20 hover:bg-[#90EE90]/30 backdrop-blur-md border border-[#90EE90]/30"
+        >
+          Verify
+        </Button>
       </div>
     </div>
   );
