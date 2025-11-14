@@ -67,7 +67,7 @@ const PhoneSignup = () => {
                   <img 
                     src={voiceSetup} 
                     alt="Easy voice setup" 
-                    className="w-64 h-64 object-contain"
+                    className="w-80 h-80 object-contain"
                   />
                 </div>
               </CarouselItem>
@@ -76,7 +76,7 @@ const PhoneSignup = () => {
                   <img 
                     src={reminders} 
                     alt="Smart reminders" 
-                    className="w-64 h-64 object-contain"
+                    className="w-80 h-80 object-contain"
                   />
                 </div>
               </CarouselItem>
@@ -85,7 +85,7 @@ const PhoneSignup = () => {
                   <img 
                     src={progress} 
                     alt="Track progress" 
-                    className="w-64 h-64 object-contain"
+                    className="w-80 h-80 object-contain"
                   />
                 </div>
               </CarouselItem>
