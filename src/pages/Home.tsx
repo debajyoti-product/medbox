@@ -1,41 +1,38 @@
-import { Input } from "@/components/ui/input";
-import { Mic } from "lucide-react";
+import { Mic, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import aiSphere from "@/assets/ai-sphere.png";
+import BottomNav from "@/components/BottomNav";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto p-6 space-y-12 animate-fade-in flex flex-col items-center justify-center min-h-screen">
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-semibold text-foreground">
-            Welcome!
+    <div className="min-h-screen bg-background pb-32">
+      <div className="max-w-2xl mx-auto p-6 space-y-12 animate-fade-in flex flex-col items-start justify-center min-h-screen">
+        <div className="space-y-2 w-full">
+          <h1 className="text-5xl font-stylish text-foreground">
+            Welcome
           </h1>
           <p className="text-base text-muted-foreground font-normal">
-            Add your medicine
+            tell us your medicine
           </p>
         </div>
 
-        <div className="relative flex items-center justify-center">
-          <img 
-            src={aiSphere} 
-            alt="AI Assistant" 
-            className="w-48 h-48 animate-pulse"
-          />
-          <Mic className="w-12 h-12 text-foreground absolute" />
+        <div className="relative w-full flex items-center justify-center my-8">
+          <div className="w-56 h-56 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/30 liquid-sphere flex items-center justify-center">
+            <Mic className="w-16 h-16 text-primary" />
+          </div>
         </div>
 
-        <div className="w-full max-w-md">
-          <Input
-            placeholder="Add your medicine"
-            className="h-12 rounded-full text-center"
-            onClick={() => navigate("/add-medicine")}
-            readOnly
-          />
-        </div>
+        <button
+          onClick={() => navigate("/add-medicine")}
+          className="flex items-center gap-2 text-primary font-medium hover:underline transition-all"
+        >
+          <Plus className="w-5 h-5" />
+          <span>add your medicine</span>
+        </button>
       </div>
+      
+      <BottomNav />
     </div>
   );
 };

@@ -112,4 +112,17 @@ All colors MUST be HSL.
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid hsla(var(--glass-border) / 0.2);
   }
+
+  .liquid-sphere {
+    animation: liquid-flow 3s ease-in-out infinite;
+  }
+}
+
+@keyframes liquid-flow {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
 }
