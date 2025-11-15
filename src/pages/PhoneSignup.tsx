@@ -8,6 +8,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import voiceSetup from "@/assets/illustration-voice-setup.png";
@@ -19,6 +20,18 @@ const PhoneSignup = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [autoplay] = useState(() => Autoplay({ delay: 3000 }));
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   const handleSendOTP = () => {
     if (phone.length !== 10 || !/^\d+$/.test(phone)) {
@@ -53,8 +66,9 @@ const PhoneSignup = () => {
 
       <div className="flex-1 flex flex-col max-w-md w-full mx-auto">
         {/* Carousel at top */}
-        <div className="mb-8">
+        <div className="mb-8 space-y-4">
           <Carousel
+            setApi={setApi}
             plugins={[autoplay]}
             className="w-full"
             opts={{
@@ -91,6 +105,18 @@ const PhoneSignup = () => {
               </CarouselItem>
             </CarouselContent>
           </Carousel>
+          
+          {/* Scroll indicators */}
+          <div className="flex justify-center gap-2">
+            {[0, 1, 2].map((index) => (
+              <div
+                key={index}
+                className={`h-2 rounded-full transition-all ${
+                  current === index ? "w-6 bg-[#90EE90]" : "w-2 bg-muted-foreground/30"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Text and input fields moved lower */}
