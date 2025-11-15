@@ -1,59 +1,39 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Pill, Bell, Calendar } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Mic } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import aiSphere from "@/assets/ai-sphere.png";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-semibold text-foreground">
-            Welcome back!
+      <div className="max-w-2xl mx-auto p-6 space-y-12 animate-fade-in flex flex-col items-center justify-center min-h-screen">
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-semibold text-foreground">
+            Welcome!
           </h1>
-          <p className="text-sm text-muted-foreground font-normal">
-            Stay on track with your medicines
+          <p className="text-base text-muted-foreground font-normal">
+            Add your medicine
           </p>
         </div>
 
-        <div className="grid gap-4">
-          <Card className="p-6 rounded-xl shadow-md">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Pill className="w-6 h-6 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-foreground mb-1">
-                  No medicines added yet
-                </h3>
-                <p className="text-sm text-muted-foreground font-normal mb-4">
-                  Add your first medicine to start tracking
-                </p>
-                <Button variant="glass" className="rounded-full font-medium">
-                  Add Medicine
-                </Button>
-              </div>
-            </div>
-          </Card>
+        <div className="relative flex items-center justify-center">
+          <img 
+            src={aiSphere} 
+            alt="AI Assistant" 
+            className="w-48 h-48 animate-pulse"
+          />
+          <Mic className="w-12 h-12 text-foreground absolute" />
+        </div>
 
-          <div className="grid sm:grid-cols-2 gap-4">
-            <Card className="p-6 rounded-xl shadow-md">
-              <div className="flex items-center gap-3 mb-2">
-                <Bell className="w-5 h-5 text-accent" />
-                <h3 className="text-base font-medium text-foreground">Reminders</h3>
-              </div>
-              <p className="text-2xl font-semibold text-foreground">0</p>
-              <p className="text-sm text-muted-foreground font-normal">Active today</p>
-            </Card>
-
-            <Card className="p-6 rounded-xl shadow-md">
-              <div className="flex items-center gap-3 mb-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                <h3 className="text-base font-medium text-foreground">Streak</h3>
-              </div>
-              <p className="text-2xl font-semibold text-foreground">0 days</p>
-              <p className="text-sm text-muted-foreground font-normal">Keep it up!</p>
-            </Card>
-          </div>
+        <div className="w-full max-w-md">
+          <Input
+            placeholder="Add your medicine"
+            className="h-12 rounded-full text-center"
+            onClick={() => navigate("/add-medicine")}
+            readOnly
+          />
         </div>
       </div>
     </div>
