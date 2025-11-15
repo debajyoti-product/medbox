@@ -3,8 +3,8 @@ import { NavLink } from "@/components/NavLink";
 
 const BottomNav = () => {
   return (
-    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-      <div className="glass rounded-full px-8 py-3 shadow-lg flex items-center gap-8">
+    <nav className="fixed bottom-6 left-0 right-0 z-50 px-6">
+      <div className="max-w-2xl mx-auto glass rounded-full px-8 py-3 shadow-lg flex items-center justify-around">
         <NavLink 
           to="/home" 
           className="flex flex-col items-center gap-1 transition-colors"
