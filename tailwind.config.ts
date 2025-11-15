@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        stylish: ['Allura', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
