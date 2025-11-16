@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Minus } from "lucide-react";
+import { Pill, Clock, FileText } from "lucide-react";
+import BottomNav from "@/components/BottomNav";
 
 type Medicine = {
   name: string;
+  perServing: number;
   timesPerDay: number;
   days: number;
 };
@@ -16,12 +18,14 @@ const AddMedicine = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("medicine");
   const [medicines, setMedicines] = useState<Medicine[]>([
-    { name: "", timesPerDay: 0, days: 0 },
+    { name: "", perServing: 1, timesPerDay: 1, days: 1 },
   ]);
   const [scheduleTime, setScheduleTime] = useState({ hour: 8, minute: 0, period: "AM" });
+  const hourScrollRef = useRef<HTMLDivElement>(null);
+  const minuteScrollRef = useRef<HTMLDivElement>(null);
 
   const addMedicine = () => {
-    setMedicines([...medicines, { name: "", timesPerDay: 0, days: 0 }]);
+    setMedicines([...medicines, { name: "", perServing: 1, timesPerDay: 1, days: 1 }]);
   };
 
   const updateMedicine = (index: number, field: keyof Medicine, value: string | number) => {
@@ -30,25 +34,41 @@ const AddMedicine = () => {
     setMedicines(updated);
   };
 
-  const adjustValue = (index: number, field: "timesPerDay" | "days", increment: boolean) => {
+  const adjustValue = (index: number, field: "perServing" | "timesPerDay" | "days", increment: boolean) => {
     const current = medicines[index][field];
-    const newValue = increment ? current + 1 : Math.max(0, current - 1);
+    const newValue = increment ? current + 1 : Math.max(1, current - 1);
     updateMedicine(index, field, newValue);
   };
 
+  const handleScroll = (ref: React.RefObject<HTMLDivElement>, type: 'hour' | 'minute') => {
+    if (!ref.current) return;
+    const scrollTop = ref.current.scrollTop;
+    const itemHeight = 60;
+    const index = Math.round(scrollTop / itemHeight);
+    
+    if (type === 'hour') {
+      setScheduleTime(prev => ({ ...prev, hour: (index % 12) + 1 }));
+    } else {
+      setScheduleTime(prev => ({ ...prev, minute: (index % 4) * 15 }));
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-t from-primary/5 to-background pb-32">
       <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="medicine" disabled={activeTab !== "medicine"}>
-              Medicine
+          <TabsList className="grid w-full grid-cols-3 mb-8 h-auto p-2">
+            <TabsTrigger value="medicine" disabled={activeTab !== "medicine"} className="flex flex-col items-center gap-2 py-3">
+              <Pill className="w-5 h-5" />
+              <span className="text-xs">Medicine</span>
             </TabsTrigger>
-            <TabsTrigger value="schedule" disabled={activeTab === "medicine"}>
-              Schedule
+            <TabsTrigger value="schedule" disabled={activeTab === "medicine"} className="flex flex-col items-center gap-2 py-3">
+              <Clock className="w-5 h-5" />
+              <span className="text-xs">Schedule</span>
             </TabsTrigger>
-            <TabsTrigger value="ailment" disabled={activeTab !== "ailment"}>
-              Ailment
+            <TabsTrigger value="ailment" disabled={activeTab !== "ailment"} className="flex flex-col items-center gap-2 py-3">
+              <FileText className="w-5 h-5" />
+              <span className="text-xs">Ailment</span>
             </TabsTrigger>
           </TabsList>
 
@@ -63,37 +83,51 @@ const AddMedicine = () => {
                 />
 
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 flex-1">
-                    <Input
-                      type="number"
-                      value={medicine.timesPerDay || ""}
-                      onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 0)}
-                      className="h-12 w-20 text-center"
-                    />
-                    <button
-                      onClick={() => adjustValue(index, "timesPerDay", true)}
-                      className="w-8 h-8 rounded-full bg-[#90EE90] flex items-center justify-center"
-                    >
-                      <Plus className="w-4 h-4 text-white" />
-                    </button>
-                    <span className="text-sm text-muted-foreground">times a day for</span>
-                  </div>
+                  <button
+                    onClick={() => adjustValue(index, "perServing", false)}
+                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                  >
+                    <span className="text-lg font-medium">−</span>
+                  </button>
+                  <Input
+                    type="number"
+                    value={medicine.perServing}
+                    onChange={(e) => updateMedicine(index, "perServing", parseInt(e.target.value) || 1)}
+                    className="h-12 flex-1"
+                  />
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">per serving</span>
+                </div>
 
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="number"
-                      value={medicine.days || ""}
-                      onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 0)}
-                      className="h-12 w-20 text-center"
-                    />
-                    <button
-                      onClick={() => adjustValue(index, "days", true)}
-                      className="w-8 h-8 rounded-full bg-[#90EE90] flex items-center justify-center"
-                    >
-                      <Plus className="w-4 h-4 text-white" />
-                    </button>
-                    <span className="text-sm text-muted-foreground">days</span>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => adjustValue(index, "timesPerDay", false)}
+                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                  >
+                    <span className="text-lg font-medium">−</span>
+                  </button>
+                  <Input
+                    type="number"
+                    value={medicine.timesPerDay}
+                    onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 1)}
+                    className="h-12 flex-1"
+                  />
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">times a day</span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => adjustValue(index, "days", false)}
+                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                  >
+                    <span className="text-lg font-medium">−</span>
+                  </button>
+                  <Input
+                    type="number"
+                    value={medicine.days}
+                    onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 1)}
+                    className="h-12 flex-1"
+                  />
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">days</span>
                 </div>
               </div>
             ))}
@@ -117,41 +151,59 @@ const AddMedicine = () => {
           <TabsContent value="schedule" className="space-y-6">
             <Card className="p-6 rounded-xl shadow-md">
               <p className="text-sm text-foreground">
-                {medicines[0]?.name || "Medicine"}, {medicines[0]?.timesPerDay || 0} times a day for {medicines[0]?.days || 0} days
+                {medicines[0]?.name || "Medicine"}, {medicines[0]?.perServing} per serving, {medicines[0]?.timesPerDay} times a day for {medicines[0]?.days} days
               </p>
             </Card>
 
-            <div className="flex items-center justify-center gap-4 p-8">
-              <div className="flex flex-col items-center">
-                <button onClick={() => setScheduleTime(prev => ({ ...prev, hour: prev.hour < 12 ? prev.hour + 1 : 1 }))}>
-                  <Plus className="w-6 h-6" />
-                </button>
-                <span className="text-4xl font-semibold my-4">{scheduleTime.hour.toString().padStart(2, "0")}</span>
-                <button onClick={() => setScheduleTime(prev => ({ ...prev, hour: prev.hour > 1 ? prev.hour - 1 : 12 }))}>
-                  <Minus className="w-6 h-6" />
-                </button>
+            <div className="flex items-center justify-center gap-6 p-8">
+              <div className="relative h-48 overflow-hidden">
+                <div 
+                  ref={hourScrollRef}
+                  onScroll={() => handleScroll(hourScrollRef, 'hour')}
+                  className="h-48 overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+                  style={{ scrollSnapType: 'y mandatory' }}
+                >
+                  <div className="h-24"></div>
+                  {[...Array(12)].map((_, i) => (
+                    <div key={i} className="h-16 flex items-center justify-center snap-center">
+                      <span className="text-4xl font-semibold text-muted-foreground">
+                        {(i + 1).toString().padStart(2, "0")}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="h-24"></div>
+                </div>
+                <div className="absolute top-1/2 left-0 right-0 h-16 -translate-y-1/2 border-y-2 border-primary/20 pointer-events-none"></div>
               </div>
 
               <span className="text-4xl font-semibold">:</span>
 
-              <div className="flex flex-col items-center">
-                <button onClick={() => setScheduleTime(prev => ({ ...prev, minute: (prev.minute + 15) % 60 }))}>
-                  <Plus className="w-6 h-6" />
-                </button>
-                <span className="text-4xl font-semibold my-4">{scheduleTime.minute.toString().padStart(2, "0")}</span>
-                <button onClick={() => setScheduleTime(prev => ({ ...prev, minute: prev.minute >= 15 ? prev.minute - 15 : 45 }))}>
-                  <Minus className="w-6 h-6" />
-                </button>
+              <div className="relative h-48 overflow-hidden">
+                <div 
+                  ref={minuteScrollRef}
+                  onScroll={() => handleScroll(minuteScrollRef, 'minute')}
+                  className="h-48 overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+                  style={{ scrollSnapType: 'y mandatory' }}
+                >
+                  <div className="h-24"></div>
+                  {[0, 15, 30, 45].map((min) => (
+                    <div key={min} className="h-16 flex items-center justify-center snap-center">
+                      <span className="text-4xl font-semibold text-muted-foreground">
+                        {min.toString().padStart(2, "0")}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="h-24"></div>
+                </div>
+                <div className="absolute top-1/2 left-0 right-0 h-16 -translate-y-1/2 border-y-2 border-primary/20 pointer-events-none"></div>
               </div>
 
-              <div className="flex flex-col items-center ml-4">
-                <button 
-                  onClick={() => setScheduleTime(prev => ({ ...prev, period: prev.period === "AM" ? "PM" : "AM" }))}
-                  className="text-2xl font-semibold"
-                >
-                  {scheduleTime.period}
-                </button>
-              </div>
+              <button 
+                onClick={() => setScheduleTime(prev => ({ ...prev, period: prev.period === "AM" ? "PM" : "AM" }))}
+                className="text-2xl font-semibold ml-4 hover:text-primary transition-colors"
+              >
+                {scheduleTime.period}
+              </button>
             </div>
 
             <Button
@@ -186,6 +238,8 @@ const AddMedicine = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <BottomNav />
     </div>
   );
 };
