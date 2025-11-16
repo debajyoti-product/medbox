@@ -107,7 +107,7 @@ const AddMedicine = () => {
             </Button>
 
             <Button
-              className="w-full rounded-full bg-[#90EE90] hover:bg-[#7FDD7F] text-white h-12"
+              className="w-full rounded-full h-12"
               onClick={() => setActiveTab("schedule")}
             >
               Next
@@ -155,7 +155,7 @@ const AddMedicine = () => {
             </div>
 
             <Button
-              className="w-full rounded-full bg-[#90EE90] hover:bg-[#7FDD7F] text-white h-12"
+              className="w-full rounded-full h-12"
               onClick={() => setActiveTab("ailment")}
             >
               Next
@@ -178,7 +178,7 @@ const AddMedicine = () => {
             </div>
 
             <Button
-              className="w-full rounded-full bg-[#90EE90] hover:bg-[#7FDD7F] text-white h-12"
+              className="w-full rounded-full h-12"
               onClick={() => navigate("/home")}
             >
               Confirm
