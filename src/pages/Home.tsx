@@ -24,10 +24,16 @@ const Home = () => {
         </div>
 
         <div className="relative w-full flex items-center justify-center my-8">
-          <div className="relative w-64 h-64 rounded-full bg-gradient-to-b from-primary/10 to-primary/20 backdrop-blur-3xl flex items-center justify-center soft-sphere shadow-[0_0_80px_rgba(144,238,144,0.3)] cursor-pointer hover:scale-105 transition-transform">
+          <div className="relative w-64 h-64 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
+            {/* Animated gradient circles */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 via-primary/20 to-primary/10 backdrop-blur-xl liquid-sphere"></div>
+            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-primary/40 via-primary/25 to-primary/15 backdrop-blur-lg liquid-sphere-reverse"></div>
+            <div className="absolute inset-16 rounded-full bg-gradient-to-br from-primary/50 via-primary/30 to-primary/20 backdrop-blur-md liquid-sphere"></div>
+            
             {/* Circular outlines */}
             <div className="absolute inset-0 rounded-full border-2 border-primary/20"></div>
             <div className="absolute inset-4 rounded-full border border-primary/10"></div>
+            
             <Mic className="w-16 h-16 text-primary relative z-10" />
           </div>
         </div>

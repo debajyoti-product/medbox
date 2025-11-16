@@ -95,6 +95,12 @@ const AddMedicine = () => {
                     onChange={(e) => updateMedicine(index, "perServing", parseInt(e.target.value) || 1)}
                     className="h-12 flex-1"
                   />
+                  <button
+                    onClick={() => adjustValue(index, "perServing", true)}
+                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                  >
+                    <span className="text-lg font-medium">+</span>
+                  </button>
                   <span className="text-sm text-muted-foreground whitespace-nowrap">per serving</span>
                 </div>
 
@@ -111,6 +117,12 @@ const AddMedicine = () => {
                     onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 1)}
                     className="h-12 flex-1"
                   />
+                  <button
+                    onClick={() => adjustValue(index, "timesPerDay", true)}
+                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                  >
+                    <span className="text-lg font-medium">+</span>
+                  </button>
                   <span className="text-sm text-muted-foreground whitespace-nowrap">times a day</span>
                 </div>
 
@@ -127,6 +139,12 @@ const AddMedicine = () => {
                     onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 1)}
                     className="h-12 flex-1"
                   />
+                  <button
+                    onClick={() => adjustValue(index, "days", true)}
+                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                  >
+                    <span className="text-lg font-medium">+</span>
+                  </button>
                   <span className="text-sm text-muted-foreground whitespace-nowrap">days</span>
                 </div>
               </div>
@@ -149,6 +167,14 @@ const AddMedicine = () => {
           </TabsContent>
 
           <TabsContent value="schedule" className="space-y-6">
+            <Button
+              variant="glass"
+              onClick={() => setActiveTab("medicine")}
+              className="mb-4"
+            >
+              ← Back
+            </Button>
+            
             <Card className="p-6 rounded-xl shadow-md">
               <p className="text-sm text-foreground">
                 {medicines[0]?.name || "Medicine"}, {medicines[0]?.perServing} per serving, {medicines[0]?.timesPerDay} times a day for {medicines[0]?.days} days
@@ -164,10 +190,10 @@ const AddMedicine = () => {
                   style={{ scrollSnapType: 'y mandatory' }}
                 >
                   <div className="h-24"></div>
-                  {[...Array(12)].map((_, i) => (
-                    <div key={i} className="h-16 flex items-center justify-center snap-center">
+                  {[1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((hour) => (
+                    <div key={hour} className="h-16 flex items-center justify-center snap-center">
                       <span className="text-4xl font-semibold text-muted-foreground">
-                        {(i + 1).toString().padStart(2, "0")}
+                        {hour.toString().padStart(2, "0")}
                       </span>
                     </div>
                   ))}
@@ -186,7 +212,7 @@ const AddMedicine = () => {
                   style={{ scrollSnapType: 'y mandatory' }}
                 >
                   <div className="h-24"></div>
-                  {[0, 15, 30, 45].map((min) => (
+                  {[0, 30, 45].map((min) => (
                     <div key={min} className="h-16 flex items-center justify-center snap-center">
                       <span className="text-4xl font-semibold text-muted-foreground">
                         {min.toString().padStart(2, "0")}
@@ -215,6 +241,14 @@ const AddMedicine = () => {
           </TabsContent>
 
           <TabsContent value="ailment" className="space-y-6">
+            <Button
+              variant="glass"
+              onClick={() => setActiveTab("schedule")}
+              className="mb-4"
+            >
+              ← Back
+            </Button>
+            
             <h2 className="text-2xl font-semibold text-foreground text-center">
               What are you taking this for?
             </h2>
