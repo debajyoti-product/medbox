@@ -117,6 +117,10 @@ All colors MUST be HSL.
     animation: liquid-flow 8s ease-in-out infinite;
   }
 
+  .liquid-sphere-reverse {
+    animation: liquid-flow-reverse 10s ease-in-out infinite;
+  }
+
   .soft-sphere {
     animation: soft-pulse 4s ease-in-out infinite;
   }
@@ -134,9 +138,22 @@ All colors MUST be HSL.
 @keyframes liquid-flow {
   0%, 100% {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg);
   }
   50% {
     border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes liquid-flow-reverse {
+  0%, 100% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: rotate(0deg);
+  }
+  50% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(-180deg);
   }
 }
 
