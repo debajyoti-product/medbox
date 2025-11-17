@@ -19,22 +19,27 @@ const Home = () => {
             Welcome
           </h1>
           <p className="text-base text-muted-foreground font-normal">
-            tell us your medicine
+            Tell Us Your Medicine
           </p>
         </div>
 
         <div className="relative w-full flex items-center justify-center my-8">
-          <div className="relative w-64 h-64 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
-            {/* Animated gradient circles */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 via-primary/20 to-primary/10 backdrop-blur-xl liquid-sphere"></div>
-            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-primary/40 via-primary/25 to-primary/15 backdrop-blur-lg liquid-sphere-reverse"></div>
-            <div className="absolute inset-16 rounded-full bg-gradient-to-br from-primary/50 via-primary/30 to-primary/20 backdrop-blur-md liquid-sphere"></div>
+          <div 
+            onClick={() => navigate("/voice-recording")}
+            className="relative w-56 h-56 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+          >
+            {/* Animated gradient circles - 2 circles with lighter colors */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 backdrop-blur-xl liquid-sphere"></div>
+            <div className="absolute inset-12 rounded-full bg-gradient-to-br from-primary/25 via-primary/15 to-primary/10 backdrop-blur-lg liquid-sphere-reverse"></div>
             
             {/* Circular outlines */}
             <div className="absolute inset-0 rounded-full border-2 border-primary/20"></div>
-            <div className="absolute inset-4 rounded-full border border-primary/10"></div>
+            <div className="absolute inset-8 rounded-full border border-primary/10"></div>
             
-            <Mic className="w-16 h-16 text-primary relative z-10" />
+            {/* 3D Mic Icon - filled with darkest blue */}
+            <div className="relative z-10 w-16 h-16 flex items-center justify-center">
+              <Mic className="w-14 h-14 fill-primary stroke-primary drop-shadow-[0_4px_8px_rgba(0,122,158,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,122,158,0.3))' }} />
+            </div>
           </div>
         </div>
 
@@ -43,7 +48,7 @@ const Home = () => {
           className="flex items-center gap-2 text-primary font-medium hover:underline transition-all"
         >
           <Plus className="w-5 h-5" />
-          <span>add your medicine</span>
+          <span>Add Your Medicine Manually</span>
         </button>
       </div>
       
