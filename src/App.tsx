@@ -8,6 +8,7 @@ import PhoneSignup from "./pages/PhoneSignup";
 import VerifyOTP from "./pages/VerifyOTP";
 import Home from "./pages/Home";
 import AddMedicine from "./pages/AddMedicine";
+import VoiceRecording from "./pages/VoiceRecording";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/home" element={<Home />} />
           <Route path="/add-medicine" element={<AddMedicine />} />
+          <Route path="/voice-recording" element={<VoiceRecording />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
