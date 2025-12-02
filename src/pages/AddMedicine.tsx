@@ -1,31 +1,40 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Pill, Clock, FileText } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Pill, Clock, FileText, Syringe, Wind } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
 
 type Medicine = {
   name: string;
+  type: string;
   perServing: number;
   timesPerDay: number;
   days: number;
 };
 
+const medicineTypes = [
+  { value: "tablet", label: "Tablet", icon: Pill },
+  { value: "capsule", label: "Capsule", icon: Pill },
+  { value: "injection", label: "Injection", icon: Syringe },
+  { value: "spray", label: "Spray", icon: Wind },
+];
+
 const AddMedicine = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("medicine");
   const [medicines, setMedicines] = useState<Medicine[]>([
-    { name: "", perServing: 1, timesPerDay: 1, days: 1 },
+    { name: "", type: "tablet", perServing: 1, timesPerDay: 1, days: 1 },
   ]);
   const [scheduleTime, setScheduleTime] = useState({ hour: 8, minute: 0, period: "AM" });
   const hourScrollRef = useRef<HTMLDivElement>(null);
   const minuteScrollRef = useRef<HTMLDivElement>(null);
 
   const addMedicine = () => {
-    setMedicines([...medicines, { name: "", perServing: 1, timesPerDay: 1, days: 1 }]);
+    setMedicines([...medicines, { name: "", type: "tablet", perServing: 1, timesPerDay: 1, days: 1 }]);
   };
 
   const updateMedicine = (index: number, field: keyof Medicine, value: string | number) => {
@@ -75,12 +84,32 @@ const AddMedicine = () => {
           <TabsContent value="medicine" className="space-y-6">
             {medicines.map((medicine, index) => (
               <div key={index} className="space-y-4">
-                <Input
-                  placeholder="Medicine name"
-                  value={medicine.name}
-                  onChange={(e) => updateMedicine(index, "name", e.target.value)}
-                  className="h-12"
-                />
+                <div className="flex items-center gap-3">
+                  <Input
+                    placeholder="Medicine Name"
+                    value={medicine.name}
+                    onChange={(e) => updateMedicine(index, "name", e.target.value)}
+                    className="h-12 flex-1"
+                  />
+                  <Select
+                    value={medicine.type}
+                    onValueChange={(value) => updateMedicine(index, "type", value)}
+                  >
+                    <SelectTrigger className="w-32 h-12">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {medicineTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          <div className="flex items-center gap-2">
+                            <type.icon className="w-4 h-4" />
+                            <span>{type.label}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <div className="flex items-center gap-3">
                   <button
@@ -101,7 +130,7 @@ const AddMedicine = () => {
                   >
                     <span className="text-lg font-medium">+</span>
                   </button>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">per serving</span>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">Per Serving</span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -123,7 +152,7 @@ const AddMedicine = () => {
                   >
                     <span className="text-lg font-medium">+</span>
                   </button>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">times a day</span>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">Times A Day</span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -145,7 +174,7 @@ const AddMedicine = () => {
                   >
                     <span className="text-lg font-medium">+</span>
                   </button>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">days</span>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">Days</span>
                 </div>
               </div>
             ))}
@@ -158,26 +187,20 @@ const AddMedicine = () => {
               Add Medicine
             </Button>
 
-            <Button
-              className="w-full rounded-full h-12"
-              onClick={() => setActiveTab("schedule")}
-            >
-              Next
-            </Button>
+            <div className="rounded-2xl bg-background shadow-lg p-2 flex gap-2">
+              <Button
+                className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90"
+                onClick={() => setActiveTab("schedule")}
+              >
+                Next
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="schedule" className="space-y-6">
-            <Button
-              variant="glass"
-              onClick={() => setActiveTab("medicine")}
-              className="mb-4"
-            >
-              ← Back
-            </Button>
-            
             <Card className="p-6 rounded-xl shadow-md">
               <p className="text-sm text-foreground">
-                {medicines[0]?.name || "Medicine"}, {medicines[0]?.perServing} per serving, {medicines[0]?.timesPerDay} times a day for {medicines[0]?.days} days
+                {medicines[0]?.name || "Medicine"}, {medicines[0]?.perServing} Per Serving, {medicines[0]?.timesPerDay} Times A Day For {medicines[0]?.days} Days
               </p>
             </Card>
 
@@ -232,43 +255,53 @@ const AddMedicine = () => {
               </button>
             </div>
 
-            <Button
-              className="w-full rounded-full h-12"
-              onClick={() => setActiveTab("ailment")}
-            >
-              Next
-            </Button>
+            <div className="rounded-2xl bg-background shadow-lg p-2 flex gap-2">
+              <Button
+                variant="ghost"
+                className="flex-1 rounded-full h-12"
+                onClick={() => setActiveTab("medicine")}
+              >
+                Back
+              </Button>
+              <Button
+                className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90"
+                onClick={() => setActiveTab("ailment")}
+              >
+                Next
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="ailment" className="space-y-6">
-            <Button
-              variant="glass"
-              onClick={() => setActiveTab("schedule")}
-              className="mb-4"
-            >
-              ← Back
-            </Button>
-            
             <h2 className="text-2xl font-semibold text-foreground text-center">
-              What are you taking this for?
+              What Are You Taking This For?
             </h2>
 
             <div className="space-y-2">
               <Input
-                placeholder="fever, jaundice, headache etc"
+                placeholder="Fever, Jaundice, Headache Etc"
                 className="h-12"
               />
               <p className="text-xs text-muted-foreground">
-                we won't share this with anyone
+                We Won't Share This With Anyone
               </p>
             </div>
 
-            <Button
-              className="w-full rounded-full h-12"
-              onClick={() => navigate("/home")}
-            >
-              Confirm
-            </Button>
+            <div className="rounded-2xl bg-background shadow-lg p-2 flex gap-2">
+              <Button
+                variant="ghost"
+                className="flex-1 rounded-full h-12"
+                onClick={() => setActiveTab("schedule")}
+              >
+                Back
+              </Button>
+              <Button
+                className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90"
+                onClick={() => navigate("/home")}
+              >
+                Confirm
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
