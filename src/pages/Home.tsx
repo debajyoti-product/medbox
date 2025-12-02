@@ -38,7 +38,7 @@ const Home = () => {
             
             {/* 3D Mic Icon - filled with darkest blue */}
             <div className="relative z-10 w-16 h-16 flex items-center justify-center">
-              <Mic className="w-14 h-14 fill-primary stroke-primary drop-shadow-[0_4px_8px_rgba(0,122,158,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,122,158,0.3))' }} />
+              <Mic className="w-14 h-14 fill-primary stroke-none drop-shadow-[0_4px_8px_rgba(0,122,158,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,122,158,0.3))' }} />
             </div>
           </div>
         </div>
