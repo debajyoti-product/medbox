@@ -1,55 +1,72 @@
 import { Mic, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
+import { Button } from "@/components/ui/button";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-t from-primary/5 to-background pb-32">
-      <div className="max-w-2xl mx-auto p-6 space-y-16 animate-fade-in flex flex-col items-start justify-start pt-32 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
+      <div className="max-w-2xl mx-auto p-6 space-y-10 animate-fade-in flex flex-col items-center justify-start pt-24 min-h-screen">
         <div className="absolute top-6 left-6">
           <h2 className="text-2xl font-semibold text-foreground">
             Med<span className="text-primary">Box</span>
           </h2>
         </div>
         
-        <div className="space-y-2 w-full">
-          <h1 className="text-5xl font-semibold bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent">
+        <div className="space-y-4 w-full text-center">
+          <h1 className="text-3xl font-semibold text-foreground">
             Welcome
           </h1>
-          <p className="text-base text-muted-foreground font-normal">
-            Tell Us Your Medicine
-          </p>
+          <div className="flex items-center justify-center gap-4 w-full">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
+            <p className="text-base text-muted-foreground font-normal whitespace-nowrap">
+              Tell Us Your Medicine
+            </p>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
+          </div>
         </div>
 
-        <div className="relative w-full flex items-center justify-center my-8">
+        <div className="relative w-full flex items-center justify-center my-4">
           <div 
             onClick={() => navigate("/voice-recording")}
-            className="relative w-56 h-56 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+            className="relative w-44 h-44 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
           >
             {/* Animated gradient circles - 2 circles with lighter colors */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 backdrop-blur-xl liquid-sphere"></div>
-            <div className="absolute inset-12 rounded-full bg-gradient-to-br from-primary/25 via-primary/15 to-primary/10 backdrop-blur-lg liquid-sphere-reverse"></div>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 via-accent/10 to-[hsl(320,70%,55%)]/10 backdrop-blur-xl liquid-sphere"></div>
+            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-[hsl(320,70%,55%)]/20 backdrop-blur-lg liquid-sphere-reverse"></div>
             
             {/* Circular outlines */}
-            <div className="absolute inset-0 rounded-full border-2 border-primary/20"></div>
-            <div className="absolute inset-8 rounded-full border border-primary/10"></div>
+            <div className="absolute inset-0 rounded-full border-2 border-accent/30"></div>
+            <div className="absolute inset-6 rounded-full border border-accent/20"></div>
             
-            {/* 3D Mic Icon - filled with darkest blue */}
-            <div className="relative z-10 w-16 h-16 flex items-center justify-center">
-              <Mic className="w-14 h-14 fill-primary stroke-none drop-shadow-[0_4px_8px_rgba(0,122,158,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,122,158,0.3))' }} />
+            {/* 3D Mic Icon - filled with primary */}
+            <div className="relative z-10 w-14 h-14 flex items-center justify-center">
+              <Mic className="w-12 h-12 fill-primary stroke-none drop-shadow-[0_4px_8px_rgba(34,139,34,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(34,139,34,0.3))' }} />
             </div>
           </div>
         </div>
 
-        <button
+        {/* Or divider */}
+        <div className="flex items-center justify-center gap-4 w-full">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
+          <span className="text-sm text-muted-foreground">Or</span>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
+        </div>
+
+        <Button
           onClick={() => navigate("/add-medicine")}
-          className="flex items-center gap-2 text-primary font-medium hover:underline transition-all"
+          variant="outline"
+          className="flex items-center gap-2 font-medium border-2 border-transparent bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] bg-clip-border rounded-full px-6 py-2 text-foreground hover:opacity-90 transition-all"
+          style={{
+            background: 'linear-gradient(var(--background), var(--background)) padding-box, linear-gradient(135deg, hsl(25, 100%, 60%), hsl(320, 70%, 55%)) border-box',
+            border: '2px solid transparent'
+          }}
         >
           <Plus className="w-5 h-5" />
           <span>Add Your Medicine Manually</span>
-        </button>
+        </Button>
       </div>
       
       <BottomNav />

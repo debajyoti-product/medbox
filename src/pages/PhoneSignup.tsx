@@ -36,8 +36,8 @@ const PhoneSignup = () => {
   const handleSendOTP = () => {
     if (phone.length !== 10 || !/^\d+$/.test(phone)) {
       toast({
-        title: "Invalid phone number",
-        description: "Please enter a valid 10-digit mobile number",
+        title: "Invalid Phone Number",
+        description: "Please Enter A Valid 10-Digit Mobile Number",
         variant: "destructive",
       });
       return;
@@ -48,14 +48,14 @@ const PhoneSignup = () => {
     
     toast({
       title: "OTP Sent",
-      description: "Please check your phone for the verification code",
+      description: "Please Check Your Phone For The Verification Code",
     });
     
     navigate("/verify-otp");
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col p-6 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col p-6 animate-fade-in">
       <button
         onClick={() => navigate("/")}
         className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -80,7 +80,7 @@ const PhoneSignup = () => {
                 <div className="flex justify-center">
                   <img 
                     src={voiceSetup} 
-                    alt="Easy voice setup" 
+                    alt="Easy Voice Setup" 
                     className="w-80 h-80 object-contain"
                   />
                 </div>
@@ -89,7 +89,7 @@ const PhoneSignup = () => {
                 <div className="flex justify-center">
                   <img 
                     src={reminders} 
-                    alt="Smart reminders" 
+                    alt="Smart Reminders" 
                     className="w-80 h-80 object-contain"
                   />
                 </div>
@@ -98,7 +98,7 @@ const PhoneSignup = () => {
                 <div className="flex justify-center">
                   <img 
                     src={progress} 
-                    alt="Track progress" 
+                    alt="Track Progress" 
                     className="w-80 h-80 object-contain"
                   />
                 </div>
@@ -112,7 +112,7 @@ const PhoneSignup = () => {
               <div
                 key={index}
                 className={`h-2 rounded-full transition-all ${
-                  current === index ? "w-6 bg-[#90EE90]" : "w-2 bg-muted-foreground/30"
+                  current === index ? "w-6 bg-gradient-to-r from-accent to-[hsl(320,70%,55%)]" : "w-2 bg-muted-foreground/30"
                 }`}
               />
             ))}
@@ -123,15 +123,15 @@ const PhoneSignup = () => {
         <div className="flex-1 flex flex-col justify-center space-y-6">
           <div className="space-y-2">
             <label htmlFor="phone" className="text-sm font-normal text-foreground block text-left">
-              Enter your phone number
+              Enter Your Phone Number
             </label>
             <Input
               id="phone"
               type="tel"
-              placeholder="Enter your 10-digit mobile number"
+              placeholder="Enter Your 10-Digit Mobile Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-              className="h-12 rounded-xl placeholder:text-muted-foreground/40"
+              className="h-12 rounded-xl placeholder:text-muted-foreground/40 bg-card border-border"
               maxLength={10}
             />
           </div>
@@ -141,7 +141,8 @@ const PhoneSignup = () => {
         <Button
           onClick={handleSendOTP}
           size="lg"
-          className="w-full text-base h-12 rounded-full font-medium bg-[#90EE90] hover:bg-[#90EE90]/90 backdrop-blur-md border border-[#90EE90]/30 text-gray-800 mt-6"
+          variant="gradient"
+          className="w-full text-base h-12 rounded-full font-medium mt-6"
         >
           Send OTP
         </Button>

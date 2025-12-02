@@ -17,20 +17,20 @@ const VoiceRecording = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background flex flex-col items-center justify-between p-6 pb-12">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-between p-6 pb-12">
       {/* Main content area */}
       <div className="flex-1 w-full max-w-2xl flex flex-col items-center justify-center space-y-8">
         {/* Animated voice circles */}
         <div className="relative w-64 h-64 flex items-center justify-center">
-          {/* Outer circle - lightest */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-primary/15 to-primary/10 backdrop-blur-xl liquid-sphere"></div>
+          {/* Outer circle - gradient */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/25 via-accent/15 to-[hsl(320,70%,55%)]/15 backdrop-blur-xl liquid-sphere"></div>
           
-          {/* Inner circle - slightly darker */}
-          <div className="absolute inset-16 rounded-full bg-gradient-to-br from-primary/30 via-primary/20 to-primary/15 backdrop-blur-lg liquid-sphere-reverse"></div>
+          {/* Inner circle - slightly more intense gradient */}
+          <div className="absolute inset-16 rounded-full bg-gradient-to-br from-accent/35 via-accent/25 to-[hsl(320,70%,55%)]/25 backdrop-blur-lg liquid-sphere-reverse"></div>
           
           {/* Mic icon - 3D effect */}
           <div className="relative z-10 w-20 h-20 flex items-center justify-center">
-            <Mic className="w-16 h-16 fill-primary stroke-none drop-shadow-[0_4px_12px_rgba(0,122,158,0.5)]" />
+            <Mic className="w-16 h-16 fill-primary stroke-none drop-shadow-[0_4px_12px_rgba(34,139,34,0.5)]" />
           </div>
         </div>
 
@@ -63,7 +63,7 @@ const VoiceRecording = () => {
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className={`w-1 rounded-full bg-primary transition-all ${
+              className={`w-1 rounded-full bg-gradient-to-t from-accent to-[hsl(320,70%,55%)] transition-all ${
                 isRecording ? 'animate-pulse' : ''
               }`}
               style={{
@@ -82,7 +82,7 @@ const VoiceRecording = () => {
           className={`w-12 h-12 flex items-center justify-center rounded-full transition-all ${
             isRecording 
               ? 'bg-destructive hover:bg-destructive/90' 
-              : 'bg-primary hover:bg-primary/90'
+              : 'bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] hover:opacity-90'
           }`}
         >
           {isRecording ? (

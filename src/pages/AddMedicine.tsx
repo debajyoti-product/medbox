@@ -63,10 +63,10 @@ const AddMedicine = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-t from-primary/5 to-background pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
       <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 h-auto p-2">
+          <TabsList className="grid w-full grid-cols-3 mb-8 h-auto p-2 bg-card">
             <TabsTrigger value="medicine" disabled={activeTab !== "medicine"} className="flex flex-col items-center gap-2 py-3">
               <Pill className="w-5 h-5" />
               <span className="text-xs">Medicine</span>
@@ -89,13 +89,13 @@ const AddMedicine = () => {
                     placeholder="Medicine Name"
                     value={medicine.name}
                     onChange={(e) => updateMedicine(index, "name", e.target.value)}
-                    className="h-12 flex-1"
+                    className="h-12 flex-1 bg-card border-border"
                   />
                   <Select
                     value={medicine.type}
                     onValueChange={(value) => updateMedicine(index, "type", value)}
                   >
-                    <SelectTrigger className="w-32 h-12">
+                    <SelectTrigger className="w-32 h-12 bg-card border-border">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -114,7 +114,7 @@ const AddMedicine = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => adjustValue(index, "perServing", false)}
-                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
                   >
                     <span className="text-lg font-medium">−</span>
                   </button>
@@ -122,11 +122,11 @@ const AddMedicine = () => {
                     type="number"
                     value={medicine.perServing}
                     onChange={(e) => updateMedicine(index, "perServing", parseInt(e.target.value) || 1)}
-                    className="h-12 flex-1"
+                    className="h-12 flex-1 bg-card border-border"
                   />
                   <button
                     onClick={() => adjustValue(index, "perServing", true)}
-                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
                   >
                     <span className="text-lg font-medium">+</span>
                   </button>
@@ -136,7 +136,7 @@ const AddMedicine = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => adjustValue(index, "timesPerDay", false)}
-                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
                   >
                     <span className="text-lg font-medium">−</span>
                   </button>
@@ -144,11 +144,11 @@ const AddMedicine = () => {
                     type="number"
                     value={medicine.timesPerDay}
                     onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 1)}
-                    className="h-12 flex-1"
+                    className="h-12 flex-1 bg-card border-border"
                   />
                   <button
                     onClick={() => adjustValue(index, "timesPerDay", true)}
-                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
                   >
                     <span className="text-lg font-medium">+</span>
                   </button>
@@ -158,7 +158,7 @@ const AddMedicine = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => adjustValue(index, "days", false)}
-                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
                   >
                     <span className="text-lg font-medium">−</span>
                   </button>
@@ -166,11 +166,11 @@ const AddMedicine = () => {
                     type="number"
                     value={medicine.days}
                     onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 1)}
-                    className="h-12 flex-1"
+                    className="h-12 flex-1 bg-card border-border"
                   />
                   <button
                     onClick={() => adjustValue(index, "days", true)}
-                    className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 flex items-center justify-center text-foreground hover:bg-primary/30"
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
                   >
                     <span className="text-lg font-medium">+</span>
                   </button>
@@ -187,9 +187,10 @@ const AddMedicine = () => {
               Add Medicine
             </Button>
 
-            <div className="rounded-2xl bg-background shadow-lg p-2 flex gap-2">
+            <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
               <Button
-                className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90"
+                variant="gradient"
+                className="flex-1 rounded-full h-12"
                 onClick={() => setActiveTab("schedule")}
               >
                 Next
@@ -198,7 +199,7 @@ const AddMedicine = () => {
           </TabsContent>
 
           <TabsContent value="schedule" className="space-y-6">
-            <Card className="p-6 rounded-xl shadow-md">
+            <Card className="p-6 rounded-xl shadow-md bg-card border-border">
               <p className="text-sm text-foreground">
                 {medicines[0]?.name || "Medicine"}, {medicines[0]?.perServing} Per Serving, {medicines[0]?.timesPerDay} Times A Day For {medicines[0]?.days} Days
               </p>
@@ -222,7 +223,7 @@ const AddMedicine = () => {
                   ))}
                   <div className="h-24"></div>
                 </div>
-                <div className="absolute top-1/2 left-0 right-0 h-16 -translate-y-1/2 border-y-2 border-primary/20 pointer-events-none"></div>
+                <div className="absolute top-1/2 left-0 right-0 h-16 -translate-y-1/2 border-y-2 border-accent/30 pointer-events-none"></div>
               </div>
 
               <span className="text-4xl font-semibold">:</span>
@@ -244,18 +245,18 @@ const AddMedicine = () => {
                   ))}
                   <div className="h-24"></div>
                 </div>
-                <div className="absolute top-1/2 left-0 right-0 h-16 -translate-y-1/2 border-y-2 border-primary/20 pointer-events-none"></div>
+                <div className="absolute top-1/2 left-0 right-0 h-16 -translate-y-1/2 border-y-2 border-accent/30 pointer-events-none"></div>
               </div>
 
               <button 
                 onClick={() => setScheduleTime(prev => ({ ...prev, period: prev.period === "AM" ? "PM" : "AM" }))}
-                className="text-2xl font-semibold ml-4 hover:text-primary transition-colors"
+                className="text-2xl font-semibold ml-4 hover:text-accent transition-colors"
               >
                 {scheduleTime.period}
               </button>
             </div>
 
-            <div className="rounded-2xl bg-background shadow-lg p-2 flex gap-2">
+            <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
               <Button
                 variant="ghost"
                 className="flex-1 rounded-full h-12"
@@ -264,7 +265,8 @@ const AddMedicine = () => {
                 Back
               </Button>
               <Button
-                className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90"
+                variant="gradient"
+                className="flex-1 rounded-full h-12"
                 onClick={() => setActiveTab("ailment")}
               >
                 Next
@@ -280,14 +282,14 @@ const AddMedicine = () => {
             <div className="space-y-2">
               <Input
                 placeholder="Fever, Jaundice, Headache Etc"
-                className="h-12"
+                className="h-12 bg-card border-border"
               />
               <p className="text-xs text-muted-foreground">
                 We Won't Share This With Anyone
               </p>
             </div>
 
-            <div className="rounded-2xl bg-background shadow-lg p-2 flex gap-2">
+            <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
               <Button
                 variant="ghost"
                 className="flex-1 rounded-full h-12"
@@ -296,7 +298,8 @@ const AddMedicine = () => {
                 Back
               </Button>
               <Button
-                className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90"
+                variant="gradient"
+                className="flex-1 rounded-full h-12"
                 onClick={() => navigate("/home")}
               >
                 Confirm
