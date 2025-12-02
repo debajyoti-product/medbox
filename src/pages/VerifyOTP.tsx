@@ -15,7 +15,7 @@ const VerifyOTP = () => {
     if (otp.length !== 4) {
       toast({
         title: "Invalid OTP",
-        description: "Please enter a valid 4-digit code",
+        description: "Please Enter A Valid 4-Digit Code",
         variant: "destructive",
       });
       return;
@@ -23,8 +23,8 @@ const VerifyOTP = () => {
 
     // For demo purposes, accept any 4-digit code
     toast({
-      title: "Verification successful",
-      description: "Welcome to MedBox!",
+      title: "Verification Successful",
+      description: "Welcome To MedBox!",
     });
     
     // Clear stored phone
@@ -37,12 +37,12 @@ const VerifyOTP = () => {
   const handleResend = () => {
     toast({
       title: "OTP Resent",
-      description: "A new code has been sent to your phone",
+      description: "A New Code Has Been Sent To Your Phone",
     });
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col p-6 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col p-6 animate-fade-in">
       <button
         onClick={() => navigate("/signup")}
         className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -55,10 +55,10 @@ const VerifyOTP = () => {
         <div className="space-y-8 text-center w-full pt-12">
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold text-foreground">
-              Verify your phone
+              Verify Your Phone
             </h2>
             <p className="text-muted-foreground">
-              We sent a 4-digit code to {phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")}
+              We Sent A 4-Digit Code To {phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")}
             </p>
           </div>
 
@@ -70,10 +70,10 @@ const VerifyOTP = () => {
                 onChange={setOtp}
               >
                 <InputOTPGroup>
-                  <InputOTPSlot index={0} className="w-14 h-14 text-xl rounded-xl" />
-                  <InputOTPSlot index={1} className="w-14 h-14 text-xl rounded-xl" />
-                  <InputOTPSlot index={2} className="w-14 h-14 text-xl rounded-xl" />
-                  <InputOTPSlot index={3} className="w-14 h-14 text-xl rounded-xl" />
+                  <InputOTPSlot index={0} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={1} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={2} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={3} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
                 </InputOTPGroup>
               </InputOTP>
             </div>
@@ -82,7 +82,7 @@ const VerifyOTP = () => {
               <Button
                 onClick={handleResend}
                 variant="link"
-                className="text-primary"
+                className="text-accent"
               >
                 Resend Code
               </Button>
@@ -93,8 +93,8 @@ const VerifyOTP = () => {
         <Button
           onClick={handleVerify}
           size="lg"
-          variant="glass"
-          className="w-full text-base h-12 rounded-full font-medium bg-[#90EE90]/20 hover:bg-[#90EE90]/30 backdrop-blur-md border border-[#90EE90]/30"
+          variant="gradient"
+          className="w-full text-base h-12 rounded-full font-medium"
         >
           Verify
         </Button>

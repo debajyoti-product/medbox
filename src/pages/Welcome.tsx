@@ -6,11 +6,11 @@ const Welcome = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-between p-6 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-between p-6 animate-fade-in">
       <div className="flex-1 flex flex-col items-center justify-center space-y-6 max-w-md w-full">
         <img 
           src={welcomeHero} 
-          alt="Welcome to MedBox" 
+          alt="Welcome To MedBox" 
           className="w-full max-w-md mx-auto rounded-xl"
         />
         <div className="space-y-3 text-center">
@@ -18,7 +18,7 @@ const Welcome = () => {
             MedBox
           </h1>
           <p className="text-base text-muted-foreground font-normal">
-            Your trusted medicine companion
+            Your Trusted Medicine Companion
           </p>
         </div>
       </div>
@@ -26,8 +26,8 @@ const Welcome = () => {
       <Button 
         onClick={() => navigate("/signup")}
         size="lg"
-        variant="glass"
-        className="w-full max-w-md text-base h-12 rounded-full font-medium bg-[#90EE90] hover:bg-[#90EE90]/90 backdrop-blur-md border border-[#90EE90]/30 text-gray-800"
+        variant="gradient"
+        className="w-full max-w-md text-base h-12 rounded-full font-medium"
       >
         Get Started
       </Button>
