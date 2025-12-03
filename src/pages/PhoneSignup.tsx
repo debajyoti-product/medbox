@@ -65,58 +65,51 @@ const PhoneSignup = () => {
       </button>
 
       <div className="flex-1 flex flex-col max-w-md w-full mx-auto">
-        {/* Carousel at top */}
-        <div className="mb-8 space-y-4">
-          <Carousel
-            setApi={setApi}
-            plugins={[autoplay]}
-            className="w-full"
-            opts={{
-              loop: true,
-            }}
-          >
-            <CarouselContent>
-              <CarouselItem>
-                <div className="flex justify-center">
-                  <img 
-                    src={voiceSetup} 
-                    alt="Easy Voice Setup" 
-                    className="w-80 h-80 object-contain"
-                  />
-                </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="flex justify-center">
-                  <img 
-                    src={reminders} 
-                    alt="Smart Reminders" 
-                    className="w-80 h-80 object-contain"
-                  />
-                </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="flex justify-center">
-                  <img 
-                    src={progress} 
-                    alt="Track Progress" 
-                    className="w-80 h-80 object-contain"
-                  />
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-          </Carousel>
-          
-          {/* Scroll indicators */}
-          <div className="flex justify-center gap-2">
-            {[0, 1, 2].map((index) => (
-              <div
-                key={index}
-                className={`h-2 rounded-full transition-all ${
-                  current === index ? "w-6 bg-gradient-to-r from-accent to-[hsl(320,70%,55%)]" : "w-2 bg-muted-foreground/30"
-                }`}
-              />
-            ))}
+        {/* Stacked Card Carousel */}
+        <div className="mb-8 relative flex items-center justify-center">
+          <div className="relative w-64 h-72">
+            <Carousel
+              setApi={setApi}
+              plugins={[autoplay]}
+              className="w-full h-full"
+              opts={{
+                loop: true,
+              }}
+            >
+              <CarouselContent>
+                {[voiceSetup, reminders, progress].map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative w-full h-72 flex items-center justify-center">
+                      {/* Background stacked cards */}
+                      <div className="absolute w-52 h-60 bg-card/60 rounded-2xl transform rotate-6 translate-x-4 shadow-[0_8px_30px_rgba(255,255,255,0.1)]"></div>
+                      <div className="absolute w-52 h-60 bg-card/40 rounded-2xl transform -rotate-6 -translate-x-4 shadow-[0_8px_30px_rgba(255,255,255,0.1)]"></div>
+                      
+                      {/* Main card */}
+                      <div className="relative w-56 h-64 bg-card rounded-2xl shadow-[0_8px_40px_rgba(255,255,255,0.15)] border border-border/30 overflow-hidden flex items-center justify-center p-4">
+                        <img 
+                          src={image} 
+                          alt={`Feature ${index + 1}`} 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
           </div>
+        </div>
+        
+        {/* Scroll indicators */}
+        <div className="flex justify-center gap-2 mb-8">
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className={`h-2 rounded-full transition-all ${
+                current === index ? "w-6 bg-gradient-to-r from-accent to-[hsl(320,70%,55%)]" : "w-2 bg-muted-foreground/30"
+              }`}
+            />
+          ))}
         </div>
 
         {/* Text and input fields moved lower */}

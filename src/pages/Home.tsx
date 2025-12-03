@@ -57,10 +57,9 @@ const Home = () => {
 
         <Button
           onClick={() => navigate("/add-medicine")}
-          variant="outline"
-          className="flex items-center gap-2 font-medium border-2 border-transparent bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] bg-clip-border rounded-full px-6 py-2 text-foreground hover:opacity-90 transition-all"
+          className="flex items-center gap-2 font-medium rounded-full px-6 py-3 h-12 bg-card text-foreground hover:bg-card/80 transition-all"
           style={{
-            background: 'linear-gradient(var(--background), var(--background)) padding-box, linear-gradient(135deg, hsl(25, 100%, 60%), hsl(320, 70%, 55%)) border-box',
+            background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(25, 100%, 60%), hsl(320, 70%, 55%)) border-box',
             border: '2px solid transparent'
           }}
         >
