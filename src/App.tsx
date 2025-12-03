@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Welcome from "./pages/Welcome";
 import PhoneSignup from "./pages/PhoneSignup";
 import VerifyOTP from "./pages/VerifyOTP";
+import NameEntry from "./pages/NameEntry";
 import Home from "./pages/Home";
 import AddMedicine from "./pages/AddMedicine";
 import VoiceRecording from "./pages/VoiceRecording";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Welcome />} />
           <Route path="/signup" element={<PhoneSignup />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/name-entry" element={<NameEntry />} />
           <Route path="/home" element={<Home />} />
           <Route path="/add-medicine" element={<AddMedicine />} />
           <Route path="/voice-recording" element={<VoiceRecording />} />

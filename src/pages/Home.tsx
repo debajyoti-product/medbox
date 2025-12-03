@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const Home = () => {
   const navigate = useNavigate();
+  const userName = localStorage.getItem("medbox_username") || "User";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
@@ -15,9 +16,9 @@ const Home = () => {
           </h2>
         </div>
         
-        <div className="space-y-4 w-full text-center">
-          <h1 className="text-3xl font-semibold text-foreground">
-            Welcome
+        <div className="space-y-4 w-full">
+          <h1 className="text-3xl font-semibold text-foreground text-left">
+            Hello, {userName}
           </h1>
           <div className="flex items-center justify-center gap-4 w-full">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
