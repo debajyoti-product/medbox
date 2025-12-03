@@ -112,69 +112,75 @@ const AddMedicine = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => adjustValue(index, "perServing", false)}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
-                  >
-                    <span className="text-lg font-medium">−</span>
-                  </button>
-                  <Input
-                    type="number"
-                    value={medicine.perServing}
-                    onChange={(e) => updateMedicine(index, "perServing", parseInt(e.target.value) || 1)}
-                    className="h-12 flex-1 bg-card border-border"
-                  />
-                  <button
-                    onClick={() => adjustValue(index, "perServing", true)}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
-                  >
-                    <span className="text-lg font-medium">+</span>
-                  </button>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">Per Serving</span>
+                  <div className="flex items-center gap-3 flex-1">
+                    <button
+                      onClick={() => adjustValue(index, "perServing", false)}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                    >
+                      <span className="text-lg font-medium">−</span>
+                    </button>
+                    <Input
+                      type="number"
+                      value={medicine.perServing}
+                      onChange={(e) => updateMedicine(index, "perServing", parseInt(e.target.value) || 1)}
+                      className="h-12 flex-1 bg-card border-border"
+                    />
+                    <button
+                      onClick={() => adjustValue(index, "perServing", true)}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                    >
+                      <span className="text-lg font-medium">+</span>
+                    </button>
+                  </div>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">Per Serving</span>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => adjustValue(index, "timesPerDay", false)}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
-                  >
-                    <span className="text-lg font-medium">−</span>
-                  </button>
-                  <Input
-                    type="number"
-                    value={medicine.timesPerDay}
-                    onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 1)}
-                    className="h-12 flex-1 bg-card border-border"
-                  />
-                  <button
-                    onClick={() => adjustValue(index, "timesPerDay", true)}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
-                  >
-                    <span className="text-lg font-medium">+</span>
-                  </button>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">Times A Day</span>
+                  <div className="flex items-center gap-3 flex-1">
+                    <button
+                      onClick={() => adjustValue(index, "timesPerDay", false)}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                    >
+                      <span className="text-lg font-medium">−</span>
+                    </button>
+                    <Input
+                      type="number"
+                      value={medicine.timesPerDay}
+                      onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 1)}
+                      className="h-12 flex-1 bg-card border-border"
+                    />
+                    <button
+                      onClick={() => adjustValue(index, "timesPerDay", true)}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                    >
+                      <span className="text-lg font-medium">+</span>
+                    </button>
+                  </div>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">Times A Day</span>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => adjustValue(index, "days", false)}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
-                  >
-                    <span className="text-lg font-medium">−</span>
-                  </button>
-                  <Input
-                    type="number"
-                    value={medicine.days}
-                    onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 1)}
-                    className="h-12 flex-1 bg-card border-border"
-                  />
-                  <button
-                    onClick={() => adjustValue(index, "days", true)}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90"
-                  >
-                    <span className="text-lg font-medium">+</span>
-                  </button>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">Days</span>
+                  <div className="flex items-center gap-3 flex-1">
+                    <button
+                      onClick={() => adjustValue(index, "days", false)}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                    >
+                      <span className="text-lg font-medium">−</span>
+                    </button>
+                    <Input
+                      type="number"
+                      value={medicine.days}
+                      onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 1)}
+                      className="h-12 flex-1 bg-card border-border"
+                    />
+                    <button
+                      onClick={() => adjustValue(index, "days", true)}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-[hsl(320,70%,55%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                    >
+                      <span className="text-lg font-medium">+</span>
+                    </button>
+                  </div>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">Days</span>
                 </div>
               </div>
             ))}
@@ -187,7 +193,7 @@ const AddMedicine = () => {
               Add Medicine
             </Button>
 
-            <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
+            <div className="mt-8 rounded-2xl bg-card shadow-lg p-2 flex gap-2">
               <Button
                 variant="gradient"
                 className="flex-1 rounded-full h-12"

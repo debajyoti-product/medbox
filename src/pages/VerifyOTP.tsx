@@ -30,8 +30,8 @@ const VerifyOTP = () => {
     // Clear stored phone
     localStorage.removeItem("medbox_phone");
     
-    // Navigate to home (to be built)
-    navigate("/home");
+    // Navigate to name entry screen
+    navigate("/name-entry");
   };
 
   const handleResend = () => {
