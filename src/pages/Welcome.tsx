@@ -14,13 +14,20 @@ const Welcome = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-between p-6">
       <div className="flex-1 flex flex-col items-center justify-center space-y-4 max-w-md w-full">
-        <div className={`space-y-3 text-center transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h1 className="text-6xl font-bold text-foreground tracking-tight">
-            Med<span className="text-primary">Box</span>
-          </h1>
-          <p className="text-lg text-muted-foreground font-normal">
-            Your Trusted Medicine Companion
-          </p>
+        <div className={`space-y-6 text-center transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <img 
+            src="/assets/medbox-logo.png" 
+            alt="MedBox Logo" 
+            className="w-32 h-32 mx-auto"
+          />
+          <div className="space-y-3">
+            <h1 className="text-6xl font-bold text-foreground tracking-tight">
+              Med<span className="text-primary">Box</span>
+            </h1>
+            <p className="text-lg text-muted-foreground font-normal">
+              Your Trusted Medicine Companion
+            </p>
+          </div>
         </div>
       </div>
       
