@@ -1,23 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import welcomeHero from "@/assets/welcome-hero.png";
+import { useEffect, useState } from "react";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowContent(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-between p-6 animate-fade-in">
-      <div className="flex-1 flex flex-col items-center justify-center space-y-6 max-w-md w-full">
-        <img 
-          src={welcomeHero} 
-          alt="Welcome To MedBox" 
-          className="w-full max-w-md mx-auto rounded-xl"
-        />
-        <div className="space-y-3 text-center">
-          <h1 className="text-5xl font-semibold text-foreground">
-            MedBox
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-between p-6">
+      <div className="flex-1 flex flex-col items-center justify-center space-y-4 max-w-md w-full">
+        <div className={`space-y-3 text-center transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h1 className="text-6xl font-bold text-foreground tracking-tight">
+            Med<span className="text-primary">Box</span>
           </h1>
-          <p className="text-base text-muted-foreground font-normal">
+          <p className="text-lg text-muted-foreground font-normal">
             Your Trusted Medicine Companion
           </p>
         </div>
@@ -27,7 +28,7 @@ const Welcome = () => {
         onClick={() => navigate("/signup")}
         size="lg"
         variant="gradient"
-        className="w-full max-w-md text-base h-12 rounded-full font-medium"
+        className={`w-full max-w-md text-base h-12 rounded-full font-medium transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
       >
         Get Started
       </Button>
