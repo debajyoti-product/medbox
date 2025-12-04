@@ -81,11 +81,11 @@ const PhoneSignup = () => {
                   <CarouselItem key={index}>
                     <div className="relative w-full h-72 flex items-center justify-center">
                       {/* Background stacked cards */}
-                      <div className="absolute w-52 h-60 bg-card/60 rounded-2xl transform rotate-6 translate-x-4 shadow-[0_8px_30px_rgba(255,255,255,0.1)]"></div>
-                      <div className="absolute w-52 h-60 bg-card/40 rounded-2xl transform -rotate-6 -translate-x-4 shadow-[0_8px_30px_rgba(255,255,255,0.1)]"></div>
+                      <div className="absolute w-52 h-60 bg-background/80 rounded-2xl transform rotate-6 translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
+                      <div className="absolute w-52 h-60 bg-background/60 rounded-2xl transform -rotate-6 -translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
                       
                       {/* Main card */}
-                      <div className="relative w-56 h-64 bg-card rounded-2xl shadow-[0_8px_40px_rgba(255,255,255,0.15)] border border-border/30 overflow-hidden flex items-center justify-center p-4">
+                      <div className="relative w-56 h-64 bg-background rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.1)] border border-border/30 overflow-hidden flex items-center justify-center p-4">
                         <img 
                           src={image} 
                           alt={`Feature ${index + 1}`} 
@@ -106,7 +106,7 @@ const PhoneSignup = () => {
             <div
               key={index}
               className={`h-2 rounded-full transition-all ${
-                current === index ? "w-6 bg-gradient-to-r from-accent to-[hsl(320,70%,55%)]" : "w-2 bg-muted-foreground/30"
+                current === index ? "w-6 bg-gradient-to-r from-[hsl(350,60%,70%)] via-[hsl(25,80%,65%)] to-[hsl(35,40%,85%)]" : "w-2 bg-muted-foreground/30"
               }`}
             />
           ))}
