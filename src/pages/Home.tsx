@@ -1,4 +1,4 @@
-import { Mic, Plus } from "lucide-react";
+import { Mic, Plus, Globe, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
-      <div className="max-w-2xl mx-auto p-6 space-y-10 animate-fade-in flex flex-col items-center justify-start pt-24 min-h-screen">
+      <div className="max-w-2xl mx-auto p-6 space-y-8 animate-fade-in flex flex-col items-center justify-start pt-16 min-h-screen">
         <div className="absolute top-6 left-6">
           <img 
             src="/assets/medbox-logo.png" 
@@ -17,8 +17,22 @@ const Home = () => {
             className="w-10 h-10"
           />
         </div>
+
+        <div className="absolute top-6 right-6 flex items-center gap-3">
+          <button
+            onClick={() => navigate("/language")}
+            className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
+          >
+            <Globe className="w-5 h-5 text-foreground" />
+          </button>
+          <button
+            className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
+          >
+            <Bell className="w-5 h-5 text-foreground" />
+          </button>
+        </div>
         
-        <div className="space-y-4 w-full">
+        <div className="space-y-4 w-full mt-4">
           <h1 className="text-3xl font-semibold text-foreground text-left">
             Hello, {userName}
           </h1>

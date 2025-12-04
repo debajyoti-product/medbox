@@ -16,8 +16,11 @@ const Vault = () => {
           
           <Button
             onClick={() => navigate("/add-medicine")}
-            variant="gradient"
-            className="flex items-center gap-2 font-medium rounded-full px-8 py-3 h-12"
+            className="flex items-center gap-2 font-medium rounded-full px-8 py-3 h-12 bg-card text-foreground hover:bg-card/80 transition-all"
+            style={{
+              background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
+              border: '2px solid transparent'
+            }}
           >
             <Plus className="w-5 h-5" />
             <span>Add Medicine</span>
