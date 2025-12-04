@@ -186,8 +186,11 @@ const AddMedicine = () => {
             ))}
 
             <Button
-              variant="glass"
-              className="w-full rounded-full"
+              className="w-full rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all"
+              style={{
+                background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
+                border: '2px solid transparent'
+              }}
               onClick={addMedicine}
             >
               Add Medicine
@@ -264,8 +267,11 @@ const AddMedicine = () => {
 
             <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
               <Button
-                variant="ghost"
-                className="flex-1 rounded-full h-12"
+                className="flex-1 rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all"
+                style={{
+                  background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
+                  border: '2px solid transparent'
+                }}
                 onClick={() => setActiveTab("medicine")}
               >
                 Back
@@ -297,8 +303,11 @@ const AddMedicine = () => {
 
             <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
               <Button
-                variant="ghost"
-                className="flex-1 rounded-full h-12"
+                className="flex-1 rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all"
+                style={{
+                  background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
+                  border: '2px solid transparent'
+                }}
                 onClick={() => setActiveTab("schedule")}
               >
                 Back
