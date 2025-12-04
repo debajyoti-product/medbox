@@ -12,7 +12,7 @@ const Home = () => {
       <div className="max-w-2xl mx-auto p-6 space-y-8 animate-fade-in flex flex-col items-center justify-start pt-16 min-h-screen">
         <div className="absolute top-6 left-6">
           <img 
-            src="/assets/medbox-logo.png" 
+            src="/assets/medbox-logo.png?v=2" 
             alt="MedBox Logo" 
             className="w-10 h-10"
           />
