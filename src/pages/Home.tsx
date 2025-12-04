@@ -37,16 +37,16 @@ const Home = () => {
             className="relative w-44 h-44 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
           >
             {/* Animated gradient circles - 2 circles with lighter colors */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 via-accent/10 to-[hsl(320,70%,55%)]/10 backdrop-blur-xl liquid-sphere"></div>
-            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-[hsl(320,70%,55%)]/20 backdrop-blur-lg liquid-sphere-reverse"></div>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/20 via-[hsl(25,80%,65%)]/10 to-[hsl(35,40%,85%)]/10 backdrop-blur-xl liquid-sphere"></div>
+            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/30 via-[hsl(25,80%,65%)]/20 to-[hsl(35,40%,85%)]/20 backdrop-blur-lg liquid-sphere-reverse"></div>
             
             {/* Circular outlines */}
-            <div className="absolute inset-0 rounded-full border-2 border-accent/30"></div>
-            <div className="absolute inset-6 rounded-full border border-accent/20"></div>
+            <div className="absolute inset-0 rounded-full border-2 border-[hsl(350,60%,70%)]/30"></div>
+            <div className="absolute inset-6 rounded-full border border-[hsl(25,80%,65%)]/20"></div>
             
             {/* 3D Mic Icon - filled with primary */}
             <div className="relative z-10 w-14 h-14 flex items-center justify-center">
-              <Mic className="w-12 h-12 fill-primary stroke-none drop-shadow-[0_4px_8px_rgba(34,139,34,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(34,139,34,0.3))' }} />
+              <Mic className="w-12 h-12 fill-[hsl(20,25%,20%)] stroke-none drop-shadow-[0_4px_8px_rgba(60,40,30,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(60,40,30,0.3))' }} />
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@ const Home = () => {
           onClick={() => navigate("/add-medicine")}
           className="flex items-center gap-2 font-medium rounded-full px-6 py-3 h-12 bg-card text-foreground hover:bg-card/80 transition-all"
           style={{
-            background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(25, 100%, 60%), hsl(320, 70%, 55%)) border-box',
+            background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
             border: '2px solid transparent'
           }}
         >
