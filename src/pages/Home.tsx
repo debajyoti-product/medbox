@@ -1,42 +1,48 @@
-import { Mic, Plus, Globe, Bell } from "lucide-react";
+import { Mic, Plus, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
-import MedBoxIcon from "@/components/MedBoxIcon";
+import GoogleTranslateIcon from "@/components/GoogleTranslateIcon";
+import { useTranslation } from "@/hooks/useTranslation";
+import medboxLogo from "@/assets/medbox-logo.png";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const userName = localStorage.getItem("medbox_username") || "User";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
-      <div className="max-w-2xl mx-auto p-6 space-y-8 animate-fade-in flex flex-col items-center justify-start pt-16 min-h-screen">
-        <div className="absolute top-6 left-6">
-          <MedBoxIcon size="sm" />
-        </div>
-
-        <div className="absolute top-6 right-6 flex items-center gap-3">
-          <button
-            onClick={() => navigate("/language")}
-            className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
-          >
-            <Globe className="w-5 h-5 text-foreground" />
-          </button>
-          <button
-            className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
-          >
-            <Bell className="w-5 h-5 text-foreground" />
-          </button>
+      <div className="max-w-2xl mx-auto p-6 space-y-8 animate-fade-in flex flex-col items-center justify-start pt-6 min-h-screen">
+        <div className="w-full flex items-center justify-between">
+          <img 
+            src={medboxLogo} 
+            alt="MedBox Logo" 
+            className="w-12 h-12 object-contain"
+          />
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate("/language")}
+              className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
+            >
+              <GoogleTranslateIcon className="text-foreground" size={20} />
+            </button>
+            <button
+              className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
+            >
+              <Bell className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
         </div>
         
-        <div className="space-y-4 w-full mt-4">
+        <div className="space-y-4 w-full mt-2">
           <h1 className="text-3xl font-semibold text-foreground text-left">
-            Hello, {userName}
+            {t("hello")}, {userName}
           </h1>
           <div className="flex items-center justify-center gap-4 w-full">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
             <p className="text-base text-muted-foreground font-normal whitespace-nowrap">
-              Tell Us Your Medicine
+              {t("tellUsYourMedicine")}
             </p>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
           </div>
@@ -65,7 +71,7 @@ const Home = () => {
         {/* Or divider */}
         <div className="flex items-center justify-center gap-4 w-full">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
-          <span className="text-sm text-muted-foreground">Or</span>
+          <span className="text-sm text-muted-foreground">{t("or")}</span>
           <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
         </div>
 
@@ -78,7 +84,7 @@ const Home = () => {
           }}
         >
           <Plus className="w-5 h-5" />
-          <span>Add Your Medicine Manually</span>
+          <span>{t("addYourMedicineManually")}</span>
         </Button>
       </div>
       
