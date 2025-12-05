@@ -2,6 +2,7 @@ import { Mic, Plus, Globe, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
+import MedBoxIcon from "@/components/MedBoxIcon";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -11,11 +12,7 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
       <div className="max-w-2xl mx-auto p-6 space-y-8 animate-fade-in flex flex-col items-center justify-start pt-16 min-h-screen">
         <div className="absolute top-6 left-6">
-          <img 
-            src="/assets/medbox-logo.png?v=2" 
-            alt="MedBox Logo" 
-            className="w-10 h-10"
-          />
+          <MedBoxIcon size="sm" />
         </div>
 
         <div className="absolute top-6 right-6 flex items-center gap-3">
