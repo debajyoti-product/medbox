@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Pill, Clock, FileText, Syringe, Wind } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Medicine = {
   name: string;
@@ -25,6 +26,7 @@ const medicineTypes = [
 
 const AddMedicine = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("medicine");
   const [medicines, setMedicines] = useState<Medicine[]>([
     { name: "", type: "tablet", perServing: 1, timesPerDay: 1, days: 1 },
@@ -62,6 +64,14 @@ const AddMedicine = () => {
     }
   };
 
+  const saveMedicines = () => {
+    const existing = localStorage.getItem("medbox_medicines");
+    const existingMedicines = existing ? JSON.parse(existing) : [];
+    const allMedicines = [...existingMedicines, ...medicines.filter(m => m.name.trim())];
+    localStorage.setItem("medbox_medicines", JSON.stringify(allMedicines));
+    navigate("/vault");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
       <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
@@ -69,15 +79,15 @@ const AddMedicine = () => {
           <TabsList className="grid w-full grid-cols-3 mb-8 h-auto p-2 bg-card">
             <TabsTrigger value="medicine" disabled={activeTab !== "medicine"} className="flex flex-col items-center gap-2 py-3">
               <Pill className="w-5 h-5" />
-              <span className="text-xs">Medicine</span>
+              <span className="text-xs">{t("medicine")}</span>
             </TabsTrigger>
             <TabsTrigger value="schedule" disabled={activeTab === "medicine"} className="flex flex-col items-center gap-2 py-3">
               <Clock className="w-5 h-5" />
-              <span className="text-xs">Schedule</span>
+              <span className="text-xs">{t("schedule")}</span>
             </TabsTrigger>
             <TabsTrigger value="ailment" disabled={activeTab !== "ailment"} className="flex flex-col items-center gap-2 py-3">
               <FileText className="w-5 h-5" />
-              <span className="text-xs">Ailment</span>
+              <span className="text-xs">{t("ailment")}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -132,7 +142,7 @@ const AddMedicine = () => {
                       <span className="text-lg font-medium">+</span>
                     </button>
                   </div>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">Per Serving</span>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">{t("perServing")}</span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -156,7 +166,7 @@ const AddMedicine = () => {
                       <span className="text-lg font-medium">+</span>
                     </button>
                   </div>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">Times A Day</span>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">{t("timesADay")}</span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -180,7 +190,7 @@ const AddMedicine = () => {
                       <span className="text-lg font-medium">+</span>
                     </button>
                   </div>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">Days</span>
+                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">{t("days")}</span>
                 </div>
               </div>
             ))}
@@ -193,7 +203,7 @@ const AddMedicine = () => {
               }}
               onClick={addMedicine}
             >
-              Add Medicine
+              {t("addMedicine")}
             </Button>
 
             <div className="mt-8 rounded-2xl bg-card shadow-lg p-2 flex gap-2">
@@ -202,7 +212,7 @@ const AddMedicine = () => {
                 className="flex-1 rounded-full h-12"
                 onClick={() => setActiveTab("schedule")}
               >
-                Next
+                {t("next")}
               </Button>
             </div>
           </TabsContent>
@@ -210,7 +220,7 @@ const AddMedicine = () => {
           <TabsContent value="schedule" className="space-y-6">
             <Card className="p-6 rounded-xl shadow-md bg-card border-border">
               <p className="text-sm text-foreground">
-                {medicines[0]?.name || "Medicine"}, {medicines[0]?.perServing} Per Serving, {medicines[0]?.timesPerDay} Times A Day For {medicines[0]?.days} Days
+                {medicines[0]?.name || t("medicine")}, {medicines[0]?.perServing} {t("perServing")}, {medicines[0]?.timesPerDay} {t("timesADay")} For {medicines[0]?.days} {t("days")}
               </p>
             </Card>
 
@@ -274,21 +284,21 @@ const AddMedicine = () => {
                 }}
                 onClick={() => setActiveTab("medicine")}
               >
-                Back
+                {t("back")}
               </Button>
               <Button
                 variant="gradient"
                 className="flex-1 rounded-full h-12"
                 onClick={() => setActiveTab("ailment")}
               >
-                Next
+                {t("next")}
               </Button>
             </div>
           </TabsContent>
 
           <TabsContent value="ailment" className="space-y-6">
             <h2 className="text-2xl font-semibold text-foreground text-center">
-              What Are You Taking This For?
+              {t("whatAreYouTakingThisFor")}
             </h2>
 
             <div className="space-y-2">
@@ -297,7 +307,7 @@ const AddMedicine = () => {
                 className="h-12 bg-card border-border"
               />
               <p className="text-xs text-muted-foreground">
-                We Won't Share This With Anyone
+                {t("weWontShareThis")}
               </p>
             </div>
 
@@ -310,14 +320,14 @@ const AddMedicine = () => {
                 }}
                 onClick={() => setActiveTab("schedule")}
               >
-                Back
+                {t("back")}
               </Button>
               <Button
                 variant="gradient"
                 className="flex-1 rounded-full h-12"
-                onClick={() => navigate("/home")}
+                onClick={saveMedicines}
               >
-                Confirm
+                {t("confirm")}
               </Button>
             </div>
           </TabsContent>

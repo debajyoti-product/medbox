@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const languages = [
   { value: "english", label: "English", native: "English" },
@@ -16,15 +16,9 @@ const languages = [
 
 const Language = () => {
   const navigate = useNavigate();
-  const [selectedLanguage, setSelectedLanguage] = useState("english");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("medbox_language");
-    if (saved) setSelectedLanguage(saved);
-  }, []);
+  const { language, setLanguage, t } = useTranslation();
 
   const handleSave = () => {
-    localStorage.setItem("medbox_language", selectedLanguage);
     navigate(-1);
   };
 
@@ -42,15 +36,15 @@ const Language = () => {
           >
             <ArrowLeft className="w-5 h-5 text-foreground" />
           </button>
-          <h1 className="text-2xl font-semibold text-foreground">Select Language</h1>
+          <h1 className="text-2xl font-semibold text-foreground">{t("selectLanguage")}</h1>
         </div>
 
-        <RadioGroup value={selectedLanguage} onValueChange={setSelectedLanguage} className="space-y-3">
+        <RadioGroup value={language} onValueChange={setLanguage} className="space-y-3">
           {languages.map((lang) => (
             <div
               key={lang.value}
               className="flex items-center space-x-4 p-4 rounded-xl bg-card border border-border cursor-pointer hover:bg-secondary/50 transition-colors"
-              onClick={() => setSelectedLanguage(lang.value)}
+              onClick={() => setLanguage(lang.value)}
             >
               <RadioGroupItem value={lang.value} id={lang.value} />
               <Label htmlFor={lang.value} className="flex-1 cursor-pointer">
@@ -66,7 +60,7 @@ const Language = () => {
           className="w-full rounded-full h-12"
           onClick={handleSave}
         >
-          Save
+          {t("save")}
         </Button>
       </div>
     </div>
