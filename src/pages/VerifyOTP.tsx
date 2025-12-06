@@ -43,14 +43,6 @@ const VerifyOTP = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col p-6 animate-fade-in">
-      <button
-        onClick={() => navigate("/signup")}
-        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
-      >
-        <ArrowLeft className="w-5 h-5" />
-        <span>Back</span>
-      </button>
-
       <div className="flex-1 flex flex-col items-center justify-between max-w-md w-full mx-auto">
         <div className="space-y-8 text-center w-full pt-12">
           <div className="space-y-2">
@@ -69,7 +61,7 @@ const VerifyOTP = () => {
                 value={otp}
                 onChange={setOtp}
               >
-                <InputOTPGroup>
+                <InputOTPGroup className="gap-4">
                   <InputOTPSlot index={0} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
                   <InputOTPSlot index={1} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
                   <InputOTPSlot index={2} className="w-14 h-14 text-xl rounded-xl bg-card border-border" />
