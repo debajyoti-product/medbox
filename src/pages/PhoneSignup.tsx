@@ -56,18 +56,10 @@ const PhoneSignup = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col p-6 animate-fade-in">
-      <button
-        onClick={() => navigate("/")}
-        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6"
-      >
-        <ArrowLeft className="w-5 h-5" />
-        <span>Back</span>
-      </button>
-
-      <div className="flex-1 flex flex-col max-w-md w-full mx-auto">
-        {/* Stacked Card Carousel */}
+      <div className="flex-1 flex flex-col max-w-md w-full mx-auto pt-8">
+        {/* Image Carousel */}
         <div className="mb-6 relative flex items-center justify-center">
-          <div className="relative w-72 h-80">
+          <div className="relative w-full h-64">
             <Carousel
               setApi={setApi}
               plugins={[autoplay]}
@@ -83,22 +75,13 @@ const PhoneSignup = () => {
                   { image: progress, text: "Track Medication Courses Regularly" }
                 ].map((item, index) => (
                   <CarouselItem key={index}>
-                    <div className="relative w-full h-80 flex flex-col items-center justify-center">
-                      {/* Background stacked cards */}
-                      <div className="absolute top-0 w-56 h-52 bg-background/80 rounded-2xl transform rotate-6 translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
-                      <div className="absolute top-0 w-56 h-52 bg-background/60 rounded-2xl transform -rotate-6 -translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
-                      
-                      {/* Main card */}
-                      <div className="relative w-60 h-56 bg-background rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.1)] overflow-hidden flex items-center justify-center">
-                        <img 
-                          src={item.image} 
-                          alt={item.text} 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      
-                      {/* Text below card */}
-                      <p className="mt-4 text-sm font-medium text-foreground/80 text-center font-caslon">
+                    <div className="w-full h-64 flex flex-col items-center justify-center">
+                      <img 
+                        src={item.image} 
+                        alt={item.text} 
+                        className="w-48 h-48 object-contain"
+                      />
+                      <p className="mt-2 text-sm font-medium text-foreground/80 text-center font-caslon">
                         {item.text}
                       </p>
                     </div>
