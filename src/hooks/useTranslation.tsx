@@ -23,7 +23,8 @@ type TranslationKey =
   | "back"
   | "confirm"
   | "whatAreYouTakingThisFor"
-  | "weWontShareThis";
+  | "weWontShareThis"
+  | "currentLanguage";
 
 const translations: Record<string, Record<TranslationKey, string>> = {
   english: {
@@ -50,6 +51,7 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     confirm: "Confirm",
     whatAreYouTakingThisFor: "What Are You Taking This For?",
     weWontShareThis: "We Won't Share This With Anyone",
+    currentLanguage: "English",
   },
   hindi: {
     hello: "नमस्ते",
@@ -75,6 +77,7 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     confirm: "पुष्टि करें",
     whatAreYouTakingThisFor: "आप यह किसके लिए ले रहे हैं?",
     weWontShareThis: "हम इसे किसी के साथ साझा नहीं करेंगे",
+    currentLanguage: "हिन्दी",
   },
   bengali: {
     hello: "হ্যালো",
@@ -100,6 +103,7 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     confirm: "নিশ্চিত করুন",
     whatAreYouTakingThisFor: "এটা কিসের জন্য খাচ্ছেন?",
     weWontShareThis: "আমরা এটি কারো সাথে শেয়ার করব না",
+    currentLanguage: "বাংলা",
   },
   gujarati: {
     hello: "નમસ્તે",
@@ -125,6 +129,7 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     confirm: "પુષ્ટિ કરો",
     whatAreYouTakingThisFor: "આ શેના માટે લઈ રહ્યા છો?",
     weWontShareThis: "અમે આ કોઈની સાથે શેર નહીં કરીએ",
+    currentLanguage: "ગુજરાતી",
   },
   tamil: {
     hello: "வணக்கம்",
@@ -150,6 +155,7 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     confirm: "உறுதிப்படுத்து",
     whatAreYouTakingThisFor: "இது எதற்காக எடுக்கிறீர்கள்?",
     weWontShareThis: "இதை யாருடனும் பகிர மாட்டோம்",
+    currentLanguage: "தமிழ்",
   },
   telugu: {
     hello: "హలో",
@@ -175,6 +181,7 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     confirm: "నిర్ధారించండి",
     whatAreYouTakingThisFor: "ఇది దేని కోసం తీసుకుంటున్నారు?",
     weWontShareThis: "మేము దీన్ని ఎవరితోనూ షేర్ చేయము",
+    currentLanguage: "తెలుగు",
   },
 };
 
