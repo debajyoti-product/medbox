@@ -56,10 +56,10 @@ const PhoneSignup = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col p-6 animate-fade-in">
-      <div className="flex-1 flex flex-col max-w-md w-full mx-auto pt-4">
+      <div className="flex-1 flex flex-col max-w-md w-full mx-auto pt-8">
         {/* Image Carousel */}
-        <div className="mb-4 relative flex items-center justify-center">
-          <div className="relative w-full h-72">
+        <div className="mb-6 relative flex items-center justify-center">
+          <div className="relative w-full h-64">
             <Carousel
               setApi={setApi}
               plugins={[autoplay]}
@@ -75,11 +75,11 @@ const PhoneSignup = () => {
                   { image: progress, text: "Track Medication Courses Regularly" }
                 ].map((item, index) => (
                   <CarouselItem key={index}>
-                    <div className="w-full h-72 flex flex-col items-center justify-center">
+                    <div className="w-full h-64 flex flex-col items-center justify-center">
                       <img 
                         src={item.image} 
                         alt={item.text} 
-                        className="w-64 h-56 object-contain"
+                        className="w-48 h-48 object-contain"
                       />
                       <p className="mt-2 text-sm font-medium text-foreground/80 text-center font-caslon">
                         {item.text}
