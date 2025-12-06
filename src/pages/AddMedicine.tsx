@@ -206,10 +206,10 @@ const AddMedicine = () => {
               {t("addMedicine")}
             </Button>
 
-            <div className="mt-8 rounded-2xl bg-card shadow-lg p-2 flex gap-2">
+            <div className="mt-8 flex gap-3">
               <Button
                 variant="gradient"
-                className="flex-1 rounded-full h-12"
+                className="flex-1 rounded-full h-12 shadow-sm"
                 onClick={() => setActiveTab("schedule")}
               >
                 {t("next")}
@@ -275,9 +275,9 @@ const AddMedicine = () => {
               </button>
             </div>
 
-            <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
+            <div className="flex gap-3">
               <Button
-                className="flex-1 rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all"
+                className="flex-1 rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all shadow-sm"
                 style={{
                   background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
                   border: '2px solid transparent'
@@ -288,7 +288,7 @@ const AddMedicine = () => {
               </Button>
               <Button
                 variant="gradient"
-                className="flex-1 rounded-full h-12"
+                className="flex-1 rounded-full h-12 shadow-sm"
                 onClick={() => setActiveTab("ailment")}
               >
                 {t("next")}
@@ -311,9 +311,9 @@ const AddMedicine = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-card shadow-lg p-2 flex gap-2">
+            <div className="flex gap-3">
               <Button
-                className="flex-1 rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all"
+                className="flex-1 rounded-full h-12 bg-card text-foreground hover:bg-card/80 transition-all shadow-sm"
                 style={{
                   background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
                   border: '2px solid transparent'
@@ -324,7 +324,7 @@ const AddMedicine = () => {
               </Button>
               <Button
                 variant="gradient"
-                className="flex-1 rounded-full h-12"
+                className="flex-1 rounded-full h-12 shadow-sm"
                 onClick={saveMedicines}
               >
                 {t("confirm")}

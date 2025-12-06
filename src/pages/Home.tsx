@@ -23,9 +23,10 @@ const Home = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/language")}
-              className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-card hover:bg-secondary transition-colors"
             >
-              <GoogleTranslateIcon className="text-foreground" size={20} />
+              <span className="text-sm font-medium text-foreground font-caslon">{t("currentLanguage")}</span>
+              <span className="text-muted-foreground">›</span>
             </button>
             <button
               className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors"
