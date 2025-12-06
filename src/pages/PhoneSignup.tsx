@@ -66,8 +66,8 @@ const PhoneSignup = () => {
 
       <div className="flex-1 flex flex-col max-w-md w-full mx-auto">
         {/* Stacked Card Carousel */}
-        <div className="mb-8 relative flex items-center justify-center">
-          <div className="relative w-64 h-72">
+        <div className="mb-6 relative flex items-center justify-center">
+          <div className="relative w-72 h-80">
             <Carousel
               setApi={setApi}
               plugins={[autoplay]}
@@ -77,21 +77,30 @@ const PhoneSignup = () => {
               }}
             >
               <CarouselContent>
-                {[voiceSetup, reminders, progress].map((image, index) => (
+                {[
+                  { image: voiceSetup, text: "Add Medicine Via Voice Or Text" },
+                  { image: reminders, text: "Daily Notifications For Your Doses" },
+                  { image: progress, text: "Track Medication Courses Regularly" }
+                ].map((item, index) => (
                   <CarouselItem key={index}>
-                    <div className="relative w-full h-72 flex items-center justify-center">
+                    <div className="relative w-full h-80 flex flex-col items-center justify-center">
                       {/* Background stacked cards */}
-                      <div className="absolute w-52 h-60 bg-background/80 rounded-2xl transform rotate-6 translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
-                      <div className="absolute w-52 h-60 bg-background/60 rounded-2xl transform -rotate-6 -translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
+                      <div className="absolute top-0 w-56 h-52 bg-background/80 rounded-2xl transform rotate-6 translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
+                      <div className="absolute top-0 w-56 h-52 bg-background/60 rounded-2xl transform -rotate-6 -translate-x-4 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"></div>
                       
                       {/* Main card */}
-                      <div className="relative w-56 h-64 bg-background rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.1)] border border-border/30 overflow-hidden flex items-center justify-center p-4">
+                      <div className="relative w-60 h-56 bg-background rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.1)] overflow-hidden flex items-center justify-center">
                         <img 
-                          src={image} 
-                          alt={`Feature ${index + 1}`} 
-                          className="w-full h-full object-contain"
+                          src={item.image} 
+                          alt={item.text} 
+                          className="w-full h-full object-cover"
                         />
                       </div>
+                      
+                      {/* Text below card */}
+                      <p className="mt-4 text-sm font-medium text-foreground/80 text-center font-caslon">
+                        {item.text}
+                      </p>
                     </div>
                   </CarouselItem>
                 ))}
