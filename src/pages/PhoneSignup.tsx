@@ -59,7 +59,7 @@ const PhoneSignup = () => {
       <div className="flex-1 flex flex-col max-w-md w-full mx-auto pt-8">
         {/* Image Carousel */}
         <div className="mb-6 relative flex items-center justify-center">
-          <div className="relative w-full h-64">
+          <div className="relative w-full">
             <Carousel
               setApi={setApi}
               plugins={[autoplay]}
@@ -75,11 +75,11 @@ const PhoneSignup = () => {
                   { image: progress, text: "Track Medication Courses Regularly" }
                 ].map((item, index) => (
                   <CarouselItem key={index}>
-                    <div className="w-full h-64 flex flex-col items-center justify-center">
+                    <div className="w-full flex flex-col items-center justify-center">
                       <img 
                         src={item.image} 
                         alt={item.text} 
-                        className="w-64 h-52 object-contain"
+                        className="w-full max-w-sm h-auto object-contain"
                       />
                       <p className="mt-2 text-sm font-medium text-foreground/80 text-center font-caslon">
                         {item.text}
