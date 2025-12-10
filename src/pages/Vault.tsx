@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Plus, Pill, CircleDot, Syringe, Wind, Droplets, Package, Activity } from "lucide-react";
+import { Plus, Pill, CircleDot, Syringe, Wind, Droplets, Package, TrendingUp } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -44,6 +45,7 @@ const Vault = () => {
   const { t } = useTranslation();
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [activeTab, setActiveTab] = useState("medicine");
+  const [courseFilter, setCourseFilter] = useState("active");
 
   useEffect(() => {
     const saved = localStorage.getItem("medbox_medicines");
@@ -96,7 +98,7 @@ const Vault = () => {
                 <span className="text-xs">{t("medicine")}</span>
               </TabsTrigger>
               <TabsTrigger value="course" className="flex flex-col items-center gap-2 py-3">
-                <Activity className="w-5 h-5" />
+                <TrendingUp className="w-5 h-5" />
                 <span className="text-xs">Course</span>
               </TabsTrigger>
             </TabsList>
@@ -120,7 +122,24 @@ const Vault = () => {
 
             {/* Course Tab */}
             <TabsContent value="course" className="space-y-4">
-              {medicines.map((medicine, index) => {
+              <div className="flex justify-end mb-4">
+                <Select value={courseFilter} onValueChange={setCourseFilter}>
+                  <SelectTrigger className="w-32 bg-card">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card">
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="complete">Complete</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {medicines
+                .filter((medicine) => {
+                  const progress = calculateProgress(medicine);
+                  if (courseFilter === "active") return progress < 100;
+                  return progress >= 100;
+                })
+                .map((medicine, index) => {
                 const MedicineIcon = getMedicineIcon(medicine.type);
                 const progress = calculateProgress(medicine);
                 const daysElapsed = calculateDaysElapsed(medicine.startDate);
@@ -151,16 +170,6 @@ const Vault = () => {
                 );
               })}
 
-              {/* Overall Progress */}
-              <Card className="p-4 rounded-xl bg-secondary/50 border-border mt-6">
-                <div className="space-y-3">
-                  <h4 className="font-medium text-foreground text-center">Overall Course Progress</h4>
-                  <Progress value={overallProgress} className="h-3" />
-                  <p className="text-sm text-muted-foreground text-center">
-                    {medicines.length} active {medicines.length === 1 ? 'course' : 'courses'}
-                  </p>
-                </div>
-              </Card>
             </TabsContent>
           </Tabs>
         )}
