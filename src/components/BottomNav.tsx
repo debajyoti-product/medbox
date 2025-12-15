@@ -1,4 +1,5 @@
-import { Home, Archive, User, TrendingUp, Mic } from "lucide-react";
+import { Home, Archive, User, TrendingUp } from "lucide-react";
+import MicrophoneIcon from "@/components/MicrophoneIcon";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
 
@@ -41,7 +42,7 @@ const BottomNav = () => {
             
             {/* Mic Icon */}
             <div className="relative z-10 flex items-center justify-center">
-              <Mic className="w-6 h-6 fill-[hsl(20,25%,20%)] stroke-none" />
+              <MicrophoneIcon size={24} className="text-[hsl(20,25%,20%)]" />
             </div>
           </div>
         </div>
