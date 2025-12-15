@@ -32,10 +32,10 @@ const BottomNav = () => {
           onClick={() => navigate("/voice-recording")}
           className="relative -mt-10 cursor-pointer hover:scale-105 transition-transform"
         >
-          <div className="w-14 h-14 relative flex items-center justify-center shadow-lg rounded-full" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-            {/* Animated gradient circles */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/40 via-[hsl(25,80%,65%)]/30 to-[hsl(35,40%,85%)]/30 backdrop-blur-xl liquid-sphere"></div>
-            <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/50 via-[hsl(25,80%,65%)]/40 to-[hsl(35,40%,85%)]/40 backdrop-blur-lg liquid-sphere-reverse"></div>
+          <div className="w-14 h-14 relative flex items-center justify-center rounded-full" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+            {/* Static gradient circles */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/40 via-[hsl(25,80%,65%)]/30 to-[hsl(35,40%,85%)]/30"></div>
+            <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/50 via-[hsl(25,80%,65%)]/40 to-[hsl(35,40%,85%)]/40"></div>
             
             {/* Circular outline */}
             <div className="absolute inset-0 rounded-full border border-[hsl(350,60%,70%)]/40"></div>

@@ -55,9 +55,10 @@ const Home = () => {
             onClick={() => navigate("/voice-recording")}
             className="relative w-44 h-44 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
           >
-            {/* Animated gradient circles - 2 circles with lighter colors */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/20 via-[hsl(25,80%,65%)]/10 to-[hsl(35,40%,85%)]/10 backdrop-blur-xl liquid-sphere"></div>
-            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/30 via-[hsl(25,80%,65%)]/20 to-[hsl(35,40%,85%)]/20 backdrop-blur-lg liquid-sphere-reverse"></div>
+            {/* Pulse animation circles */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/20 via-[hsl(25,80%,65%)]/10 to-[hsl(35,40%,85%)]/10 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
+            <div className="absolute inset-6 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/30 via-[hsl(25,80%,65%)]/20 to-[hsl(35,40%,85%)]/20 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite_0.5s]"></div>
+            <div className="absolute inset-12 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/40 via-[hsl(25,80%,65%)]/30 to-[hsl(35,40%,85%)]/30 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite_1s]"></div>
             
             {/* Circular outlines */}
             <div className="absolute inset-0 rounded-full border-2 border-[hsl(350,60%,70%)]/30"></div>
