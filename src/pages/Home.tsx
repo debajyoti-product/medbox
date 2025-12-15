@@ -1,4 +1,5 @@
-import { Mic, Plus, Bell } from "lucide-react";
+import { Plus, Bell } from "lucide-react";
+import MicrophoneIcon from "@/components/MicrophoneIcon";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ const Home = () => {
             
             {/* 3D Mic Icon - filled with primary */}
             <div className="relative z-10 w-14 h-14 flex items-center justify-center">
-              <Mic className="w-12 h-12 fill-[hsl(20,25%,20%)] stroke-none drop-shadow-[0_4px_8px_rgba(60,40,30,0.4)]" style={{ filter: 'drop-shadow(0 2px 4px rgba(60,40,30,0.3))' }} />
+              <MicrophoneIcon size={48} className="text-[hsl(20,25%,20%)] drop-shadow-[0_4px_8px_rgba(60,40,30,0.4)]" />
             </div>
           </div>
         </div>
