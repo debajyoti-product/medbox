@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import AddMedicine from "./pages/AddMedicine";
 import VoiceRecording from "./pages/VoiceRecording";
 import Vault from "./pages/Vault";
+import Course from "./pages/Course";
 import Profile from "./pages/Profile";
 import Language from "./pages/Language";
 import NotFound from "./pages/NotFound";
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/add-medicine" element={<AddMedicine />} />
             <Route path="/voice-recording" element={<VoiceRecording />} />
             <Route path="/vault" element={<Vault />} />
+            <Route path="/course" element={<Course />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/language" element={<Language />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
