@@ -4,7 +4,7 @@ import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
 import GoogleTranslateIcon from "@/components/GoogleTranslateIcon";
 import { useTranslation } from "@/hooks/useTranslation";
-import medboxLogo from "@/assets/medbox-logo.png";
+import medboxLogo from "@/assets/medbox-logo-new.png";
 
 const Home = () => {
   const navigate = useNavigate();
