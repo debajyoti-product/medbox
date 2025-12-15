@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import medboxLogo from "@/assets/medbox-logo.png";
+import medboxLogo from "@/assets/medbox-logo-new.png";
 
 const Welcome = () => {
   const navigate = useNavigate();
