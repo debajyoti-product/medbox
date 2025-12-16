@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const BATCH_SIZE = 1000;
+const BATCH_SIZE = 500;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -21,16 +21,19 @@ serve(async (req) => {
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Read CSV file embedded with the function
-    const csvPath = new URL('./medicines.csv', import.meta.url);
-    const csvContent = await Deno.readTextFile(csvPath);
+    const { csvData, clearFirst } = await req.json();
     
-    console.log('CSV file loaded, parsing...');
+    if (!csvData) {
+      return new Response(
+        JSON.stringify({ error: 'No CSV data provided' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
-    const lines = csvContent.split('\n');
-    const header = lines[0];
-    console.log(`Header: ${header}`);
-    console.log(`Total lines: ${lines.length}`);
+    console.log('Parsing CSV data...');
+    
+    const lines = csvData.split('\n');
+    console.log(`Total lines received: ${lines.length}`);
     
     const records: Array<{
       name: string;
@@ -39,37 +42,44 @@ serve(async (req) => {
       short_composition: string | null;
     }> = [];
     
-    // Parse CSV (skip header)
-    for (let i = 1; i < lines.length; i++) {
+    // Check if first line is header
+    const firstLine = lines[0]?.toLowerCase() || '';
+    const startIndex = firstLine.includes('name') && firstLine.includes('price') ? 1 : 0;
+    
+    // Parse CSV
+    for (let i = startIndex; i < lines.length; i++) {
       const line = lines[i].trim();
       if (!line) continue;
       
-      // Parse CSV line (handle commas in quoted fields)
       const parts = parseCSVLine(line);
       
       if (parts.length >= 5) {
         const [id, name, price, packSize, composition] = parts;
         
-        records.push({
-          name: name?.trim() || '',
-          price: price ? parseFloat(price) || null : null,
-          pack_size_label: packSize?.trim() || null,
-          short_composition: composition?.trim() || null,
-        });
+        if (name?.trim()) {
+          records.push({
+            name: name.trim(),
+            price: price ? parseFloat(price) || null : null,
+            pack_size_label: packSize?.trim() || null,
+            short_composition: composition?.trim() || null,
+          });
+        }
       }
     }
     
     console.log(`Parsed ${records.length} records`);
     
-    // Clear existing data first
-    console.log('Clearing existing medicine catalog...');
-    const { error: deleteError } = await supabase
-      .from('medicine_catalog')
-      .delete()
-      .neq('id', 0); // Delete all
-    
-    if (deleteError) {
-      console.error('Error clearing table:', deleteError);
+    // Clear existing data if requested
+    if (clearFirst) {
+      console.log('Clearing existing medicine catalog...');
+      const { error: deleteError } = await supabase
+        .from('medicine_catalog')
+        .delete()
+        .neq('id', 0);
+      
+      if (deleteError) {
+        console.error('Error clearing table:', deleteError);
+      }
     }
     
     // Insert in batches
