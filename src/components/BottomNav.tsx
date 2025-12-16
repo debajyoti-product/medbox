@@ -7,77 +7,29 @@ const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-6 left-0 right-0 z-50 px-6">
-      <div className="max-w-2xl mx-auto relative">
-        {/* Nav bar with curved cutout */}
-        <div className="relative bg-card/80 backdrop-blur-md border border-border rounded-full px-5 py-2.5 shadow-lg flex items-center justify-around">
-          {/* SVG mask for curved cutout */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
-            <defs>
-              <mask id="navMask">
-                <rect width="100%" height="100%" fill="white" rx="9999" />
-                {/* Curved cutout for the add button */}
-                <circle cx="50%" cy="-4" r="28" fill="black" />
-              </mask>
-            </defs>
-          </svg>
-          
-          {/* Background with mask applied */}
-          <div 
-            className="absolute inset-0 bg-card/80 backdrop-blur-md rounded-full"
-            style={{ 
-              clipPath: 'url(#navClip)',
-            }}
-          ></div>
+      <div className="max-w-2xl mx-auto bg-card/80 backdrop-blur-md border border-border rounded-full px-5 py-2.5 shadow-lg flex items-center justify-around relative">
+        <NavLink 
+          to="/home" 
+          className="flex flex-col items-center gap-0.5 transition-colors"
+          activeClassName="text-accent"
+        >
+          <Home className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Home</span>
+        </NavLink>
+        
+        <NavLink 
+          to="/vault" 
+          className="flex flex-col items-center gap-0.5 transition-colors"
+          activeClassName="text-accent"
+        >
+          <Archive className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Vault</span>
+        </NavLink>
 
-          <NavLink 
-            to="/home" 
-            className="flex flex-col items-center gap-0.5 transition-colors"
-            activeClassName="text-accent"
-          >
-            <Home className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Home</span>
-          </NavLink>
-          
-          <NavLink 
-            to="/vault" 
-            className="flex flex-col items-center gap-0.5 transition-colors"
-            activeClassName="text-accent"
-          >
-            <Archive className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Vault</span>
-          </NavLink>
-
-          {/* Spacer for center button */}
-          <div className="w-14"></div>
-
-          <NavLink 
-            to="/course" 
-            className="flex flex-col items-center gap-0.5 transition-colors"
-            activeClassName="text-accent"
-          >
-            <TrendingUp className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Course</span>
-          </NavLink>
-          
-          <NavLink 
-            to="/profile" 
-            className="flex flex-col items-center gap-0.5 transition-colors"
-            activeClassName="text-accent"
-          >
-            <User className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Profile</span>
-          </NavLink>
-        </div>
-
-        {/* Curved cutout overlay - creates the half circle effect */}
-        <div className="absolute left-1/2 -translate-x-1/2 -top-3 w-16 h-8 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-background border-2 border-border"></div>
-        </div>
-
-        {/* Add Medicine Button - positioned in the cutout */}
+        {/* Add Medicine Button - positioned between Vault and Course */}
         <div 
           onClick={() => navigate("/add-medicine")}
-          className="absolute left-1/2 -translate-x-1/2 -top-6 cursor-pointer hover:scale-105 transition-transform z-10"
+          className="relative -mt-8 cursor-pointer hover:scale-105 transition-transform"
         >
           <div className="w-12 h-12 relative flex items-center justify-center rounded-full" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
             {/* Outer gradient circle */}
@@ -92,6 +44,24 @@ const BottomNav = () => {
             </div>
           </div>
         </div>
+
+        <NavLink 
+          to="/course" 
+          className="flex flex-col items-center gap-0.5 transition-colors"
+          activeClassName="text-accent"
+        >
+          <TrendingUp className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Course</span>
+        </NavLink>
+        
+        <NavLink 
+          to="/profile" 
+          className="flex flex-col items-center gap-0.5 transition-colors"
+          activeClassName="text-accent"
+        >
+          <User className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Profile</span>
+        </NavLink>
       </div>
     </nav>
   );
