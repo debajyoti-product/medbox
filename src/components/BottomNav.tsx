@@ -7,61 +7,64 @@ const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-6 left-0 right-0 z-50 px-6">
-      <div className="max-w-2xl mx-auto bg-card/80 backdrop-blur-md border border-border rounded-full px-5 py-2.5 shadow-lg flex items-center justify-around relative">
-        <NavLink 
-          to="/home" 
-          className="flex flex-col items-center gap-0.5 transition-colors"
-          activeClassName="text-accent"
-        >
-          <Home className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Home</span>
-        </NavLink>
-        
-        <NavLink 
-          to="/vault" 
-          className="flex flex-col items-center gap-0.5 transition-colors"
-          activeClassName="text-accent"
-        >
-          <Archive className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Vault</span>
-        </NavLink>
+      <div className="max-w-2xl mx-auto relative">
+        {/* Main nav bar */}
+        <div className="relative bg-card/85 backdrop-blur-md border border-border rounded-full px-5 py-2.5 shadow-lg flex items-center justify-around">
+          <NavLink 
+            to="/home" 
+            className="flex flex-col items-center gap-0.5 transition-colors"
+            activeClassName="text-accent"
+          >
+            <Home className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Home</span>
+          </NavLink>
+          
+          <NavLink 
+            to="/vault" 
+            className="flex flex-col items-center gap-0.5 transition-colors"
+            activeClassName="text-accent"
+          >
+            <Archive className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Vault</span>
+          </NavLink>
 
-        {/* Add Medicine Button - positioned between Vault and Course */}
+          {/* Spacer for the center button */}
+          <div className="w-16"></div>
+
+          <NavLink 
+            to="/course" 
+            className="flex flex-col items-center gap-0.5 transition-colors"
+            activeClassName="text-accent"
+          >
+            <TrendingUp className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Course</span>
+          </NavLink>
+          
+          <NavLink 
+            to="/profile" 
+            className="flex flex-col items-center gap-0.5 transition-colors"
+            activeClassName="text-accent"
+          >
+            <User className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Profile</span>
+          </NavLink>
+
+          {/* Cutout background - creates the notch illusion */}
+          <div className="absolute left-1/2 -translate-x-1/2 -top-1 w-[72px] h-10 bg-background rounded-b-full"></div>
+        </div>
+
+        {/* Add Medicine Button - floating above */}
         <div 
           onClick={() => navigate("/add-medicine")}
-          className="relative -mt-8 cursor-pointer hover:scale-105 transition-transform"
+          className="absolute left-1/2 -translate-x-1/2 -top-7 cursor-pointer hover:scale-105 transition-transform z-10"
         >
-          <div className="w-12 h-12 relative flex items-center justify-center rounded-full" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-            {/* Outer gradient circle */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/40 via-[hsl(25,80%,65%)]/30 to-[hsl(35,40%,85%)]/30"></div>
-            
-            {/* Circular outline */}
-            <div className="absolute inset-0 rounded-full border border-[hsl(350,60%,70%)]/40"></div>
-            
-            {/* Plus Icon */}
-            <div className="relative z-10 flex items-center justify-center">
-              <Plus className="w-6 h-6 text-[hsl(20,25%,20%)]" strokeWidth={2.5} />
+          {/* Outer ring matching background for cutout effect */}
+          <div className="w-16 h-16 rounded-full bg-background p-1.5" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+            <div className="w-full h-full relative flex items-center justify-center rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/40 via-[hsl(25,80%,65%)]/30 to-[hsl(35,40%,85%)]/30 border border-[hsl(350,60%,70%)]/40">
+              <Plus className="w-7 h-7 text-[hsl(20,25%,20%)]" strokeWidth={2.5} />
             </div>
           </div>
         </div>
-
-        <NavLink 
-          to="/course" 
-          className="flex flex-col items-center gap-0.5 transition-colors"
-          activeClassName="text-accent"
-        >
-          <TrendingUp className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Course</span>
-        </NavLink>
-        
-        <NavLink 
-          to="/profile" 
-          className="flex flex-col items-center gap-0.5 transition-colors"
-          activeClassName="text-accent"
-        >
-          <User className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Profile</span>
-        </NavLink>
       </div>
     </nav>
   );
