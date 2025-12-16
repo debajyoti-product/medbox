@@ -6,8 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import searchIllustration from "@/assets/illustration-search.png";
-import reminders from "@/assets/illustration-reminders.png";
-import progress from "@/assets/illustration-progress.png";
+import reminders from "@/assets/illustration-reminders-new.png";
+import progress from "@/assets/illustration-progress-new.png";
 const PhoneSignup = () => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
