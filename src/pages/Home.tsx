@@ -6,6 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import medboxLogo from "@/assets/medbox-logo-new.png";
+import medicinesIllustration from "@/assets/illustration-medicines.png";
 const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return {
@@ -85,6 +86,7 @@ const Home = () => {
 
         {/* Centered content area */}
         <div className="flex-1 flex flex-col items-center justify-center">
+          <img src={medicinesIllustration} alt="Medicine illustration" className="w-40 h-40 object-contain mb-4" />
           <p className="text-muted-foreground/40 mb-3 text-xl">Add Medicines To Get Started</p>
           <ChevronsDown className="w-6 h-6 text-muted-foreground/40 animate-bounce" />
         </div>
