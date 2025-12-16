@@ -93,7 +93,14 @@ const AddMedicine = () => {
     setMedicines(updated);
   };
 
+  const vibrate = (duration: number = 10) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+  };
+
   const adjustValue = (index: number, field: "perServing" | "timesPerDay" | "days", increment: boolean) => {
+    vibrate(15);
     const current = medicines[index][field];
     const newValue = increment ? current + 1 : Math.max(1, current - 1);
     updateMedicine(index, field, newValue);

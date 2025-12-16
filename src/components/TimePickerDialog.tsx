@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown } from "lucide-react";
@@ -11,6 +11,12 @@ interface TimePickerDialogProps {
   initialMinute?: number;
   initialPeriod?: "AM" | "PM";
 }
+
+const vibrate = (duration: number = 10) => {
+  if (navigator.vibrate) {
+    navigator.vibrate(duration);
+  }
+};
 
 const TimePickerDialog = ({
   open,
@@ -40,22 +46,40 @@ const TimePickerDialog = ({
     }
   }, [open, hour, minute]);
 
-  const handleHourScroll = () => {
+  const lastHourRef = useRef(hour);
+  const lastMinuteRef = useRef(minute);
+
+  const handleHourScroll = useCallback(() => {
     if (!hourScrollRef.current) return;
     const scrollTop = hourScrollRef.current.scrollTop;
     const index = Math.round(scrollTop / 60);
     const newHour = hours[Math.min(index, hours.length - 1)] || 1;
+    if (newHour !== lastHourRef.current) {
+      vibrate(8);
+      lastHourRef.current = newHour;
+    }
     setHour(newHour);
-  };
+  }, [hours]);
 
-  const handleMinuteScroll = () => {
+  const handleMinuteScroll = useCallback(() => {
     if (!minuteScrollRef.current) return;
     const scrollTop = minuteScrollRef.current.scrollTop;
     const index = Math.floor(scrollTop / 60);
-    setMinute(Math.max(0, Math.min(index, 59)));
+    const newMinute = Math.max(0, Math.min(index, 59));
+    if (newMinute !== lastMinuteRef.current) {
+      vibrate(8);
+      lastMinuteRef.current = newMinute;
+    }
+    setMinute(newMinute);
+  }, []);
+
+  const togglePeriod = () => {
+    vibrate(15);
+    setPeriod((p) => (p === "AM" ? "PM" : "AM"));
   };
 
   const handleConfirm = () => {
+    vibrate(20);
     onTimeSelect(hour, minute, period);
     onOpenChange(false);
   };
@@ -132,7 +156,7 @@ const TimePickerDialog = ({
 
           {/* AM/PM */}
           <button
-            onClick={() => setPeriod((p) => (p === "AM" ? "PM" : "AM"))}
+            onClick={togglePeriod}
             className="text-2xl font-semibold ml-2 hover:text-accent transition-colors text-foreground"
           >
             {period}
