@@ -51,8 +51,8 @@ const TimePickerDialog = ({
   const handleMinuteScroll = () => {
     if (!minuteScrollRef.current) return;
     const scrollTop = minuteScrollRef.current.scrollTop;
-    const index = Math.round(scrollTop / 60);
-    setMinute(Math.min(index, 59));
+    const index = Math.floor(scrollTop / 60);
+    setMinute(Math.max(0, Math.min(index, 59)));
   };
 
   const handleConfirm = () => {
