@@ -100,7 +100,7 @@ const Home = () => {
         {/* Search bar positioned above bottom nav */}
         <div 
           onClick={() => navigate("/search")}
-          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-md mb-16"
+          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-md mb-6"
         >
           <Search className="w-5 h-5 text-muted-foreground" />
           <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
