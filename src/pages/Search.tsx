@@ -271,8 +271,8 @@ const Search = () => {
 
       {/* Continue Button */}
       <div className="fixed bottom-32 left-0 right-0 px-6">
-        <div className="max-w-2xl mx-auto space-y-2">
-          <p className="text-center text-sm italic text-muted-foreground">
+        <div className="max-w-2xl mx-auto bg-background pt-4 pb-2 px-4 rounded-t-2xl space-y-2">
+          <p className="text-center text-xs text-muted-foreground">
             Tap on a medicine card to view full name
           </p>
           <Button
@@ -288,7 +288,7 @@ const Search = () => {
 
       {/* Full Name Popup Dialog */}
       <Dialog open={fullNamePopup.open} onOpenChange={(open) => setFullNamePopup({ ...fullNamePopup, open })}>
-        <DialogContent className="max-w-sm rounded-xl">
+        <DialogContent className="max-w-sm w-[calc(100%-2rem)] bg-card/95 backdrop-blur-xl border-border rounded-3xl p-5 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 fixed">
           <DialogHeader>
             <DialogTitle className="text-base font-medium text-foreground">
               {fullNamePopup.name}
@@ -299,7 +299,7 @@ const Search = () => {
 
       {/* Duplicate Warning Dialog */}
       <AlertDialog open={duplicateWarning.open} onOpenChange={(open) => setDuplicateWarning({ ...duplicateWarning, open })}>
-        <AlertDialogContent className="max-w-sm rounded-xl">
+        <AlertDialogContent className="max-w-sm w-[calc(100%-2rem)] bg-card/95 backdrop-blur-xl border-border rounded-3xl p-5 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 fixed">
           <AlertDialogHeader>
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
