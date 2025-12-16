@@ -102,7 +102,7 @@ const PhoneSignup = () => {
                       <img 
                         src={item.image} 
                         alt={item.text} 
-                        className="w-full max-w-2xl h-auto object-contain scale-150"
+                        className="w-48 h-auto object-contain"
                       />
                       <p className="mt-8 text-sm font-medium text-foreground/80 text-center font-caslon">
                         {item.text}
