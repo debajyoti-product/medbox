@@ -6,8 +6,8 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, name?: string) => Promise<{ error: Error | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  sendOtp: (phone: string) => Promise<{ error: Error | null }>;
+  verifyOtp: (phone: string, token: string) => Promise<{ error: Error | null; isNewUser: boolean }>;
   signOut: () => Promise<void>;
 };
 
@@ -38,39 +38,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, name?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          name: name || "",
-        },
-      },
+  const sendOtp = async (phone: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
+      phone,
     });
-
-    if (!error && name) {
-      // Update profile with name after signup
-      setTimeout(async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase.from("profiles").update({ name }).eq("user_id", user.id);
-        }
-      }, 500);
-    }
-
     return { error: error as Error | null };
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+  const verifyOtp = async (phone: string, token: string) => {
+    const { data, error } = await supabase.auth.verifyOtp({
+      phone,
+      token,
+      type: "sms",
     });
-    return { error: error as Error | null };
+
+    if (error) {
+      return { error: error as Error | null, isNewUser: false };
+    }
+
+    // Check if user has a name set (to determine if new user)
+    let isNewUser = false;
+    if (data.user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("name")
+        .eq("user_id", data.user.id)
+        .single();
+      
+      isNewUser = !profile?.name;
+    }
+
+    return { error: null, isNewUser };
   };
 
   const signOut = async () => {
@@ -78,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, sendOtp, verifyOtp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

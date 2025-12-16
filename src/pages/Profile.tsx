@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { User, Mail, ChevronRight, LogOut } from "lucide-react";
+import { User, Phone, ChevronRight, LogOut } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
 import GoogleTranslateIcon from "@/components/GoogleTranslateIcon";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -13,10 +13,11 @@ const Profile = () => {
   const { t, language } = useTranslation();
   const { user, loading, signOut } = useAuth();
   const [userName, setUserName] = useState("User");
+  const [userPhone, setUserPhone] = useState("");
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/auth");
+      navigate("/signup");
     }
   }, [user, loading, navigate]);
 
@@ -25,12 +26,17 @@ const Profile = () => {
       if (user) {
         const { data } = await supabase
           .from("profiles")
-          .select("name")
+          .select("name, phone")
           .eq("user_id", user.id)
           .single();
         
         if (data?.name) {
           setUserName(data.name);
+        }
+        if (data?.phone) {
+          setUserPhone(data.phone);
+        } else if (user.phone) {
+          setUserPhone(user.phone);
         }
       }
     };
@@ -82,11 +88,11 @@ const Profile = () => {
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                <Mail className="w-5 h-5 text-muted-foreground" />
+                <Phone className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Email</p>
-                <p className="text-foreground font-medium">{user?.email || "Not Set"}</p>
+                <p className="text-sm text-muted-foreground">{t("phone")}</p>
+                <p className="text-foreground font-medium">{userPhone || "Not Set"}</p>
               </div>
             </div>
           </div>
