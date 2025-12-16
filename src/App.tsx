@@ -17,6 +17,7 @@ import Course from "./pages/Course";
 import Profile from "./pages/Profile";
 import Language from "./pages/Language";
 import Search from "./pages/Search";
+import AdminImport from "./pages/AdminImport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/language" element={<Language />} />
               <Route path="/search" element={<Search />} />
+              <Route path="/admin/import" element={<AdminImport />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
