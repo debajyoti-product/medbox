@@ -38,37 +38,74 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Demo mode: Create a deterministic email from phone number for testing
+  const phoneToEmail = (phone: string) => {
+    const cleanPhone = phone.replace(/\D/g, "");
+    return `demo_${cleanPhone}@medbox.demo`;
+  };
+
   const sendOtp = async (phone: string) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      phone,
-    });
-    return { error: error as Error | null };
+    // Demo mode: Just store the phone, no actual OTP sent
+    // In production, you would use supabase.auth.signInWithOtp({ phone })
+    console.log("Demo mode: OTP would be sent to", phone);
+    return { error: null };
   };
 
   const verifyOtp = async (phone: string, token: string) => {
-    const { data, error } = await supabase.auth.verifyOtp({
-      phone,
-      token,
-      type: "sms",
-    });
-
-    if (error) {
-      return { error: error as Error | null, isNewUser: false };
+    // Demo mode: Accept any 6-digit code and sign in with email/password
+    if (token.length !== 6) {
+      return { error: new Error("Please enter a 6-digit code"), isNewUser: false };
     }
 
-    // Check if user has a name set (to determine if new user)
-    let isNewUser = false;
-    if (data.user) {
+    const email = phoneToEmail(phone);
+    const password = `demo_password_${phone.replace(/\D/g, "")}`;
+
+    // Try to sign in first
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInData.user) {
+      // Existing user - check if they have a name
       const { data: profile } = await supabase
         .from("profiles")
         .select("name")
-        .eq("user_id", data.user.id)
+        .eq("user_id", signInData.user.id)
         .single();
-      
-      isNewUser = !profile?.name;
+
+      return { error: null, isNewUser: !profile?.name };
     }
 
-    return { error: null, isNewUser };
+    // User doesn't exist, create new account
+    if (signInError?.message?.includes("Invalid login credentials")) {
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            phone: phone,
+          },
+        },
+      });
+
+      if (signUpError) {
+        return { error: signUpError as Error, isNewUser: false };
+      }
+
+      // Update profile with phone number
+      if (signUpData.user) {
+        await supabase
+          .from("profiles")
+          .update({ phone: phone })
+          .eq("user_id", signUpData.user.id);
+      }
+
+      return { error: null, isNewUser: true };
+    }
+
+    return { error: signInError as Error | null, isNewUser: false };
   };
 
   const signOut = async () => {

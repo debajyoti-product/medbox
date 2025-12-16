@@ -70,8 +70,8 @@ const PhoneSignup = () => {
     localStorage.setItem("medbox_phone", fullPhone);
     
     toast({
-      title: "OTP Sent",
-      description: "Please Check Your Phone For The Verification Code",
+      title: "Demo Mode",
+      description: "Enter Any 6-Digit Code On The Next Screen",
     });
     
     navigate("/verify-otp");
