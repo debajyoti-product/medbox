@@ -29,7 +29,7 @@ const Vault = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate("/auth");
+      navigate("/signup");
     }
   }, [user, authLoading, navigate]);
 

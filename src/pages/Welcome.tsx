@@ -41,7 +41,7 @@ const Welcome = () => {
       </div>
       
       <Button 
-        onClick={() => navigate("/auth")}
+        onClick={() => navigate("/signup")}
         size="lg"
         variant="gradient"
         className={`w-full max-w-md text-base h-12 rounded-full font-medium transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}

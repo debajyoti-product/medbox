@@ -17,7 +17,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/auth");
+      navigate("/signup");
     }
   }, [user, loading, navigate]);
 
