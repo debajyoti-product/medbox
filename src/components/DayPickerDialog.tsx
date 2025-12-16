@@ -175,7 +175,7 @@ const DayPickerDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm mx-auto bg-card/95 backdrop-blur-xl border-border rounded-3xl p-6">
+      <DialogContent className="max-w-sm mx-4 bg-card/95 backdrop-blur-xl border-border rounded-3xl p-5">
         <div className="space-y-4">
           {/* Month Navigation */}
           <div className="flex items-center justify-center gap-4">
@@ -198,9 +198,9 @@ const DayPickerDialog = ({
           </div>
 
           {/* Weekday Headers */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-2">
             {WEEKDAYS.map((day, i) => (
-              <div key={i} className="text-center text-xs font-medium text-muted-foreground py-2">
+              <div key={i} className="text-center text-xs font-medium text-muted-foreground py-1">
                 {day}
               </div>
             ))}
@@ -209,7 +209,7 @@ const DayPickerDialog = ({
           {/* Calendar Grid */}
           <div
             ref={containerRef}
-            className="grid grid-cols-7 gap-1"
+            className="grid grid-cols-7 gap-2"
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
@@ -222,12 +222,17 @@ const DayPickerDialog = ({
                 <button
                   key={index}
                   data-date={date.toISOString()}
-                  onClick={() => toggleDate(date)}
-                  onTouchStart={() => handleTouchStart(date)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleDate(date);
+                  }}
+                  onTouchStart={(e) => {
+                    handleTouchStart(date);
+                  }}
                   disabled={isPast || !isCurrentMonth}
                   className={`
-                    aspect-square rounded-xl flex items-center justify-center text-sm font-medium
-                    transition-all duration-200 touch-none select-none
+                    w-9 h-10 rounded-lg flex items-center justify-center text-sm font-medium mx-auto
+                    transition-all duration-200 select-none active:scale-95
                     ${!isCurrentMonth ? 'opacity-30 cursor-not-allowed' : ''}
                     ${isPast && isCurrentMonth ? 'opacity-40 cursor-not-allowed' : ''}
                     ${isSelected 
