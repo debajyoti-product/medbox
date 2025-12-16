@@ -221,18 +221,15 @@ const AddMedicine = () => {
       <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
         {/* Add Medicine Form Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 h-auto p-2 bg-card">
-            <TabsTrigger value="medicine" disabled={activeTab !== "medicine"} className="flex flex-col items-center gap-2 py-3">
-              <Pill className="w-5 h-5" />
-              <span className="text-xs">{t("medicine")}</span>
+          <TabsList className="flex w-full justify-center gap-4 mb-6 h-auto p-1.5 bg-transparent">
+            <TabsTrigger value="medicine" disabled={activeTab !== "medicine"} className="px-6 py-1.5 rounded-full text-xs font-medium">
+              {t("medicine")}
             </TabsTrigger>
-            <TabsTrigger value="schedule" disabled={activeTab === "medicine"} className="flex flex-col items-center gap-2 py-3">
-              <Clock className="w-5 h-5" />
-              <span className="text-xs">{t("schedule")}</span>
+            <TabsTrigger value="schedule" disabled={activeTab === "medicine"} className="px-6 py-1.5 rounded-full text-xs font-medium">
+              {t("schedule")}
             </TabsTrigger>
-            <TabsTrigger value="ailment" disabled={activeTab !== "ailment"} className="flex flex-col items-center gap-2 py-3">
-              <FileText className="w-5 h-5" />
-              <span className="text-xs">{t("ailment")}</span>
+            <TabsTrigger value="ailment" disabled={activeTab !== "ailment"} className="px-6 py-1.5 rounded-full text-xs font-medium">
+              {t("ailment")}
             </TabsTrigger>
           </TabsList>
 
@@ -244,7 +241,9 @@ const AddMedicine = () => {
                     placeholder="Medicine Name"
                     value={medicine.name}
                     onChange={(e) => updateMedicine(index, "name", e.target.value)}
-                    className="h-12 flex-1 bg-card border-border"
+                    onClick={() => navigate("/search")}
+                    readOnly
+                    className="h-12 flex-1 bg-card border-border cursor-pointer"
                   />
                   <Select value={medicine.type} onValueChange={(value) => updateMedicine(index, "type", value)}>
                     <SelectTrigger className="w-32 h-12 bg-card border-border">
