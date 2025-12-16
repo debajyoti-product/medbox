@@ -11,8 +11,12 @@ interface DayPickerDialogProps {
 }
 
 const vibrate = (duration: number = 10) => {
-  if (navigator.vibrate) {
-    navigator.vibrate(duration);
+  try {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+  } catch (e) {
+    // Vibration not supported
   }
 };
 
@@ -86,18 +90,10 @@ const DayPickerDialog = ({
     });
   }, []);
 
-  const handleTouchStart = (date: Date) => {
-    if (isPastDate(date)) return;
-    isDragging.current = true;
-    lastTouchedDate.current = date.toDateString();
-    toggleDate(date);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current) return;
     
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    const element = document.elementFromPoint(e.clientX, e.clientY);
     const dateAttr = element?.getAttribute("data-date");
     
     if (dateAttr) {
@@ -110,7 +106,7 @@ const DayPickerDialog = ({
     }
   };
 
-  const handleTouchEnd = () => {
+  const handlePointerUp = () => {
     isDragging.current = false;
     lastTouchedDate.current = null;
   };
@@ -175,7 +171,7 @@ const DayPickerDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm mx-4 bg-card/95 backdrop-blur-xl border-border rounded-3xl p-5">
+      <DialogContent className="max-w-sm w-[calc(100%-2rem)] bg-card/95 backdrop-blur-xl border-border rounded-3xl p-5 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 fixed">
         <div className="space-y-4">
           {/* Month Navigation */}
           <div className="flex items-center justify-center gap-4">
@@ -210,8 +206,9 @@ const DayPickerDialog = ({
           <div
             ref={containerRef}
             className="grid grid-cols-7 gap-2"
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
           >
             {calendarDays.map(({ date, isCurrentMonth }, index) => {
               const isSelected = isDateSelected(date);
@@ -222,12 +219,17 @@ const DayPickerDialog = ({
                 <button
                   key={index}
                   data-date={date.toISOString()}
-                  onClick={(e) => {
+                  onPointerDown={(e) => {
                     e.preventDefault();
-                    toggleDate(date);
+                    if (!isPast && isCurrentMonth) {
+                      isDragging.current = true;
+                      lastTouchedDate.current = date.toDateString();
+                      toggleDate(date);
+                    }
                   }}
-                  onTouchStart={(e) => {
-                    handleTouchStart(date);
+                  onPointerUp={() => {
+                    isDragging.current = false;
+                    lastTouchedDate.current = null;
                   }}
                   disabled={isPast || !isCurrentMonth}
                   className={`

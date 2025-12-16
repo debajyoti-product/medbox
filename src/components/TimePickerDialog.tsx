@@ -13,8 +13,12 @@ interface TimePickerDialogProps {
 }
 
 const vibrate = (duration: number = 10) => {
-  if (navigator.vibrate) {
-    navigator.vibrate(duration);
+  try {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+  } catch (e) {
+    // Vibration not supported
   }
 };
 
