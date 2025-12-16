@@ -11,7 +11,7 @@ import VerifyOTP from "./pages/VerifyOTP";
 import NameEntry from "./pages/NameEntry";
 import Home from "./pages/Home";
 import AddMedicine from "./pages/AddMedicine";
-import VoiceRecording from "./pages/VoiceRecording";
+
 import Vault from "./pages/Vault";
 import Course from "./pages/Course";
 import Profile from "./pages/Profile";
@@ -37,7 +37,7 @@ const App = () => (
               <Route path="/name-entry" element={<NameEntry />} />
               <Route path="/home" element={<Home />} />
               <Route path="/add-medicine" element={<AddMedicine />} />
-              <Route path="/voice-recording" element={<VoiceRecording />} />
+              
               <Route path="/vault" element={<Vault />} />
               <Route path="/course" element={<Course />} />
               <Route path="/profile" element={<Profile />} />
