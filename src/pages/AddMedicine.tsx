@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Pill, Clock, FileText, Syringe, Wind, Droplets, CircleDot } from "lucide-react";
+import { Pill, Clock, FileText, Syringe, Droplets, CircleDot } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
 import TimePickerDialog from "@/components/TimePickerDialog";
 import DayPickerDialog from "@/components/DayPickerDialog";
@@ -18,8 +18,7 @@ const medicineTypes = [
   { value: "tablet", label: "Tablet", icon: Pill },
   { value: "capsule", label: "Capsule", icon: CircleDot },
   { value: "injection", label: "Injection", icon: Syringe },
-  { value: "spray", label: "Spray", icon: Wind },
-  { value: "liquid", label: "Liquid", icon: Droplets },
+  { value: "syrup", label: "Syrup", icon: Droplets },
 ];
 
 const getMedicineIcon = (type: string) => {
@@ -32,8 +31,7 @@ const getTypeLabel = (type: string, count: number) => {
     tablet: { singular: "Tablet", plural: "Tablets" },
     capsule: { singular: "Capsule", plural: "Capsules" },
     injection: { singular: "Injection", plural: "Injections" },
-    spray: { singular: "Spray", plural: "Sprays" },
-    liquid: { singular: "ml", plural: "ml" },
+    syrup: { singular: "ml", plural: "ml" },
   };
   const label = labels[type] || labels.tablet;
   return count === 1 ? label.singular : label.plural;
