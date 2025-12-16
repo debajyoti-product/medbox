@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import voiceSetup from "@/assets/illustration-voice-setup.png";
+import searchIllustration from "@/assets/illustration-search.png";
 import reminders from "@/assets/illustration-reminders.png";
 import progress from "@/assets/illustration-progress.png";
 const PhoneSignup = () => {
@@ -59,8 +59,8 @@ const PhoneSignup = () => {
           }}>
               <CarouselContent>
                 {[{
-                image: voiceSetup,
-                text: "Add Medicine Via Voice Or Text"
+                image: searchIllustration,
+                text: "Search Medicines & Add Them"
               }, {
                 image: reminders,
                 text: "Daily Notifications For Your Doses"
