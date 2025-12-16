@@ -1,19 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Plus, Pill, CircleDot, Syringe, Wind, Droplets } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import BottomNav from "@/components/BottomNav";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useState, useEffect } from "react";
-
-type Medicine = {
-  name: string;
-  type: string;
-  perServing: number;
-  timesPerDay: number;
-  days: number;
-  startDate?: string;
-};
+import { useAuth } from "@/hooks/useAuth";
+import { useMedicines } from "@/hooks/useMedicines";
 
 const medicineTypes = [
   { value: "tablet", icon: Pill },
@@ -31,14 +24,29 @@ const getMedicineIcon = (type: string) => {
 const Vault = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const { user, loading: authLoading } = useAuth();
+  const { medicines, loading: medicinesLoading } = useMedicines();
 
   useEffect(() => {
-    const saved = localStorage.getItem("medbox_medicines");
-    if (saved) {
-      setMedicines(JSON.parse(saved));
+    if (!authLoading && !user) {
+      navigate("/auth");
     }
-  }, []);
+  }, [user, authLoading, navigate]);
+
+  const loading = authLoading || medicinesLoading;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
+        <div className="max-w-2xl mx-auto p-6 animate-fade-in">
+          <div className="flex flex-col items-center justify-center min-h-[70vh]">
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+        <BottomNav />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
@@ -63,10 +71,10 @@ const Vault = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {medicines.map((medicine, index) => {
+            {medicines.map((medicine) => {
               const MedicineIcon = getMedicineIcon(medicine.type);
               return (
-                <Card key={index} className="p-4 rounded-xl bg-card border-border">
+                <Card key={medicine.id} className="p-4 rounded-xl bg-card border-border">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-secondary/50 flex items-center justify-center">
                       <MedicineIcon className="w-6 h-6 text-muted-foreground" />

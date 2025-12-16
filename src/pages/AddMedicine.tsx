@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,15 +9,9 @@ import { Pill, Clock, FileText, Syringe, Wind, Droplets, CircleDot } from "lucid
 import BottomNav from "@/components/BottomNav";
 import TimePickerDialog from "@/components/TimePickerDialog";
 import { useTranslation } from "@/hooks/useTranslation";
-
-type Medicine = {
-  name: string;
-  type: string;
-  perServing: number;
-  timesPerDay: number;
-  days: number;
-  scheduleTime?: { hour: number; minute: number; period: "AM" | "PM" };
-};
+import { useAuth } from "@/hooks/useAuth";
+import { useMedicines, type Medicine } from "@/hooks/useMedicines";
+import { useToast } from "@/hooks/use-toast";
 
 const medicineTypes = [
   { value: "tablet", label: "Tablet", icon: Pill },
@@ -53,7 +47,12 @@ const getTimesLabel = (times: number) => {
 const AddMedicine = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user, loading: authLoading } = useAuth();
+  const { addMedicines } = useMedicines();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("medicine");
+  const [ailment, setAilment] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const [medicines, setMedicines] = useState<Medicine[]>([
     {
       name: "",
@@ -65,6 +64,12 @@ const AddMedicine = () => {
   ]);
   const [timePickerOpen, setTimePickerOpen] = useState(false);
   const [selectedMedicineIndex, setSelectedMedicineIndex] = useState(0);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
 
   const addMedicine = () => {
     setMedicines([
@@ -113,17 +118,49 @@ const AddMedicine = () => {
     return `${time.hour}:${time.minute.toString().padStart(2, "0")} ${time.period}`;
   };
 
-  const saveMedicines = () => {
-    const existing = localStorage.getItem("medbox_medicines");
-    const existingMedicines = existing ? JSON.parse(existing) : [];
-    const newMedicines = medicines.filter((m) => m.name.trim()).map((m) => ({
+  const saveMedicines = async () => {
+    const validMedicines = medicines.filter((m) => m.name.trim());
+    if (validMedicines.length === 0) {
+      toast({
+        title: "No Medicines",
+        description: "Please Add At Least One Medicine",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    const medicinesWithAilment = validMedicines.map((m) => ({
       ...m,
-      startDate: new Date().toISOString(),
+      ailment: ailment || undefined,
     }));
-    const allMedicines = [...existingMedicines, ...newMedicines];
-    localStorage.setItem("medbox_medicines", JSON.stringify(allMedicines));
+
+    const { error } = await addMedicines(medicinesWithAilment);
+    setIsSaving(false);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed To Save Medicines. Please Try Again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Medicines Have Been Saved",
+    });
     navigate("/vault");
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
@@ -291,7 +328,12 @@ const AddMedicine = () => {
             <h2 className="text-2xl font-semibold text-foreground text-center">{t("whatAreYouTakingThisFor")}</h2>
 
             <div className="space-y-2">
-              <Input placeholder="Fever, Jaundice, Headache Etc" className="h-12 bg-card border-border" />
+              <Input 
+                placeholder="Fever, Jaundice, Headache Etc" 
+                className="h-12 bg-card border-border"
+                value={ailment}
+                onChange={(e) => setAilment(e.target.value)}
+              />
               <p className="text-xs text-muted-foreground">{t("weWontShareThis")}</p>
             </div>
           </TabsContent>
@@ -315,13 +357,14 @@ const AddMedicine = () => {
             <Button 
               variant="gradient" 
               className="flex-1 rounded-full h-12 shadow-sm"
+              disabled={isSaving}
               onClick={() => {
                 if (activeTab === "medicine") setActiveTab("schedule");
                 else if (activeTab === "schedule") setActiveTab("ailment");
                 else saveMedicines();
               }}
             >
-              {activeTab === "ailment" ? t("confirm") : t("next")}
+              {isSaving ? "Saving..." : activeTab === "ailment" ? t("confirm") : t("next")}
             </Button>
           </div>
         </div>

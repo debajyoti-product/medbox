@@ -1,16 +1,50 @@
 import { Plus, Bell } from "lucide-react";
+import { useEffect, useState } from "react";
 import MicrophoneIcon from "@/components/MicrophoneIcon";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
-import GoogleTranslateIcon from "@/components/GoogleTranslateIcon";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import medboxLogo from "@/assets/medbox-logo-new.png";
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const userName = localStorage.getItem("medbox_username") || "User";
+  const { user, loading } = useAuth();
+  const [userName, setUserName] = useState("User");
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        const { data } = await supabase
+          .from("profiles")
+          .select("name")
+          .eq("user_id", user.id)
+          .single();
+        
+        if (data?.name) {
+          setUserName(data.name);
+        }
+      }
+    };
+    fetchProfile();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-32">
