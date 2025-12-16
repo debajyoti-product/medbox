@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
@@ -13,9 +12,6 @@ const PhoneSignup = () => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
   const {
     user,
     sendOtp
@@ -39,34 +35,18 @@ const PhoneSignup = () => {
   }, [api]);
   const handleSendOTP = async () => {
     if (phone.length !== 10 || !/^\d+$/.test(phone)) {
-      toast({
-        title: "Invalid Phone Number",
-        description: "Please Enter A Valid 10-Digit Mobile Number",
-        variant: "destructive"
-      });
       return;
     }
     setIsLoading(true);
     const fullPhone = `+91${phone}`;
-    const {
-      error
-    } = await sendOtp(fullPhone);
+    const { error } = await sendOtp(fullPhone);
     setIsLoading(false);
     if (error) {
-      toast({
-        title: "Error Sending OTP",
-        description: error.message || "Please Try Again Later",
-        variant: "destructive"
-      });
       return;
     }
 
     // Store phone for verification screen
     localStorage.setItem("medbox_phone", fullPhone);
-    toast({
-      title: "Demo Mode",
-      description: "Enter Any 6-Digit Code On The Next Screen"
-    });
     navigate("/verify-otp");
   };
   return <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col p-6 animate-fade-in">

@@ -2,24 +2,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { verifyOtp, sendOtp } = useAuth();
   const phone = localStorage.getItem("medbox_phone") || "";
 
   const handleVerify = async () => {
     if (otp.length !== 6) {
-      toast({
-        title: "Invalid OTP",
-        description: "Please Enter Any 6-Digit Code To Continue",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -28,18 +21,8 @@ const VerifyOTP = () => {
     setIsLoading(false);
 
     if (error) {
-      toast({
-        title: "Verification Failed",
-        description: error.message || "Invalid Code. Please Try Again.",
-        variant: "destructive",
-      });
       return;
     }
-
-    toast({
-      title: "Verification Successful",
-      description: "Welcome To MedBox!",
-    });
     
     // Clear stored phone
     localStorage.removeItem("medbox_phone");
@@ -54,29 +37,10 @@ const VerifyOTP = () => {
 
   const handleResend = async () => {
     if (!phone) {
-      toast({
-        title: "Error",
-        description: "Please Go Back And Enter Your Phone Number",
-        variant: "destructive",
-      });
       return;
     }
 
-    const { error } = await sendOtp(phone);
-    
-    if (error) {
-      toast({
-        title: "Error Sending OTP",
-        description: error.message || "Please Try Again",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({
-      title: "OTP Resent",
-      description: "A New Code Has Been Sent To Your Phone",
-    });
+    await sendOtp(phone);
   };
 
   const formatPhone = (phone: string) => {
