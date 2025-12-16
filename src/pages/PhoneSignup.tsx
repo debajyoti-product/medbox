@@ -89,7 +89,7 @@ const PhoneSignup = () => {
                 text: "Track Medication Courses Regularly"
               }].map((item, index) => <CarouselItem key={index}>
                     <div className="w-full flex flex-col items-center justify-center">
-                      <img src={item.image} alt={item.text} className="w-48 h-auto bg-background border-primary-foreground object-fill" />
+                      <img src={item.image} alt={item.text} className="w-96 h-auto bg-background border-primary-foreground object-fill" />
                       <p className="mt-8 text-sm font-medium text-foreground/80 text-center font-caslon">
                         {item.text}
                       </p>
