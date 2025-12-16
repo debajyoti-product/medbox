@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -45,6 +45,7 @@ const getTimesLabel = (times: number) => {
 
 const AddMedicine = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const { addMedicines } = useMedicines();
@@ -52,16 +53,32 @@ const AddMedicine = () => {
   const [activeTab, setActiveTab] = useState("medicine");
   const [ailment, setAilment] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [medicines, setMedicines] = useState<Medicine[]>([
-    {
-      name: "",
-      type: "tablet",
-      perServing: 1,
-      timesPerDay: 1,
-      days: 1,
-      selectedDays: [],
-    },
-  ]);
+
+  // Get preselected medicines from navigation state
+  const preselectedMedicines = (location.state as { preselectedMedicines?: { name: string; type: string }[] })?.preselectedMedicines;
+
+  const [medicines, setMedicines] = useState<Medicine[]>(() => {
+    if (preselectedMedicines && preselectedMedicines.length > 0) {
+      return preselectedMedicines.map((m) => ({
+        name: m.name,
+        type: m.type,
+        perServing: 1,
+        timesPerDay: 1,
+        days: 1,
+        selectedDays: [],
+      }));
+    }
+    return [
+      {
+        name: "",
+        type: "tablet",
+        perServing: 1,
+        timesPerDay: 1,
+        days: 1,
+        selectedDays: [],
+      },
+    ];
+  });
   const [timePickerOpen, setTimePickerOpen] = useState(false);
   const [dayPickerOpen, setDayPickerOpen] = useState(false);
   const [selectedMedicineIndex, setSelectedMedicineIndex] = useState(0);
