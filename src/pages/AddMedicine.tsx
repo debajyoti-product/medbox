@@ -115,7 +115,7 @@ const AddMedicine = () => {
     setDayPickerOpen(true);
   };
 
-  const handleDaysSelect = (days: number[]) => {
+  const handleDaysSelect = (days: Date[]) => {
     const updated = [...medicines];
     updated[selectedMedicineIndex] = {
       ...updated[selectedMedicineIndex],
@@ -125,9 +125,12 @@ const AddMedicine = () => {
     setMedicines(updated);
   };
 
-  const formatDays = (selectedDays?: number[]) => {
+  const formatDays = (selectedDays?: Date[]) => {
     if (!selectedDays || selectedDays.length === 0) return "Set Days";
-    if (selectedDays.length === 1) return `Day ${selectedDays[0]}`;
+    if (selectedDays.length === 1) {
+      const d = selectedDays[0];
+      return `${d.getDate()}/${d.getMonth() + 1}`;
+    }
     return `${selectedDays.length} Days`;
   };
 
