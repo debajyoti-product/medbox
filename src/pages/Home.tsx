@@ -1,4 +1,4 @@
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, Sun, Moon, ChevronsDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
@@ -6,6 +6,13 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import medboxLogo from "@/assets/medbox-logo-new.png";
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return { text: "Good Morning", icon: Sun };
+  if (hour < 17) return { text: "Good Afternoon", icon: Sun };
+  return { text: "Good Evening", icon: Moon };
+};
 
 const Home = () => {
   const navigate = useNavigate();
@@ -44,15 +51,18 @@ const Home = () => {
     );
   }
 
+  const greeting = getGreeting();
+  const GreetingIcon = greeting.icon;
+
   return (
     <div className="h-screen bg-gradient-to-b from-background via-background to-card pb-32 overflow-hidden fixed inset-0">
-      <div className="max-w-2xl mx-auto p-6 h-full animate-fade-in flex flex-col items-center justify-between pt-6">
-        <div className="w-full space-y-6">
+      <div className="max-w-2xl mx-auto p-6 h-full animate-fade-in flex flex-col pt-6">
+        <div className="w-full space-y-4">
           <div className="w-full flex items-center justify-between">
             <img 
               src={medboxLogo} 
               alt="MedBox Logo" 
-              className="w-12 h-12 object-contain"
+              className="w-16 h-16 object-contain"
             />
             <div className="flex items-center gap-3">
               <button
@@ -70,14 +80,27 @@ const Home = () => {
             </div>
           </div>
           
-          <h1 className="text-xl font-semibold text-foreground text-left">
-            {t("hello")}, {userName}
-          </h1>
+          <div className="text-left">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-foreground">{greeting.text}</span>
+              <GreetingIcon className="w-4 h-4 text-foreground" />
+            </div>
+            <h1 className="text-2xl font-semibold text-foreground capitalize">
+              {userName}
+            </h1>
+          </div>
         </div>
 
+        {/* Centered content area */}
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <p className="text-muted-foreground/40 text-sm mb-3">Add Medicines To Get Started</p>
+          <ChevronsDown className="w-6 h-6 text-muted-foreground/40 animate-bounce" />
+        </div>
+
+        {/* Search bar positioned above bottom nav */}
         <div 
           onClick={() => navigate("/search")}
-          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-md mb-8"
+          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-md mb-16"
         >
           <Search className="w-5 h-5 text-muted-foreground" />
           <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>

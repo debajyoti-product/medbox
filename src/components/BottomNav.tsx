@@ -55,8 +55,8 @@ const BottomNav = () => {
           onClick={() => navigate("/add-medicine")}
           className="absolute left-1/2 -translate-x-1/2 -top-8 cursor-pointer hover:scale-105 transition-transform z-30"
         >
-          <div className="w-16 h-16 rounded-full bg-background p-1.5" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
-            <div className="w-full h-full flex items-center justify-center rounded-full bg-[hsl(35,40%,92%)] border border-[hsl(350,60%,70%)]/40">
+          <div className="w-16 h-16 rounded-full bg-background p-1.5 border border-border" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+            <div className="w-full h-full flex items-center justify-center rounded-full bg-[hsl(35,40%,92%)]">
               <Plus className="w-7 h-7 text-[hsl(20,25%,20%)]" strokeWidth={2.5} />
             </div>
           </div>
