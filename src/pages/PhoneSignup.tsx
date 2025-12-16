@@ -111,9 +111,9 @@ const PhoneSignup = () => {
             <label htmlFor="phone" className="text-sm font-normal text-foreground block text-left">
               Enter Your Phone Number
             </label>
-            <div className="flex items-center gap-2">
-              <span className="text-foreground font-medium">+91</span>
-              <Input id="phone" type="tel" value={phone} onChange={e => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))} className="h-12 rounded-xl placeholder:text-muted-foreground/40 bg-card border-border flex-1 text-xs" maxLength={10} placeholder="Enter Your 10-Digit Phone Number" />
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground text-xs font-medium">+91</span>
+              <Input id="phone" type="tel" value={phone} onChange={e => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))} className="h-12 rounded-xl placeholder:text-muted-foreground/60 bg-background border-border pl-12 text-xs" maxLength={10} placeholder="Enter Your 10-Digit Phone Number" />
             </div>
           </div>
         </div>
