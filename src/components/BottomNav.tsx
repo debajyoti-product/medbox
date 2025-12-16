@@ -1,5 +1,4 @@
-import { Home, Archive, User, TrendingUp } from "lucide-react";
-import MicrophoneIcon from "@/components/MicrophoneIcon";
+import { Home, Archive, User, TrendingUp, Plus } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
 
@@ -27,22 +26,21 @@ const BottomNav = () => {
           <span className="text-[10px] font-medium">Vault</span>
         </NavLink>
 
-        {/* Miniature Voice Sphere - positioned between Vault and Course */}
+        {/* Add Medicine Button - positioned between Vault and Course */}
         <div 
-          onClick={() => navigate("/voice-recording")}
+          onClick={() => navigate("/add-medicine")}
           className="relative -mt-8 cursor-pointer hover:scale-105 transition-transform"
         >
           <div className="w-12 h-12 relative flex items-center justify-center rounded-full" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-            {/* Static gradient circles */}
+            {/* Outer gradient circle */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/40 via-[hsl(25,80%,65%)]/30 to-[hsl(35,40%,85%)]/30"></div>
-            <div className="absolute inset-1.5 rounded-full bg-gradient-to-br from-[hsl(350,60%,70%)]/50 via-[hsl(25,80%,65%)]/40 to-[hsl(35,40%,85%)]/40"></div>
             
             {/* Circular outline */}
             <div className="absolute inset-0 rounded-full border border-[hsl(350,60%,70%)]/40"></div>
             
-            {/* Mic Icon */}
+            {/* Plus Icon */}
             <div className="relative z-10 flex items-center justify-center">
-              <MicrophoneIcon size={20} className="text-[hsl(20,25%,20%)]" />
+              <Plus className="w-6 h-6 text-[hsl(20,25%,20%)]" strokeWidth={2.5} />
             </div>
           </div>
         </div>

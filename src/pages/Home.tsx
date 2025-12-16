@@ -1,9 +1,8 @@
-import { Plus, Bell } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import MicrophoneIcon from "@/components/MicrophoneIcon";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -112,17 +111,13 @@ const Home = () => {
           <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
         </div>
 
-        <Button
-          onClick={() => navigate("/add-medicine")}
-          className="flex items-center gap-2 font-medium rounded-full px-6 py-3 h-12 bg-card text-foreground hover:bg-card/80 transition-all"
-          style={{
-            background: 'linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box',
-            border: '2px solid transparent'
-          }}
+        <div 
+          onClick={() => navigate("/search")}
+          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-card rounded-full cursor-pointer hover:bg-card/80 transition-all border border-border"
         >
-          <Plus className="w-5 h-5" />
-          <span>{t("addYourMedicineManually")}</span>
-        </Button>
+          <Search className="w-5 h-5 text-muted-foreground" />
+          <span className="text-muted-foreground">Search Your Medicines Here</span>
+        </div>
       </div>
       
       <BottomNav />
