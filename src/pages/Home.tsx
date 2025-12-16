@@ -71,7 +71,7 @@ const Home = () => {
         </div>
         
         <div className="space-y-4 w-full mt-2">
-          <h1 className="text-3xl font-semibold text-foreground text-left">
+          <h1 className="text-xl font-semibold text-foreground text-left">
             {t("hello")}, {userName}
           </h1>
           <div className="flex items-center justify-center gap-4 w-full">
@@ -104,19 +104,12 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Or divider */}
-        <div className="flex items-center justify-center gap-4 w-full">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
-          <span className="text-sm text-muted-foreground">{t("or")}</span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
-        </div>
-
         <div 
           onClick={() => navigate("/search")}
-          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-card rounded-full cursor-pointer hover:bg-card/80 transition-all border border-border"
+          className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-md"
         >
           <Search className="w-5 h-5 text-muted-foreground" />
-          <span className="text-muted-foreground">Search Your Medicines Here</span>
+          <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
         </div>
       </div>
       

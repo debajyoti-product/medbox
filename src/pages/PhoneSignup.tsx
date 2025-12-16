@@ -97,14 +97,14 @@ const PhoneSignup = () => {
                   { image: reminders, text: "Daily Notifications For Your Doses" },
                   { image: progress, text: "Track Medication Courses Regularly" }
                 ].map((item, index) => (
-                  <CarouselItem key={index}>
+                <CarouselItem key={index}>
                     <div className="w-full flex flex-col items-center justify-center">
                       <img 
                         src={item.image} 
                         alt={item.text} 
-                        className="w-full max-w-sm h-auto object-contain"
+                        className="w-full max-w-2xl h-auto object-contain scale-150"
                       />
-                      <p className="mt-2 text-sm font-medium text-foreground/80 text-center font-caslon">
+                      <p className="mt-8 text-sm font-medium text-foreground/80 text-center font-caslon">
                         {item.text}
                       </p>
                     </div>
