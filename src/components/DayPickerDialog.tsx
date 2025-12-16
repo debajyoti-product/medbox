@@ -1,13 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DayPickerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDaysSelect: (days: number[]) => void;
-  initialDays?: number[];
-  maxDays?: number;
+  onDaysSelect: (days: Date[]) => void;
+  initialDays?: Date[];
 }
 
 const vibrate = (duration: number = 10) => {
@@ -16,38 +16,81 @@ const vibrate = (duration: number = 10) => {
   }
 };
 
+const WEEKDAYS = ["M", "T", "W", "T", "F", "S", "S"];
+
 const DayPickerDialog = ({
   open,
   onOpenChange,
   onDaysSelect,
   initialDays = [],
-  maxDays = 30,
 }: DayPickerDialogProps) => {
-  const [selectedDays, setSelectedDays] = useState<number[]>(initialDays);
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [selectedDates, setSelectedDates] = useState<Date[]>(initialDays);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
-  const lastTouchedDay = useRef<number | null>(null);
+  const lastTouchedDate = useRef<string | null>(null);
 
   useEffect(() => {
     if (open) {
-      setSelectedDays(initialDays);
+      setSelectedDates(initialDays);
+      setCurrentMonth(today.getMonth());
+      setCurrentYear(today.getFullYear());
     }
-  }, [open, initialDays]);
+  }, [open]);
 
-  const toggleDay = useCallback((day: number) => {
+  const getMonthName = (month: number) => {
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return months[month];
+  };
+
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1; // Convert to Monday = 0
+  };
+
+  const isToday = (date: Date) => {
+    return date.toDateString() === today.toDateString();
+  };
+
+  const isPastDate = (date: Date) => {
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    const todayCompare = new Date(today);
+    todayCompare.setHours(0, 0, 0, 0);
+    return compareDate < todayCompare;
+  };
+
+  const isDateSelected = (date: Date) => {
+    return selectedDates.some(d => d.toDateString() === date.toDateString());
+  };
+
+  const toggleDate = useCallback((date: Date) => {
+    if (isPastDate(date)) return;
+    
     vibrate(15);
-    setSelectedDays((prev) => {
-      if (prev.includes(day)) {
-        return prev.filter((d) => d !== day);
+    setSelectedDates((prev) => {
+      const dateStr = date.toDateString();
+      if (prev.some(d => d.toDateString() === dateStr)) {
+        return prev.filter((d) => d.toDateString() !== dateStr);
       }
-      return [...prev, day].sort((a, b) => a - b);
+      return [...prev, date].sort((a, b) => a.getTime() - b.getTime());
     });
   }, []);
 
-  const handleTouchStart = (day: number) => {
+  const handleTouchStart = (date: Date) => {
+    if (isPastDate(date)) return;
     isDragging.current = true;
-    lastTouchedDay.current = day;
-    toggleDay(day);
+    lastTouchedDate.current = date.toDateString();
+    toggleDate(date);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -55,79 +98,158 @@ const DayPickerDialog = ({
     
     const touch = e.touches[0];
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const dayAttr = element?.getAttribute("data-day");
+    const dateAttr = element?.getAttribute("data-date");
     
-    if (dayAttr) {
-      const day = parseInt(dayAttr);
-      if (day !== lastTouchedDay.current && !isNaN(day)) {
-        lastTouchedDay.current = day;
-        if (!selectedDays.includes(day)) {
-          vibrate(8);
-          setSelectedDays((prev) => [...prev, day].sort((a, b) => a - b));
-        }
+    if (dateAttr) {
+      const date = new Date(dateAttr);
+      if (!isPastDate(date) && dateAttr !== lastTouchedDate.current && !isDateSelected(date)) {
+        lastTouchedDate.current = dateAttr;
+        vibrate(8);
+        setSelectedDates((prev) => [...prev, date].sort((a, b) => a.getTime() - b.getTime()));
       }
     }
   };
 
   const handleTouchEnd = () => {
     isDragging.current = false;
-    lastTouchedDay.current = null;
+    lastTouchedDate.current = null;
+  };
+
+  const prevMonth = () => {
+    vibrate(10);
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const nextMonth = () => {
+    vibrate(10);
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
   };
 
   const handleConfirm = () => {
     vibrate(20);
-    onDaysSelect(selectedDays);
+    onDaysSelect(selectedDates);
     onOpenChange(false);
   };
 
-  const days = Array.from({ length: maxDays }, (_, i) => i + 1);
+  // Generate calendar days
+  const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+  const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+  const prevMonthDays = getDaysInMonth(currentMonth === 0 ? 11 : currentMonth - 1, currentMonth === 0 ? currentYear - 1 : currentYear);
+
+  // Calculate days to show
+  const calendarDays: { date: Date; isCurrentMonth: boolean }[] = [];
+  
+  // Previous month days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = prevMonthDays - i;
+    const date = new Date(currentMonth === 0 ? currentYear - 1 : currentYear, currentMonth === 0 ? 11 : currentMonth - 1, day);
+    calendarDays.push({ date, isCurrentMonth: false });
+  }
+  
+  // Current month days
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(currentYear, currentMonth, day);
+    calendarDays.push({ date, isCurrentMonth: true });
+  }
+  
+  // Next month days to fill the grid
+  const remainingDays = 42 - calendarDays.length; // 6 rows * 7 days
+  for (let day = 1; day <= remainingDays; day++) {
+    const date = new Date(currentMonth === 11 ? currentYear + 1 : currentYear, currentMonth === 11 ? 0 : currentMonth + 1, day);
+    calendarDays.push({ date, isCurrentMonth: false });
+  }
+
+  // Can go to previous month only if it's not before current month
+  const canGoPrev = currentYear > today.getFullYear() || 
+    (currentYear === today.getFullYear() && currentMonth > today.getMonth());
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm mx-auto bg-card/95 backdrop-blur-xl border-border rounded-3xl p-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-center text-foreground">
-            Select Days
-          </h3>
-          <p className="text-sm text-muted-foreground text-center">
-            Tap Or Swipe To Select Multiple Days
-          </p>
+          {/* Month Navigation */}
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={prevMonth}
+              disabled={!canGoPrev}
+              className={`p-2 rounded-full transition-all ${canGoPrev ? 'hover:bg-secondary' : 'opacity-30 cursor-not-allowed'}`}
+            >
+              <ChevronLeft className="w-5 h-5 text-foreground" />
+            </button>
+            <h3 className="text-lg font-semibold text-foreground min-w-[140px] text-center">
+              {getMonthName(currentMonth)} {currentYear}
+            </h3>
+            <button
+              onClick={nextMonth}
+              className="p-2 rounded-full hover:bg-secondary transition-all"
+            >
+              <ChevronRight className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
 
+          {/* Weekday Headers */}
+          <div className="grid grid-cols-7 gap-1">
+            {WEEKDAYS.map((day, i) => (
+              <div key={i} className="text-center text-xs font-medium text-muted-foreground py-2">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Grid */}
           <div
             ref={containerRef}
-            className="grid grid-cols-7 gap-2 py-4"
+            className="grid grid-cols-7 gap-1"
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            {days.map((day) => {
-              const isSelected = selectedDays.includes(day);
+            {calendarDays.map(({ date, isCurrentMonth }, index) => {
+              const isSelected = isDateSelected(date);
+              const isPast = isPastDate(date);
+              const isTodayDate = isToday(date);
+              
               return (
                 <button
-                  key={day}
-                  data-day={day}
-                  onClick={() => toggleDay(day)}
-                  onTouchStart={() => handleTouchStart(day)}
+                  key={index}
+                  data-date={date.toISOString()}
+                  onClick={() => toggleDate(date)}
+                  onTouchStart={() => handleTouchStart(date)}
+                  disabled={isPast || !isCurrentMonth}
                   className={`
-                    aspect-square rounded-full flex items-center justify-center text-sm font-medium
+                    aspect-square rounded-xl flex items-center justify-center text-sm font-medium
                     transition-all duration-200 touch-none select-none
+                    ${!isCurrentMonth ? 'opacity-30 cursor-not-allowed' : ''}
+                    ${isPast && isCurrentMonth ? 'opacity-40 cursor-not-allowed' : ''}
                     ${isSelected 
                       ? "bg-[hsl(20,25%,25%)] text-white" 
-                      : "bg-transparent text-foreground"
+                      : isTodayDate && isCurrentMonth
+                        ? "ring-2 ring-[hsl(20,25%,25%)] text-foreground"
+                        : "text-foreground"
                     }
                   `}
-                  style={!isSelected ? {
+                  style={!isSelected && isCurrentMonth && !isPast ? {
                     background: "linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box",
                     border: "2px solid transparent",
                   } : undefined}
                 >
-                  {day}
+                  {date.getDate()}
                 </button>
               );
             })}
           </div>
 
           <p className="text-xs text-muted-foreground text-center">
-            {selectedDays.length} Day{selectedDays.length !== 1 ? "s" : ""} Selected
+            {selectedDates.length} Day{selectedDates.length !== 1 ? "s" : ""} Selected
           </p>
 
           <Button
