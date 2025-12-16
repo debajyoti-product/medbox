@@ -219,9 +219,18 @@ const AddMedicine = () => {
                     </button>
                     <Input
                       type="number"
-                      value={medicine.perServing}
-                      onChange={(e) => updateMedicine(index, "perServing", parseInt(e.target.value) || 1)}
-                      className="h-12 flex-1 bg-card border-border"
+                      min="1"
+                      value={medicine.perServing || ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateMedicine(index, "perServing", val === "" ? 0 : parseInt(val) || 0);
+                      }}
+                      onBlur={(e) => {
+                        if (!e.target.value || parseInt(e.target.value) < 1) {
+                          updateMedicine(index, "perServing", 1);
+                        }
+                      }}
+                      className="h-12 flex-1 bg-card border-border text-center"
                     />
                     <button
                       onClick={() => adjustValue(index, "perServing", true)}
@@ -243,9 +252,18 @@ const AddMedicine = () => {
                     </button>
                     <Input
                       type="number"
-                      value={medicine.timesPerDay}
-                      onChange={(e) => updateMedicine(index, "timesPerDay", parseInt(e.target.value) || 1)}
-                      className="h-12 flex-1 bg-card border-border"
+                      min="1"
+                      value={medicine.timesPerDay || ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateMedicine(index, "timesPerDay", val === "" ? 0 : parseInt(val) || 0);
+                      }}
+                      onBlur={(e) => {
+                        if (!e.target.value || parseInt(e.target.value) < 1) {
+                          updateMedicine(index, "timesPerDay", 1);
+                        }
+                      }}
+                      className="h-12 flex-1 bg-card border-border text-center"
                     />
                     <button
                       onClick={() => adjustValue(index, "timesPerDay", true)}
@@ -267,9 +285,18 @@ const AddMedicine = () => {
                     </button>
                     <Input
                       type="number"
-                      value={medicine.days}
-                      onChange={(e) => updateMedicine(index, "days", parseInt(e.target.value) || 1)}
-                      className="h-12 flex-1 bg-card border-border"
+                      min="1"
+                      value={medicine.days || ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateMedicine(index, "days", val === "" ? 0 : parseInt(val) || 0);
+                      }}
+                      onBlur={(e) => {
+                        if (!e.target.value || parseInt(e.target.value) < 1) {
+                          updateMedicine(index, "days", 1);
+                        }
+                      }}
+                      className="h-12 flex-1 bg-card border-border text-center"
                     />
                     <button
                       onClick={() => adjustValue(index, "days", true)}
@@ -340,7 +367,7 @@ const AddMedicine = () => {
         </Tabs>
 
         {/* Bottom Buttons - Always visible */}
-        <div className="fixed bottom-24 left-0 right-0 px-6">
+        <div className="fixed bottom-32 left-0 right-0 px-6">
           <div className="max-w-2xl mx-auto flex gap-3">
             {activeTab !== "medicine" && (
               <Button
