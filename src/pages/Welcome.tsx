@@ -2,10 +2,18 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import medboxLogo from "@/assets/medbox-logo-new.png";
+import { useAuth } from "@/hooks/useAuth";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/home");
+    }
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 300);
@@ -33,7 +41,7 @@ const Welcome = () => {
       </div>
       
       <Button 
-        onClick={() => navigate("/signup")}
+        onClick={() => navigate("/auth")}
         size="lg"
         variant="gradient"
         className={`w-full max-w-md text-base h-12 rounded-full font-medium transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
