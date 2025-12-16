@@ -9,6 +9,7 @@ export type Medicine = {
   perServing: number;
   timesPerDay: number;
   days: number;
+  selectedDays?: number[];
   scheduleTime?: { hour: number; minute: number; period: "AM" | "PM" };
   ailment?: string;
   startDate?: string;

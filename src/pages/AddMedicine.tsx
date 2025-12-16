@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Pill, Clock, FileText, Syringe, Wind, Droplets, CircleDot } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
 import TimePickerDialog from "@/components/TimePickerDialog";
+import DayPickerDialog from "@/components/DayPickerDialog";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { useMedicines, type Medicine } from "@/hooks/useMedicines";
@@ -60,9 +61,11 @@ const AddMedicine = () => {
       perServing: 1,
       timesPerDay: 1,
       days: 1,
+      selectedDays: [],
     },
   ]);
   const [timePickerOpen, setTimePickerOpen] = useState(false);
+  const [dayPickerOpen, setDayPickerOpen] = useState(false);
   const [selectedMedicineIndex, setSelectedMedicineIndex] = useState(0);
 
   useEffect(() => {
@@ -80,6 +83,7 @@ const AddMedicine = () => {
         perServing: 1,
         timesPerDay: 1,
         days: 1,
+        selectedDays: [],
       },
     ]);
   };
@@ -99,11 +103,32 @@ const AddMedicine = () => {
     }
   };
 
-  const adjustValue = (index: number, field: "perServing" | "timesPerDay" | "days", increment: boolean) => {
+  const adjustValue = (index: number, field: "perServing" | "timesPerDay", increment: boolean) => {
     vibrate(15);
     const current = medicines[index][field];
     const newValue = increment ? current + 1 : Math.max(1, current - 1);
     updateMedicine(index, field, newValue);
+  };
+
+  const openDayPicker = (index: number) => {
+    setSelectedMedicineIndex(index);
+    setDayPickerOpen(true);
+  };
+
+  const handleDaysSelect = (days: number[]) => {
+    const updated = [...medicines];
+    updated[selectedMedicineIndex] = {
+      ...updated[selectedMedicineIndex],
+      selectedDays: days,
+      days: days.length || 1,
+    };
+    setMedicines(updated);
+  };
+
+  const formatDays = (selectedDays?: number[]) => {
+    if (!selectedDays || selectedDays.length === 0) return "Set Days";
+    if (selectedDays.length === 1) return `Day ${selectedDays[0]}`;
+    return `${selectedDays.length} Days`;
   };
 
   const openTimePicker = (index: number) => {
@@ -281,39 +306,6 @@ const AddMedicine = () => {
                   </div>
                   <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">{t("timesADay")}</span>
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-3 flex-1">
-                    <button
-                      onClick={() => adjustValue(index, "days", false)}
-                      className="w-8 h-8 rounded-full bg-[hsl(20,25%,25%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
-                    >
-                      <span className="text-lg font-medium">−</span>
-                    </button>
-                    <Input
-                      type="number"
-                      min="1"
-                      value={medicine.days || ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        updateMedicine(index, "days", val === "" ? 0 : parseInt(val) || 0);
-                      }}
-                      onBlur={(e) => {
-                        if (!e.target.value || parseInt(e.target.value) < 1) {
-                          updateMedicine(index, "days", 1);
-                        }
-                      }}
-                      className="h-12 flex-1 bg-card border-border text-center"
-                    />
-                    <button
-                      onClick={() => adjustValue(index, "days", true)}
-                      className="w-8 h-8 rounded-full bg-[hsl(20,25%,25%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
-                    >
-                      <span className="text-lg font-medium">+</span>
-                    </button>
-                  </div>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap w-32 text-right">{t("days")}</span>
-                </div>
               </div>
             ))}
 
@@ -334,24 +326,36 @@ const AddMedicine = () => {
               const MedicineIcon = getMedicineIcon(medicine.type);
               return (
                 <Card key={index} className="p-4 rounded-xl shadow-md bg-card border-border">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
                         <MedicineIcon className="w-5 h-5 text-foreground" />
                       </div>
-                      <div>
-                        <p className="font-medium text-foreground">{medicine.name || "Medicine"}</p>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="min-w-0">
+                        <p className="font-medium text-foreground truncate">{medicine.name || "Medicine"}</p>
+                        <p className="text-sm text-muted-foreground truncate">
                           {medicine.perServing} {getTypeLabel(medicine.type, medicine.perServing)}, {getTimesLabel(medicine.timesPerDay)}
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => openTimePicker(index)}
-                      className="px-4 py-2 rounded-full text-sm font-medium bg-[hsl(20,25%,25%)] text-white hover:opacity-90 transition-all"
-                    >
-                      {formatTime(medicine.scheduleTime)}
-                    </button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => openTimePicker(index)}
+                        className="px-3 py-2 rounded-full text-xs font-medium bg-[hsl(20,25%,25%)] text-white hover:opacity-90 transition-all"
+                      >
+                        {formatTime(medicine.scheduleTime)}
+                      </button>
+                      <button
+                        onClick={() => openDayPicker(index)}
+                        className="px-3 py-2 rounded-full text-xs font-medium transition-all"
+                        style={{
+                          background: "linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, linear-gradient(135deg, hsl(350, 60%, 70%), hsl(25, 80%, 65%), hsl(35, 40%, 85%)) border-box",
+                          border: "2px solid transparent",
+                        }}
+                      >
+                        {formatDays(medicine.selectedDays)}
+                      </button>
+                    </div>
                   </div>
                 </Card>
               );
@@ -411,6 +415,13 @@ const AddMedicine = () => {
         initialHour={medicines[selectedMedicineIndex]?.scheduleTime?.hour || 8}
         initialMinute={medicines[selectedMedicineIndex]?.scheduleTime?.minute || 0}
         initialPeriod={medicines[selectedMedicineIndex]?.scheduleTime?.period || "AM"}
+      />
+
+      <DayPickerDialog
+        open={dayPickerOpen}
+        onOpenChange={setDayPickerOpen}
+        onDaysSelect={handleDaysSelect}
+        initialDays={medicines[selectedMedicineIndex]?.selectedDays || []}
       />
 
       <BottomNav />
