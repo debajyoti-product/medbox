@@ -17,7 +17,7 @@ const VerifyOTP = () => {
     if (otp.length !== 6) {
       toast({
         title: "Invalid OTP",
-        description: "Please Enter A Valid 6-Digit Code",
+        description: "Please Enter Any 6-Digit Code To Continue",
         variant: "destructive",
       });
       return;
@@ -96,7 +96,10 @@ const VerifyOTP = () => {
               Verify Your Phone
             </h2>
             <p className="text-muted-foreground">
-              We Sent A 6-Digit Code To {formatPhone(phone)}
+              Demo Mode: Enter Any 6 Digits To Continue
+            </p>
+            <p className="text-xs text-muted-foreground/60 mt-1">
+              Phone: {formatPhone(phone)}
             </p>
           </div>
 
