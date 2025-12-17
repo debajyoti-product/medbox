@@ -12,7 +12,7 @@ const VerifyOTP = () => {
   const phone = localStorage.getItem("medbox_phone") || "";
 
   const handleVerify = async () => {
-    if (otp.length !== 6) {
+    if (otp.length !== 4) {
       return;
     }
 
@@ -60,7 +60,7 @@ const VerifyOTP = () => {
               Verify Your Phone
             </h2>
             <p className="text-muted-foreground">
-              Demo Mode: Enter Any 6 Digits To Continue
+              Demo Mode: Enter Any 4 Digits To Continue
             </p>
             <p className="text-xs text-muted-foreground/60 mt-1">
               Phone: {formatPhone(phone)}
@@ -70,17 +70,15 @@ const VerifyOTP = () => {
           <div className="space-y-6">
             <div className="flex justify-center">
               <InputOTP
-                maxLength={6}
+                maxLength={4}
                 value={otp}
                 onChange={setOtp}
               >
                 <InputOTPGroup className="gap-2">
-                  <InputOTPSlot index={0} className="w-12 h-14 text-xl rounded-xl bg-card border-border" />
-                  <InputOTPSlot index={1} className="w-12 h-14 text-xl rounded-xl bg-card border-border" />
-                  <InputOTPSlot index={2} className="w-12 h-14 text-xl rounded-xl bg-card border-border" />
-                  <InputOTPSlot index={3} className="w-12 h-14 text-xl rounded-xl bg-card border-border" />
-                  <InputOTPSlot index={4} className="w-12 h-14 text-xl rounded-xl bg-card border-border" />
-                  <InputOTPSlot index={5} className="w-12 h-14 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={0} className="w-14 h-16 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={1} className="w-14 h-16 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={2} className="w-14 h-16 text-xl rounded-xl bg-card border-border" />
+                  <InputOTPSlot index={3} className="w-14 h-16 text-xl rounded-xl bg-card border-border" />
                 </InputOTPGroup>
               </InputOTP>
             </div>
@@ -89,7 +87,7 @@ const VerifyOTP = () => {
               <Button
                 onClick={handleResend}
                 variant="link"
-                className="text-accent"
+                className="text-accent underline underline-offset-4"
               >
                 Resend Code
               </Button>

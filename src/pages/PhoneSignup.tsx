@@ -99,7 +99,7 @@ const PhoneSignup = () => {
         </div>
 
         {/* CTA at bottom */}
-        <Button onClick={handleSendOTP} size="lg" variant="gradient" className="w-full text-base h-12 rounded-full font-medium mt-6" disabled={isLoading}>
+        <Button onClick={handleSendOTP} size="lg" variant="gradient" className="w-full text-base h-12 rounded-full font-medium mt-6" disabled={isLoading || phone.length !== 10}>
           {isLoading ? "Sending..." : "Send OTP"}
         </Button>
       </div>
