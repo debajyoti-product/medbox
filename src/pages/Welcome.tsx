@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import medboxLogo from "@/assets/medbox-logo-new.png";
@@ -20,9 +19,19 @@ const Welcome = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Auto transition to signup after 2 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!loading && !user) {
+        navigate("/signup");
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [loading, user, navigate]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-between p-6">
-      <div className="flex-1 flex flex-col items-center justify-center space-y-4 max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-card flex flex-col items-center justify-center p-6">
+      <div className="flex flex-col items-center justify-center space-y-4 max-w-md w-full">
         <div className={`space-y-6 text-center transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <img 
             src={medboxLogo} 
@@ -39,15 +48,6 @@ const Welcome = () => {
           </div>
         </div>
       </div>
-      
-      <Button 
-        onClick={() => navigate("/signup")}
-        size="lg"
-        variant="gradient"
-        className={`w-full max-w-md text-base h-12 rounded-full font-medium transition-all duration-700 delay-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-      >
-        Get Started
-      </Button>
     </div>
   );
 };

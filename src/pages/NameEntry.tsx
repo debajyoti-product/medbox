@@ -58,11 +58,6 @@ const NameEntry = () => {
       return;
     }
 
-    toast({
-      title: "Welcome, " + name.trim() + "!",
-      description: "Your Profile Has Been Set Up",
-    });
-    
     navigate("/home");
   };
 
@@ -82,9 +77,6 @@ const NameEntry = () => {
             <h2 className="text-2xl font-semibold text-foreground">
               What Should We Call You?
             </h2>
-            <p className="text-muted-foreground">
-              Enter Your Name So We Can Personalize Your Experience
-            </p>
           </div>
 
           <div className="space-y-6">
@@ -92,10 +84,7 @@ const NameEntry = () => {
               placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="h-14 text-lg text-center bg-transparent border-0 border-b-2 border-border rounded-none focus-visible:ring-0 focus-visible:border-primary placeholder:text-muted-foreground/40"
-              style={{
-                borderImage: "linear-gradient(90deg, transparent, hsl(var(--border)), transparent) 1",
-              }}
+              className="h-14 text-lg text-center bg-transparent border-0 border-b-2 border-foreground/40 rounded-none focus-visible:ring-0 focus-visible:border-primary placeholder:text-muted-foreground/40"
             />
           </div>
         </div>
@@ -105,7 +94,7 @@ const NameEntry = () => {
           size="lg"
           variant="gradient"
           className="w-full text-base h-12 rounded-full font-medium"
-          disabled={isLoading}
+          disabled={isLoading || name.trim().length < 3}
         >
           {isLoading ? "Saving..." : "Continue"}
         </Button>
