@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { User, Phone, ChevronRight, LogOut } from "lucide-react";
+import { User, Phone, ChevronRight, LogOut, Globe } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
-import GoogleTranslateIcon from "@/components/GoogleTranslateIcon";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -107,7 +106,7 @@ const Profile = () => {
           >
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                <GoogleTranslateIcon className="text-muted-foreground" size={20} />
+                <Globe className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">{t("language")}</p>
