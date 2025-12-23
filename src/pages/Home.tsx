@@ -94,37 +94,41 @@ const Home = () => {
         </div>
 
         {/* Scan prescription card */}
-        <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="flex-1 flex flex-col items-center justify-center gap-8">
           <button 
             onClick={() => setIsCameraOpen(true)}
-            className="w-full max-w-xs aspect-square rounded-3xl bg-primary/90 flex flex-col items-center justify-center gap-4 transition-all active:scale-95 hover:bg-primary shadow-lg"
+            className="w-44 h-44 rounded-2xl bg-primary/90 flex flex-col items-center justify-center gap-3 transition-all active:scale-95 hover:bg-primary shadow-lg backdrop-blur-sm"
           >
             {/* Camera frame with corner brackets */}
-            <div className="w-40 h-40 relative flex items-center justify-center">
+            <div className="w-20 h-20 relative flex items-center justify-center">
               {/* Top left corner */}
-              <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-accent rounded-tl-lg" />
+              <div className="absolute top-0 left-0 w-5 h-5 border-t-[3px] border-l-[3px] border-primary-foreground/80 rounded-tl-md" />
               {/* Top right corner */}
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-accent rounded-tr-lg" />
+              <div className="absolute top-0 right-0 w-5 h-5 border-t-[3px] border-r-[3px] border-primary-foreground/80 rounded-tr-md" />
               {/* Bottom left corner */}
-              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-accent rounded-bl-lg" />
+              <div className="absolute bottom-0 left-0 w-5 h-5 border-b-[3px] border-l-[3px] border-primary-foreground/80 rounded-bl-md" />
               {/* Bottom right corner */}
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-accent rounded-br-lg" />
+              <div className="absolute bottom-0 right-0 w-5 h-5 border-b-[3px] border-r-[3px] border-primary-foreground/80 rounded-br-md" />
               
               {/* Camera icon in center */}
-              <Camera className="w-16 h-16 text-primary-foreground/60" />
+              <Camera className="w-10 h-10 text-primary-foreground/70" />
             </div>
             
-            <span className="text-primary-foreground font-medium text-lg">Click to Take Photo</span>
+            <span className="text-primary-foreground/90 font-medium text-xs">Click to Take Photo</span>
           </button>
-          <p className="text-muted-foreground/60 text-sm mt-4 text-center">
-            Scan your prescription to add medicines
-          </p>
-        </div>
 
-        {/* Search bar positioned above bottom nav */}
-        <div onClick={() => navigate("/search")} className="w-full flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-md mb-2">
-          <Search className="w-5 h-5 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
+          {/* Separator with "or" */}
+          <div className="flex items-center gap-4 w-full max-w-xs">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-muted-foreground text-sm">or</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          {/* Search bar */}
+          <div onClick={() => navigate("/search")} className="w-full max-w-xs flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-sm">
+            <Search className="w-5 h-5 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
+          </div>
         </div>
       </div>
       
