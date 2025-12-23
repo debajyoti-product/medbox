@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { X, Camera } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { X, Camera, Flashlight, FlashlightOff } from "lucide-react";
 
 interface CameraCaptureProps {
   isOpen: boolean;
@@ -13,6 +12,8 @@ const CameraCapture = ({ isOpen, onClose, onCapture }: CameraCaptureProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [torchOn, setTorchOn] = useState(false);
+  const [torchSupported, setTorchSupported] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -37,6 +38,13 @@ const CameraCapture = ({ isOpen, onClose, onCapture }: CameraCaptureProps) => {
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
       }
+
+      // Check if torch is supported
+      const track = mediaStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities?.() as MediaTrackCapabilities & { torch?: boolean };
+      if (capabilities?.torch) {
+        setTorchSupported(true);
+      }
     } catch (err) {
       console.error("Camera access error:", err);
       setError("Unable to access camera. Please allow camera permissions.");
@@ -47,6 +55,22 @@ const CameraCapture = ({ isOpen, onClose, onCapture }: CameraCaptureProps) => {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
+    }
+    setTorchOn(false);
+    setTorchSupported(false);
+  };
+
+  const toggleTorch = async () => {
+    if (!stream) return;
+    
+    const track = stream.getVideoTracks()[0];
+    try {
+      await track.applyConstraints({
+        advanced: [{ torch: !torchOn } as MediaTrackConstraintSet & { torch: boolean }],
+      });
+      setTorchOn(!torchOn);
+    } catch (err) {
+      console.error("Torch toggle error:", err);
     }
   };
 
@@ -70,13 +94,31 @@ const CameraCapture = ({ isOpen, onClose, onCapture }: CameraCaptureProps) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col">
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 z-10 w-12 h-12 rounded-full bg-black/50 flex items-center justify-center text-white"
-      >
-        <X className="w-6 h-6" />
-      </button>
+      {/* Top controls */}
+      <div className="absolute top-6 left-0 right-0 z-10 flex justify-between items-center px-6">
+        {/* Torch button */}
+        {torchSupported && (
+          <button
+            onClick={toggleTorch}
+            className="w-12 h-12 rounded-full bg-black/50 flex items-center justify-center text-white transition-all active:scale-95"
+          >
+            {torchOn ? (
+              <Flashlight className="w-6 h-6 text-yellow-400" />
+            ) : (
+              <FlashlightOff className="w-6 h-6" />
+            )}
+          </button>
+        )}
+        {!torchSupported && <div className="w-12" />}
+        
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="w-12 h-12 rounded-full bg-black/50 flex items-center justify-center text-white transition-all active:scale-95"
+        >
+          <X className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Camera view */}
       <div className="flex-1 relative overflow-hidden">

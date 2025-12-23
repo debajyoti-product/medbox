@@ -93,34 +93,34 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Scan prescription card */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-8">
+        {/* Scan prescription card - centered between header and nav */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-6">
           <button 
             onClick={() => setIsCameraOpen(true)}
-            className="w-44 h-44 rounded-2xl bg-primary/90 flex flex-col items-center justify-center gap-3 transition-all active:scale-95 hover:bg-primary shadow-lg backdrop-blur-sm"
+            className="w-40 h-40 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/30 to-primary/40 flex flex-col items-center justify-center gap-2 transition-all active:scale-95 hover:from-primary/25 hover:to-primary/50 shadow-md border border-primary/20 animate-fade-in"
           >
-            {/* Camera frame with corner brackets */}
-            <div className="w-20 h-20 relative flex items-center justify-center">
+            {/* Camera frame with corner brackets - closer to edges */}
+            <div className="w-28 h-24 relative flex items-center justify-center">
               {/* Top left corner */}
-              <div className="absolute top-0 left-0 w-5 h-5 border-t-[3px] border-l-[3px] border-primary-foreground/80 rounded-tl-md" />
+              <div className="absolute top-0 left-0 w-5 h-5 border-t-[3px] border-l-[3px] border-primary rounded-tl-md" />
               {/* Top right corner */}
-              <div className="absolute top-0 right-0 w-5 h-5 border-t-[3px] border-r-[3px] border-primary-foreground/80 rounded-tr-md" />
+              <div className="absolute top-0 right-0 w-5 h-5 border-t-[3px] border-r-[3px] border-primary rounded-tr-md" />
               {/* Bottom left corner */}
-              <div className="absolute bottom-0 left-0 w-5 h-5 border-b-[3px] border-l-[3px] border-primary-foreground/80 rounded-bl-md" />
+              <div className="absolute bottom-0 left-0 w-5 h-5 border-b-[3px] border-l-[3px] border-primary rounded-bl-md" />
               {/* Bottom right corner */}
-              <div className="absolute bottom-0 right-0 w-5 h-5 border-b-[3px] border-r-[3px] border-primary-foreground/80 rounded-br-md" />
+              <div className="absolute bottom-0 right-0 w-5 h-5 border-b-[3px] border-r-[3px] border-primary rounded-br-md" />
               
               {/* Camera icon in center */}
-              <Camera className="w-10 h-10 text-primary-foreground/70" />
+              <Camera className="w-9 h-9 text-primary/70" />
             </div>
             
-            <span className="text-primary-foreground/90 font-medium text-xs">Click to Take Photo</span>
+            <span className="text-muted-foreground font-medium text-xs">Click to Take Photo</span>
           </button>
 
           {/* Separator with "or" */}
           <div className="flex items-center gap-4 w-full max-w-xs">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-muted-foreground text-sm">or</span>
+            <span className="text-muted-foreground/70 text-sm">or</span>
             <div className="flex-1 h-px bg-border" />
           </div>
 
