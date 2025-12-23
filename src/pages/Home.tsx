@@ -139,29 +139,31 @@ const Home = () => {
 
         {/* Scan prescription card - centered between header and nav */}
         <div className="flex-1 flex flex-col items-center justify-center gap-5">
-          {/* Camera button with dissolving gradient */}
+          {/* Camera button with glassmorphic box */}
           <div className="w-full max-w-xs relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/8 to-transparent rounded-2xl" />
             <button 
               onClick={() => setIsCameraOpen(true)}
-              className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] animate-fade-in"
+              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98] animate-fade-in bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)]"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)',
+              }}
             >
               {/* Camera frame with corner brackets */}
-              <div className="w-24 h-20 relative flex items-center justify-center">
+              <div className="w-32 h-24 relative flex items-center justify-center">
                 {/* Top left corner */}
-                <div className="absolute top-0 left-0 w-5 h-5 border-t-[2.5px] border-l-[2.5px] border-primary/60 rounded-tl-md" />
+                <div className="absolute top-0 left-0 w-6 h-6 border-t-[3px] border-l-[3px] border-primary/70 rounded-tl-lg" />
                 {/* Top right corner */}
-                <div className="absolute top-0 right-0 w-5 h-5 border-t-[2.5px] border-r-[2.5px] border-primary/60 rounded-tr-md" />
+                <div className="absolute top-0 right-0 w-6 h-6 border-t-[3px] border-r-[3px] border-primary/70 rounded-tr-lg" />
                 {/* Bottom left corner */}
-                <div className="absolute bottom-0 left-0 w-5 h-5 border-b-[2.5px] border-l-[2.5px] border-primary/60 rounded-bl-md" />
+                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-[3px] border-l-[3px] border-primary/70 rounded-bl-lg" />
                 {/* Bottom right corner */}
-                <div className="absolute bottom-0 right-0 w-5 h-5 border-b-[2.5px] border-r-[2.5px] border-primary/60 rounded-br-md" />
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-[3px] border-r-[3px] border-primary/70 rounded-br-lg" />
                 
                 {/* Camera icon in center */}
-                <Camera className="w-8 h-8 text-primary/50" />
+                <Camera className="w-10 h-10 text-primary/60" />
               </div>
               
-              <span className="text-muted-foreground/70 font-medium text-xs">Click to Take Photo</span>
+              <span className="text-muted-foreground font-medium text-sm">Tap to Scan Prescription</span>
             </button>
           </div>
 
