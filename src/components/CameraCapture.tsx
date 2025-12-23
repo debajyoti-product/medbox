@@ -135,9 +135,9 @@ const CameraCapture = ({ isOpen, onClose, onCapture }: CameraCaptureProps) => {
               muted
               className="w-full h-full object-cover"
             />
-            {/* Corner brackets overlay */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-72 h-96 relative">
+            {/* Corner brackets overlay with text below */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <div className="w-72 h-80 relative">
                 {/* Top left corner */}
                 <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-lg" />
                 {/* Top right corner */}
@@ -147,10 +147,10 @@ const CameraCapture = ({ isOpen, onClose, onCapture }: CameraCaptureProps) => {
                 {/* Bottom right corner */}
                 <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-lg" />
               </div>
+              <p className="mt-4 text-center text-white/80 text-sm">
+                Align your prescription or medicine within the frame
+              </p>
             </div>
-            <p className="absolute bottom-32 left-0 right-0 text-center text-white/80 text-sm">
-              Align your prescription or medicine within the frame
-            </p>
           </>
         )}
       </div>
