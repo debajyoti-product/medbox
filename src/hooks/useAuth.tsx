@@ -52,9 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const verifyOtp = async (phone: string, token: string) => {
-    // Demo mode: Accept any 6-digit code and sign in with email/password
-    if (token.length !== 6) {
-      return { error: new Error("Please enter a 6-digit code"), isNewUser: false };
+    // Demo mode: Accept any 4-digit code and sign in with email/password
+    if (token.length !== 4) {
+      return { error: new Error("Please enter a 4-digit code"), isNewUser: false };
     }
 
     const email = phoneToEmail(phone);
