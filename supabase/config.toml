@@ -2,3 +2,6 @@ project_id = "zsgoghaxldhsedbexkap"
 
 [functions.import-medicines]
 verify_jwt = false
+
+[functions.process-prescription]
+verify_jwt = false

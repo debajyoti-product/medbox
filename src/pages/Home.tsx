@@ -1,4 +1,4 @@
-import { Bell, Search, Sun, Moon, Camera } from "lucide-react";
+import { Bell, Search, Sun, Moon, Camera, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
@@ -6,6 +6,7 @@ import CameraCapture from "@/components/CameraCapture";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import medboxLogo from "@/assets/medbox-logo-new.png";
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -33,7 +34,8 @@ const Home = () => {
   } = useAuth();
   const [userName, setUserName] = useState("User");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
   useEffect(() => {
     if (!loading && !user) {
       navigate("/signup");
@@ -54,9 +56,51 @@ const Home = () => {
     fetchProfile();
   }, [user]);
 
-  const handleCapture = (imageData: string) => {
-    console.log("Photo captured:", imageData.substring(0, 50) + "...");
-    // TODO: Process the captured prescription image
+  const handleCapture = async (imageData: string) => {
+    setIsProcessing(true);
+    
+    try {
+      const response = await supabase.functions.invoke('process-prescription', {
+        body: { imageBase64: imageData }
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to process image');
+      }
+
+      const { medicines, error } = response.data;
+
+      if (error) {
+        toast({
+          title: "Processing Error",
+          description: error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!medicines || medicines.length === 0) {
+        toast({
+          title: "No medicines found",
+          description: "Could not identify medicines. Please try again or add manually.",
+          variant: "destructive",
+        });
+        navigate("/add-medicine");
+        return;
+      }
+
+      // Navigate to review screen with extracted medicines
+      navigate("/review-medicines", { state: { medicines } });
+    } catch (error) {
+      console.error("Error processing prescription:", error);
+      toast({
+        title: "Error",
+        description: "Failed to process prescription. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (loading) {
@@ -139,6 +183,15 @@ const Home = () => {
         onClose={() => setIsCameraOpen(false)} 
         onCapture={handleCapture} 
       />
+
+      {/* Processing overlay */}
+      {isProcessing && (
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
+          <Loader2 className="w-12 h-12 text-primary animate-spin" />
+          <p className="text-foreground font-medium">Analyzing prescription...</p>
+          <p className="text-muted-foreground text-sm">This may take a few seconds</p>
+        </div>
+      )}
     </div>;
 };
 export default Home;
