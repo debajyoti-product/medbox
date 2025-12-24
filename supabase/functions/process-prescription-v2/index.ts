@@ -45,7 +45,13 @@ serve(async (req) => {
     console.log("Step 1: Sending image to Azure Document Intelligence Read API...");
 
     // Step 1: Send image to Azure Document Intelligence Read API
-    const imageBuffer = Uint8Array.from(atob(imageBase64), c => c.charCodeAt(0));
+    // Strip the data URL prefix if present (e.g., "data:image/jpeg;base64,")
+    let cleanBase64 = imageBase64;
+    if (imageBase64.includes(',')) {
+      cleanBase64 = imageBase64.split(',')[1];
+    }
+    
+    const imageBuffer = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
     
     const analyzeUrl = `${AZURE_VISION_ENDPOINT}/vision/v3.2/read/analyze`;
     
