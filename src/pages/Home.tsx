@@ -60,7 +60,7 @@ const Home = () => {
     setIsProcessing(true);
     
     try {
-      const response = await supabase.functions.invoke('process-prescription', {
+      const response = await supabase.functions.invoke('process-prescription-v2', {
         body: { imageBase64: imageData }
       });
 
@@ -143,7 +143,7 @@ const Home = () => {
           <div className="w-full max-w-xs relative">
             <button 
               onClick={() => setIsCameraOpen(true)}
-              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98] animate-fade-in bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)]"
+              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98] animate-pulse-glow bg-white/10 backdrop-blur-xl border border-white/20"
               style={{
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)',
               }}
