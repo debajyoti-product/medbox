@@ -141,16 +141,12 @@ const Home = () => {
         <div className="flex-1 flex flex-col items-center justify-center gap-5">
           {/* Camera button with glassmorphic box */}
           <div className="w-full max-w-xs relative">
+            {/* Gradient background behind the glass */}
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
+            
             <button 
               onClick={() => setIsCameraOpen(true)}
-              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98]"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(6px)',
-                WebkitBackdropFilter: 'blur(6px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
-              }}
+              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
             >
               {/* Camera frame with corner brackets */}
               <div className="w-32 h-24 relative flex items-center justify-center">
