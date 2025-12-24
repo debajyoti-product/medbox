@@ -143,9 +143,13 @@ const Home = () => {
           <div className="w-full max-w-xs relative">
             <button 
               onClick={() => setIsCameraOpen(true)}
-              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98] animate-pulse-glow bg-white/10 backdrop-blur-xl border border-white/20"
+              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98]"
               style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
               }}
             >
               {/* Camera frame with corner brackets */}
