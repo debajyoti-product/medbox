@@ -26,14 +26,6 @@ serve(async (req) => {
     const AZURE_VISION_KEY = Deno.env.get('AZURE_VISION_KEY');
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
-    if (!AZURE_VISION_ENDPOINT || !AZURE_VISION_KEY) {
-      console.error("Azure Vision credentials not configured");
-      return new Response(
-        JSON.stringify({ error: "Azure Vision credentials not configured" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     if (!LOVABLE_API_KEY) {
       console.error("LOVABLE_API_KEY is not configured");
       return new Response(
@@ -42,102 +34,141 @@ serve(async (req) => {
       );
     }
 
-    console.log("Step 1: Sending image to Azure Document Intelligence Read API...");
+    const ensureDataUrl = (base64OrDataUrl: string) => {
+      if (base64OrDataUrl.startsWith('data:')) return base64OrDataUrl;
+      return `data:image/jpeg;base64,${base64OrDataUrl}`;
+    };
 
-    // Step 1: Send image to Azure Document Intelligence Read API
+    const geminiOcr = async (base64OrDataUrl: string) => {
+      console.log("Fallback: Running OCR with Gemini vision...");
+
+      const imageUrl = ensureDataUrl(base64OrDataUrl);
+      const ocrPrompt = `Extract ALL readable text from this prescription image.\n\nRules:\n- Return plain text only (no markdown, no bullets, no JSON).\n- Keep line breaks.\n- Do not add explanations.`;
+
+      const resp = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: ocrPrompt },
+                { type: 'image_url', image_url: { url: imageUrl } },
+              ],
+            },
+          ],
+        }),
+      });
+
+      if (!resp.ok) {
+        const t = await resp.text();
+        console.error('Gemini OCR error:', resp.status, t);
+        throw new Error('AI OCR failed');
+      }
+
+      const data = await resp.json();
+      const content = data.choices?.[0]?.message?.content;
+      if (!content || typeof content !== 'string') throw new Error('AI OCR returned no text');
+      return content.trim();
+    };
+
+    console.log("Step 1: Attempting OCR via Azure (if configured)...");
+
     // Strip the data URL prefix if present (e.g., "data:image/jpeg;base64,")
     let cleanBase64 = imageBase64;
     if (imageBase64.includes(',')) {
       cleanBase64 = imageBase64.split(',')[1];
     }
-    
-    const imageBuffer = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
-    
-    const analyzeUrl = `${AZURE_VISION_ENDPOINT}/vision/v3.2/read/analyze`;
-    
-    const analyzeResponse = await fetch(analyzeUrl, {
-      method: 'POST',
-      headers: {
-        'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY,
-        'Content-Type': 'application/octet-stream',
-      },
-      body: imageBuffer,
-    });
 
-    if (!analyzeResponse.ok) {
-      const errorText = await analyzeResponse.text();
-      console.error("Azure analyze error:", analyzeResponse.status, errorText);
-      return new Response(
-        JSON.stringify({ error: "Failed to analyze image with Azure", details: errorText }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Get the operation location to poll for results
-    const operationLocation = analyzeResponse.headers.get('Operation-Location');
-    if (!operationLocation) {
-      console.error("No operation location returned from Azure");
-      return new Response(
-        JSON.stringify({ error: "No operation location returned from Azure" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    console.log("Step 2: Polling Azure for OCR results...");
-
-    // Step 2: Poll for results
-    let ocrResult = null;
-    let attempts = 0;
-    const maxAttempts = 30;
-
-    while (attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const resultResponse = await fetch(operationLocation, {
-        headers: {
-          'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY,
-        },
-      });
-
-      if (!resultResponse.ok) {
-        const errorText = await resultResponse.text();
-        console.error("Azure result poll error:", resultResponse.status, errorText);
-        attempts++;
-        continue;
-      }
-
-      const resultData = await resultResponse.json();
-      
-      if (resultData.status === 'succeeded') {
-        ocrResult = resultData;
-        break;
-      } else if (resultData.status === 'failed') {
-        console.error("Azure OCR failed:", resultData);
-        return new Response(
-          JSON.stringify({ error: "Azure OCR processing failed" }),
-          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-      
-      attempts++;
-    }
-
-    if (!ocrResult) {
-      console.error("Azure OCR timed out");
-      return new Response(
-        JSON.stringify({ error: "Azure OCR timed out" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Extract raw text from OCR results
     let rawText = '';
-    if (ocrResult.analyzeResult?.readResults) {
-      for (const page of ocrResult.analyzeResult.readResults) {
-        for (const line of page.lines || []) {
-          rawText += line.text + '\n';
+
+    // Prefer Azure Read API when credentials are configured; otherwise fall back to Gemini vision OCR.
+    if (AZURE_VISION_ENDPOINT && AZURE_VISION_KEY) {
+      try {
+        const imageBuffer = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
+        const analyzeUrl = `${AZURE_VISION_ENDPOINT}/vision/v3.2/read/analyze`;
+
+        const analyzeResponse = await fetch(analyzeUrl, {
+          method: 'POST',
+          headers: {
+            'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY,
+            'Content-Type': 'application/octet-stream',
+          },
+          body: imageBuffer,
+        });
+
+        if (!analyzeResponse.ok) {
+          const errorText = await analyzeResponse.text();
+          console.error("Azure analyze error:", analyzeResponse.status, errorText);
+          // If Azure is misconfigured (very common), fall back automatically.
+          rawText = await geminiOcr(imageBase64);
+        } else {
+          const operationLocation = analyzeResponse.headers.get('Operation-Location');
+          if (!operationLocation) {
+            console.error("No operation location returned from Azure");
+            rawText = await geminiOcr(imageBase64);
+          } else {
+            console.log("Step 2: Polling Azure for OCR results...");
+
+            let ocrResult: any = null;
+            let attempts = 0;
+            const maxAttempts = 30;
+
+            while (attempts < maxAttempts) {
+              await new Promise(resolve => setTimeout(resolve, 1000));
+
+              const resultResponse = await fetch(operationLocation, {
+                headers: {
+                  'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY,
+                },
+              });
+
+              if (!resultResponse.ok) {
+                const errorText = await resultResponse.text();
+                console.error("Azure result poll error:", resultResponse.status, errorText);
+                attempts++;
+                continue;
+              }
+
+              const resultData = await resultResponse.json();
+
+              if (resultData.status === 'succeeded') {
+                ocrResult = resultData;
+                break;
+              } else if (resultData.status === 'failed') {
+                console.error("Azure OCR failed:", resultData);
+                break;
+              }
+
+              attempts++;
+            }
+
+            if (ocrResult?.analyzeResult?.readResults) {
+              for (const page of ocrResult.analyzeResult.readResults) {
+                for (const line of page.lines || []) {
+                  rawText += line.text + '\n';
+                }
+              }
+            }
+
+            if (!rawText.trim()) {
+              console.log('Azure OCR returned no text; falling back to Gemini OCR.');
+              rawText = await geminiOcr(imageBase64);
+            }
+          }
         }
+      } catch (e) {
+        console.error('Azure OCR flow crashed; falling back to Gemini OCR:', e);
+        rawText = await geminiOcr(imageBase64);
       }
+    } else {
+      console.log('Azure credentials not configured; using Gemini vision OCR.');
+      rawText = await geminiOcr(imageBase64);
     }
 
     console.log("OCR raw text extracted:", rawText.substring(0, 500) + "...");
@@ -145,7 +176,7 @@ serve(async (req) => {
     if (!rawText.trim()) {
       console.log("No text found in image");
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           medicines: [],
           message: "No text found in the prescription image. Please try again with a clearer image."
         }),
