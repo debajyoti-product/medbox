@@ -1,4 +1,4 @@
-import { Bell, Search, Sun, Moon, Camera, Loader2 } from "lucide-react";
+import { Bell, Search, Sun, Moon, Camera, Loader2, Image as ImageIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
@@ -56,7 +56,7 @@ const Home = () => {
     fetchProfile();
   }, [user]);
 
-  const handleCapture = async (imageData: string) => {
+  const processImage = async (imageData: string) => {
     setIsProcessing(true);
     
     try {
@@ -89,7 +89,6 @@ const Home = () => {
         return;
       }
 
-      // Navigate to review screen with extracted medicines
       navigate("/review-medicines", { state: { medicines } });
     } catch (error) {
       console.error("Error processing prescription:", error);
@@ -101,6 +100,24 @@ const Home = () => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleCapture = async (imageData: string) => {
+    await processImage(imageData);
+  };
+
+  const handleGallerySelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const imageData = event.target?.result as string;
+      if (imageData) {
+        await processImage(imageData);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   if (loading) {
@@ -137,34 +154,43 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Scan prescription card - centered between header and nav */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-5">
-          {/* Camera button with glassmorphic box */}
-          <div className="w-full max-w-xs relative">
-            {/* Gradient background behind the glass */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
-            
-            <button 
-              onClick={() => setIsCameraOpen(true)}
-              className="relative w-full py-8 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
-            >
-              {/* Camera frame with corner brackets */}
-              <div className="w-32 h-24 relative flex items-center justify-center">
-                {/* Top left corner */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-[3px] border-l-[3px] border-primary/70 rounded-tl-lg" />
-                {/* Top right corner */}
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-[3px] border-r-[3px] border-primary/70 rounded-tr-lg" />
-                {/* Bottom left corner */}
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-[3px] border-l-[3px] border-primary/70 rounded-bl-lg" />
-                {/* Bottom right corner */}
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-[3px] border-r-[3px] border-primary/70 rounded-br-lg" />
-                
-                {/* Camera icon in center */}
-                <Camera className="w-10 h-10 text-primary/60" />
-              </div>
-              
-              <span className="text-muted-foreground font-medium text-sm">Tap to Scan Prescription</span>
-            </button>
+        {/* Prescription section */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          {/* Header with lines */}
+          <div className="flex items-center gap-4 w-full max-w-xs">
+            <div className="flex-1 h-px bg-border/60" />
+            <span className="text-muted-foreground text-xs font-medium">Add Your Prescription</span>
+            <div className="flex-1 h-px bg-border/60" />
+          </div>
+
+          {/* Two option boxes */}
+          <div className="w-full max-w-xs flex gap-3">
+            {/* Camera option */}
+            <div className="flex-1 relative">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
+              <button 
+                onClick={() => setIsCameraOpen(true)}
+                className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
+              >
+                <Camera className="w-8 h-8 text-primary/70" />
+                <span className="text-muted-foreground font-medium text-xs text-center px-2">Take Photo With Camera</span>
+              </button>
+            </div>
+
+            {/* Gallery option */}
+            <div className="flex-1 relative">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
+              <label className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] cursor-pointer">
+                <ImageIcon className="w-8 h-8 text-primary/70" />
+                <span className="text-muted-foreground font-medium text-xs text-center px-2">Add Photo From Gallery</span>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={handleGallerySelect}
+                />
+              </label>
+            </div>
           </div>
 
           {/* Separator with "or" */}
@@ -174,7 +200,8 @@ const Home = () => {
             <div className="flex-1 h-px bg-border/60" />
           </div>
 
-          {/* Search bar */}
+          {/* Search bar - pushed down with margin */}
+          <div className="mt-4" />
           <div onClick={() => navigate("/search")} className="w-full max-w-xs flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-sm">
             <Search className="w-5 h-5 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
@@ -182,7 +209,7 @@ const Home = () => {
         </div>
       </div>
       
-      <BottomNav />
+      <BottomNav onCameraClick={() => setIsCameraOpen(true)} />
       
       <CameraCapture 
         isOpen={isCameraOpen} 
