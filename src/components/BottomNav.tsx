@@ -1,19 +1,34 @@
-import { Home, Archive, User, TrendingUp } from "lucide-react";
+import { Home, Archive, User, TrendingUp, Plus } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useRef } from "react";
 
 interface BottomNavProps {
   onCameraClick?: () => void;
+  onGalleryClick?: () => void;
 }
 
-const BottomNav = ({ onCameraClick }: BottomNavProps) => {
+const BottomNav = ({ onCameraClick, onGalleryClick }: BottomNavProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
-  const handleCameraIconClick = () => {
+  const handlePlusClick = () => {
+    // Show native action sheet by triggering camera input with capture
     if (onCameraClick) {
-      onCameraClick();
+      // Create a temporary input to show native camera/gallery picker
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.capture = 'environment';
+      input.onchange = (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file && onGalleryClick) {
+          // Dispatch a custom event with the file
+          const event = new CustomEvent('nav-file-selected', { detail: file });
+          window.dispatchEvent(event);
+        }
+      };
+      input.click();
     } else {
-      // Fallback to file picker if no camera handler
       fileInputRef.current?.click();
     }
   };
@@ -34,17 +49,17 @@ const BottomNav = ({ onCameraClick }: BottomNavProps) => {
             <span className="text-[10px] font-medium">Vault</span>
           </NavLink>
 
-          {/* Camera lens icon */}
+          {/* Plus icon */}
           <button 
-            onClick={handleCameraIconClick}
+            onClick={handlePlusClick}
             className="flex items-center justify-center -mt-6"
           >
-            <div className="relative w-12 h-12 flex items-center justify-center">
+            <div className="relative w-14 h-14 flex items-center justify-center">
               {/* Outer circle border */}
-              <div className="absolute inset-0 rounded-full border-2 border-primary/40" />
+              <div className="absolute inset-0 rounded-full border-2 border-primary/50" />
               {/* Inner circle fill */}
-              <div className="w-8 h-8 rounded-full bg-primary/70 flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-background/30" />
+              <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center">
+                <Plus className="w-5 h-5 text-primary-foreground" />
               </div>
             </div>
           </button>
@@ -54,6 +69,12 @@ const BottomNav = ({ onCameraClick }: BottomNavProps) => {
             type="file" 
             accept="image/*" 
             capture="environment"
+            className="hidden" 
+          />
+          <input 
+            ref={galleryInputRef}
+            type="file" 
+            accept="image/*"
             className="hidden" 
           />
 
