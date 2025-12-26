@@ -170,7 +170,7 @@ const Home = () => {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
               <button 
                 onClick={() => setIsCameraOpen(true)}
-                className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
+                className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.06)]"
               >
                 <Camera className="w-8 h-8 text-primary/70" />
                 <span className="text-muted-foreground font-medium text-xs text-center px-2">Take Photo With Camera</span>
@@ -180,7 +180,7 @@ const Home = () => {
             {/* Gallery option */}
             <div className="flex-1 relative">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
-              <label className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] cursor-pointer">
+              <label className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.06)] cursor-pointer">
                 <ImageIcon className="w-8 h-8 text-primary/70" />
                 <span className="text-muted-foreground font-medium text-xs text-center px-2">Add Photo From Gallery</span>
                 <input 
@@ -200,8 +200,7 @@ const Home = () => {
             <div className="flex-1 h-px bg-border/60" />
           </div>
 
-          {/* Search bar - pushed down with margin */}
-          <div className="mt-4" />
+          {/* Search bar */}
           <div onClick={() => navigate("/search")} className="w-full max-w-xs flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-sm">
             <Search className="w-5 h-5 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
