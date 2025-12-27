@@ -175,7 +175,7 @@ const Home = () => {
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
                   <Camera className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-muted-foreground font-medium text-xs text-center px-2">Take Photo With Camera</span>
+                <span className="text-muted-foreground font-medium text-xs text-center px-2">Take Photo</span>
               </button>
             </div>
 
@@ -186,7 +186,7 @@ const Home = () => {
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-muted-foreground font-medium text-xs text-center px-2">Add File From Phone</span>
+                <span className="text-muted-foreground font-medium text-xs text-center px-2">Upload File</span>
                 <input 
                   type="file" 
                   accept="image/*" 
