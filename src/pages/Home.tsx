@@ -1,4 +1,4 @@
-import { Bell, Search, Sun, Moon, Camera, Loader2, Image as ImageIcon } from "lucide-react";
+import { Bell, Search, Sun, Moon, Camera, Loader2, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
@@ -172,17 +172,21 @@ const Home = () => {
                 onClick={() => setIsCameraOpen(true)}
                 className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.06)]"
               >
-                <Camera className="w-8 h-8 text-primary/70" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
+                  <Camera className="w-5 h-5 text-white" />
+                </div>
                 <span className="text-muted-foreground font-medium text-xs text-center px-2">Take Photo With Camera</span>
               </button>
             </div>
 
-            {/* Gallery option */}
+            {/* File option */}
             <div className="flex-1 relative">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
               <label className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.06)] cursor-pointer">
-                <ImageIcon className="w-8 h-8 text-primary/70" />
-                <span className="text-muted-foreground font-medium text-xs text-center px-2">Add Photo From Gallery</span>
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-muted-foreground font-medium text-xs text-center px-2">Add File From Phone</span>
                 <input 
                   type="file" 
                   accept="image/*" 

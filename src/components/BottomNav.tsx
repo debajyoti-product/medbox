@@ -12,25 +12,21 @@ const BottomNav = ({ onCameraClick, onGalleryClick }: BottomNavProps) => {
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const handlePlusClick = () => {
-    // Show native action sheet by triggering camera input with capture
-    if (onCameraClick) {
-      // Create a temporary input to show native camera/gallery picker
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.capture = 'environment';
-      input.onchange = (e) => {
-        const file = (e.target as HTMLInputElement).files?.[0];
-        if (file && onGalleryClick) {
-          // Dispatch a custom event with the file
-          const event = new CustomEvent('nav-file-selected', { detail: file });
-          window.dispatchEvent(event);
-        }
-      };
-      input.click();
-    } else {
-      fileInputRef.current?.click();
-    }
+    // Show native action sheet with ALL options (camera, gallery, files)
+    // By not setting capture attribute, the browser shows all options
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    // No capture attribute = shows take photo, photo library, and choose file options
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        // Dispatch a custom event with the file
+        const event = new CustomEvent('nav-file-selected', { detail: file });
+        window.dispatchEvent(event);
+      }
+    };
+    input.click();
   };
 
   return <nav className="fixed bottom-6 left-0 right-0 z-50 px-6">
@@ -57,9 +53,9 @@ const BottomNav = ({ onCameraClick, onGalleryClick }: BottomNavProps) => {
             <div className="relative w-14 h-14 flex items-center justify-center">
               {/* Outer circle border */}
               <div className="absolute inset-0 rounded-full border-2 border-primary/50" />
-              {/* Inner circle fill */}
-              <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center">
-                <Plus className="w-5 h-5 text-primary-foreground" />
+              {/* Inner circle fill with gradient */}
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
+                <Plus className="w-5 h-5 text-white" />
               </div>
             </div>
           </button>
