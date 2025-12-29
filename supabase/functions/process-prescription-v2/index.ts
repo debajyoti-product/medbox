@@ -46,7 +46,7 @@ serve(async (req) => {
       return `data:image/jpeg;base64,${base64OrDataUrl}`;
     };
 
-    console.log("Step 1: Running OCR with Qwen 3VL via OpenRouter...");
+    console.log("Step 1: Running OCR with Qwen 2.5 VL via OpenRouter...");
 
     const imageUrl = ensureDataUrl(imageBase64);
 
