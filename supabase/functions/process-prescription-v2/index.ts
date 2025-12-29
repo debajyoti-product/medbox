@@ -22,9 +22,16 @@ serve(async (req) => {
       );
     }
 
-    const AZURE_VISION_ENDPOINT = Deno.env.get('AZURE_VISION_ENDPOINT');
-    const AZURE_VISION_KEY = Deno.env.get('AZURE_VISION_KEY');
+    const QWEN_IMAGE_KEY = Deno.env.get('QWEN_IMAGE_KEY');
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+
+    if (!QWEN_IMAGE_KEY) {
+      console.error("QWEN_IMAGE_KEY is not configured");
+      return new Response(
+        JSON.stringify({ error: "QWEN_IMAGE_KEY is not configured" }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     if (!LOVABLE_API_KEY) {
       console.error("LOVABLE_API_KEY is not configured");
@@ -39,161 +46,19 @@ serve(async (req) => {
       return `data:image/jpeg;base64,${base64OrDataUrl}`;
     };
 
-    const geminiOcr = async (base64OrDataUrl: string) => {
-      console.log("Fallback: Running OCR with Gemini vision...");
+    console.log("Step 1: Running OCR with Qwen 3VL via OpenRouter...");
 
-      const imageUrl = ensureDataUrl(base64OrDataUrl);
-      const ocrPrompt = `Extract ALL readable text from this prescription image.\n\nRules:\n- Return plain text only (no markdown, no bullets, no JSON).\n- Keep line breaks.\n- Do not add explanations.`;
+    const imageUrl = ensureDataUrl(imageBase64);
 
-      const resp = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: ocrPrompt },
-                { type: 'image_url', image_url: { url: imageUrl } },
-              ],
-            },
-          ],
-        }),
-      });
-
-      if (!resp.ok) {
-        const t = await resp.text();
-        console.error('Gemini OCR error:', resp.status, t);
-        throw new Error('AI OCR failed');
-      }
-
-      const data = await resp.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (!content || typeof content !== 'string') throw new Error('AI OCR returned no text');
-      return content.trim();
-    };
-
-    console.log("Step 1: Attempting OCR via Azure (if configured)...");
-
-    // Strip the data URL prefix if present (e.g., "data:image/jpeg;base64,")
-    let cleanBase64 = imageBase64;
-    if (imageBase64.includes(',')) {
-      cleanBase64 = imageBase64.split(',')[1];
-    }
-
-    let rawText = '';
-
-    // Prefer Azure Read API when credentials are configured; otherwise fall back to Gemini vision OCR.
-    if (AZURE_VISION_ENDPOINT && AZURE_VISION_KEY) {
-      try {
-        const imageBuffer = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
-        const analyzeUrl = `${AZURE_VISION_ENDPOINT}/vision/v3.2/read/analyze`;
-
-        const analyzeResponse = await fetch(analyzeUrl, {
-          method: 'POST',
-          headers: {
-            'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY,
-            'Content-Type': 'application/octet-stream',
-          },
-          body: imageBuffer,
-        });
-
-        if (!analyzeResponse.ok) {
-          const errorText = await analyzeResponse.text();
-          console.error("Azure analyze error:", analyzeResponse.status, errorText);
-          // If Azure is misconfigured (very common), fall back automatically.
-          rawText = await geminiOcr(imageBase64);
-        } else {
-          const operationLocation = analyzeResponse.headers.get('Operation-Location');
-          if (!operationLocation) {
-            console.error("No operation location returned from Azure");
-            rawText = await geminiOcr(imageBase64);
-          } else {
-            console.log("Step 2: Polling Azure for OCR results...");
-
-            let ocrResult: any = null;
-            let attempts = 0;
-            const maxAttempts = 30;
-
-            while (attempts < maxAttempts) {
-              await new Promise(resolve => setTimeout(resolve, 1000));
-
-              const resultResponse = await fetch(operationLocation, {
-                headers: {
-                  'Ocp-Apim-Subscription-Key': AZURE_VISION_KEY,
-                },
-              });
-
-              if (!resultResponse.ok) {
-                const errorText = await resultResponse.text();
-                console.error("Azure result poll error:", resultResponse.status, errorText);
-                attempts++;
-                continue;
-              }
-
-              const resultData = await resultResponse.json();
-
-              if (resultData.status === 'succeeded') {
-                ocrResult = resultData;
-                break;
-              } else if (resultData.status === 'failed') {
-                console.error("Azure OCR failed:", resultData);
-                break;
-              }
-
-              attempts++;
-            }
-
-            if (ocrResult?.analyzeResult?.readResults) {
-              for (const page of ocrResult.analyzeResult.readResults) {
-                for (const line of page.lines || []) {
-                  rawText += line.text + '\n';
-                }
-              }
-            }
-
-            if (!rawText.trim()) {
-              console.log('Azure OCR returned no text; falling back to Gemini OCR.');
-              rawText = await geminiOcr(imageBase64);
-            }
-          }
-        }
-      } catch (e) {
-        console.error('Azure OCR flow crashed; falling back to Gemini OCR:', e);
-        rawText = await geminiOcr(imageBase64);
-      }
-    } else {
-      console.log('Azure credentials not configured; using Gemini vision OCR.');
-      rawText = await geminiOcr(imageBase64);
-    }
-
-    console.log("OCR raw text extracted:", rawText.substring(0, 500) + "...");
-
-    if (!rawText.trim()) {
-      console.log("No text found in image");
-      return new Response(
-        JSON.stringify({
-          medicines: [],
-          message: "No text found in the prescription image. Please try again with a clearer image."
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    console.log("Step 3: Sending OCR text to Gemini for medicine extraction...");
-
-    // Step 3: Send raw text to Gemini for medicine extraction
-    const systemPrompt = `You are an EXPERT medical data validator. I will provide you with raw OCR text from a medical prescription.
+    // OCR System Prompt for Qwen (same as Azure was using)
+    const ocrSystemPrompt = `You are an EXPERT medical data validator. I will provide you with a medical prescription image.
 
 Your goal:
-1. Map the messy OCR text to real-world pharmaceutical names.
-2. Extract dosage instructions (e.g., '1-0-1' or 'twice daily').
-3. Format as JSON
-4. CRITICAL: If a drug name looks like a dangerous misspelling or the OCR is too garbled to be at least 90% sure, set the accurate flag to false & append a warning.
+1. Extract ALL readable text from this prescription image.
+2. Map the messy OCR text to real-world pharmaceutical names.
+3. Extract dosage instructions (e.g., '1-0-1' or 'twice daily').
+4. Format as JSON
+5. CRITICAL: If a drug name looks like a dangerous misspelling or the text is too garbled to be at least 90% sure, set the accurate flag to false & append a warning.
 
 Return a JSON array of medicines with this exact structure:
 [
@@ -215,6 +80,127 @@ If you cannot identify a medicine or if the text is too unclear:
 
 ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
 
+    // Step 1: Call Qwen 3VL via OpenRouter for OCR + initial extraction
+    const qwenResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${QWEN_IMAGE_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://lovable.dev',
+        'X-Title': 'MedBox Prescription Scanner',
+      },
+      body: JSON.stringify({
+        model: 'qwen/qwen-2.5-vl-72b-instruct',
+        messages: [
+          { role: 'system', content: ocrSystemPrompt },
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Extract medicine information from this prescription image.' },
+              { type: 'image_url', image_url: { url: imageUrl } },
+            ],
+          },
+        ],
+      }),
+    });
+
+    if (!qwenResponse.ok) {
+      const errorText = await qwenResponse.text();
+      console.error("Qwen API error:", qwenResponse.status, errorText);
+      
+      if (qwenResponse.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Rate limits exceeded, please try again later." }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      return new Response(
+        JSON.stringify({ error: "Failed to process image with Qwen OCR" }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const qwenData = await qwenResponse.json();
+    const qwenContent = qwenData.choices?.[0]?.message?.content;
+
+    if (!qwenContent) {
+      console.error("No content in Qwen response");
+      return new Response(
+        JSON.stringify({ medicines: [], message: "Qwen OCR could not extract any text from the image" }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log("Qwen raw response:", qwenContent.substring(0, 500) + "...");
+
+    // Parse Qwen's JSON response
+    let qwenMedicines = [];
+    try {
+      let cleanedContent = qwenContent.trim();
+      if (cleanedContent.startsWith('```json')) {
+        cleanedContent = cleanedContent.slice(7);
+      } else if (cleanedContent.startsWith('```')) {
+        cleanedContent = cleanedContent.slice(3);
+      }
+      if (cleanedContent.endsWith('```')) {
+        cleanedContent = cleanedContent.slice(0, -3);
+      }
+      cleanedContent = cleanedContent.trim();
+
+      qwenMedicines = JSON.parse(cleanedContent);
+      
+      if (!Array.isArray(qwenMedicines)) {
+        qwenMedicines = [qwenMedicines];
+      }
+    } catch (parseError) {
+      console.error("Failed to parse Qwen response as JSON:", parseError);
+      console.error("Raw content:", qwenContent);
+      // Continue with empty array, Gemini will try to help
+      qwenMedicines = [];
+    }
+
+    console.log("Qwen extracted medicines:", qwenMedicines.length);
+
+    // Step 2: Validate with Gemini 3 Flash + thinking_level: medium
+    console.log("Step 2: Validating with Gemini 3 Flash (thinking_level: medium)...");
+
+    const validationPrompt = `You are an EXPERT medical data validator with deep thinking capabilities.
+
+I will provide you with:
+1. The original prescription image
+2. A JSON extraction from another AI (Qwen)
+
+Your task:
+1. Look at the original prescription image carefully
+2. Compare it with the JSON extraction provided
+3. Validate each medicine name, dosage, and instructions
+4. Correct any errors or hallucinations from the first extraction
+5. If a medicine name is unclear in the image, set accurate: false and add a warning
+
+CRITICAL VALIDATION RULES:
+- Cross-reference medicine names with the actual image
+- Check if dosage/frequency matches what's written
+- Flag any discrepancies between the image and the JSON
+- If Qwen hallucinated a medicine not in the image, remove it
+- If Qwen missed a medicine in the image, add it
+
+Return the VALIDATED JSON array with this structure:
+[
+  {
+    "name": "Medicine Name",
+    "strength": "500mg or unknown",
+    "type": "tablet|capsule|syrup|injection|cream|drops|inhaler|other",
+    "dosage": "1-0-1 or twice daily",
+    "frequency": "after meals|before meals|with meals|as needed",
+    "duration": "7 days or as prescribed",
+    "accurate": true,
+    "warning": null
+  }
+]
+
+ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
+
     const geminiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -223,16 +209,26 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
+        thinking_level: 'medium',
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Here is the raw OCR text from the prescription:\n\n${rawText}` }
+          { role: 'system', content: validationPrompt },
+          {
+            role: 'user',
+            content: [
+              { 
+                type: 'text', 
+                text: `Here is Qwen's extraction:\n\n${JSON.stringify(qwenMedicines, null, 2)}\n\nPlease validate this against the original prescription image below:` 
+              },
+              { type: 'image_url', image_url: { url: imageUrl } },
+            ],
+          },
         ],
       }),
     });
 
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      console.error("Gemini API error:", geminiResponse.status, errorText);
+      console.error("Gemini validation API error:", geminiResponse.status, errorText);
       
       if (geminiResponse.status === 429) {
         return new Response(
@@ -248,30 +244,40 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
         );
       }
       
+      // If Gemini fails, return Qwen's results as fallback
+      console.log("Gemini validation failed, returning Qwen results as fallback");
       return new Response(
-        JSON.stringify({ error: "Failed to process with AI" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const geminiData = await geminiResponse.json();
-    const aiContent = geminiData.choices?.[0]?.message?.content;
-
-    if (!aiContent) {
-      console.error("No content in Gemini response");
-      return new Response(
-        JSON.stringify({ medicines: [], message: "AI could not extract medicine information" }),
+        JSON.stringify({ 
+          medicines: qwenMedicines, 
+          validated: false,
+          success: true 
+        }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log("Gemini raw response:", aiContent);
+    const geminiData = await geminiResponse.json();
+    const geminiContent = geminiData.choices?.[0]?.message?.content;
 
-    // Parse the JSON response
-    let medicines = [];
+    if (!geminiContent) {
+      console.error("No content in Gemini validation response");
+      // Return Qwen's results as fallback
+      return new Response(
+        JSON.stringify({ 
+          medicines: qwenMedicines, 
+          validated: false,
+          success: true 
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log("Gemini validation response:", geminiContent.substring(0, 500) + "...");
+
+    // Parse the validated JSON response
+    let validatedMedicines = [];
     try {
-      // Clean up the response - remove markdown code blocks if present
-      let cleanedContent = aiContent.trim();
+      let cleanedContent = geminiContent.trim();
       if (cleanedContent.startsWith('```json')) {
         cleanedContent = cleanedContent.slice(7);
       } else if (cleanedContent.startsWith('```')) {
@@ -282,30 +288,24 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
       }
       cleanedContent = cleanedContent.trim();
 
-      medicines = JSON.parse(cleanedContent);
+      validatedMedicines = JSON.parse(cleanedContent);
       
-      if (!Array.isArray(medicines)) {
-        medicines = [medicines];
+      if (!Array.isArray(validatedMedicines)) {
+        validatedMedicines = [validatedMedicines];
       }
     } catch (parseError) {
-      console.error("Failed to parse Gemini response:", parseError);
-      console.error("Raw content:", aiContent);
-      return new Response(
-        JSON.stringify({ 
-          medicines: [], 
-          message: "Failed to parse medicine data. Please try again or add manually.",
-          rawText: rawText
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      console.error("Failed to parse Gemini validation response:", parseError);
+      console.error("Raw content:", geminiContent);
+      // Use Qwen's results as fallback
+      validatedMedicines = qwenMedicines;
     }
 
-    console.log("Successfully extracted medicines:", medicines.length);
+    console.log("Successfully validated medicines:", validatedMedicines.length);
 
     return new Response(
       JSON.stringify({ 
-        medicines, 
-        rawText,
+        medicines: validatedMedicines, 
+        validated: true,
         success: true 
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
