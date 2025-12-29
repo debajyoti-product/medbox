@@ -90,7 +90,7 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
         'X-Title': 'MedBox Prescription Scanner',
       },
       body: JSON.stringify({
-        model: 'qwen/qwen-2.5-vl-72b-instruct',
+        model: 'qwen/qwen2.5-vl-7b-instruct',
         messages: [
           { role: 'system', content: ocrSystemPrompt },
           {
