@@ -90,7 +90,7 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
         'X-Title': 'MedBox Prescription Scanner',
       },
       body: JSON.stringify({
-        model: 'qwen/qwen2.5-vl-7b-instruct',
+        model: 'qwen/qwen2.5-vl-72b-instruct',
         messages: [
           { role: 'system', content: ocrSystemPrompt },
           {
@@ -115,10 +115,14 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
         );
       }
       
-      return new Response(
-        JSON.stringify({ error: "Failed to process image with Qwen OCR" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+       return new Response(
+         JSON.stringify({ 
+           error: "Failed to process image with Qwen OCR",
+           details: errorText,
+           status: qwenResponse.status,
+         }),
+         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+       );
     }
 
     const qwenData = await qwenResponse.json();
