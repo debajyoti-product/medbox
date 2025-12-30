@@ -1,10 +1,10 @@
 project_id = "zsgoghaxldhsedbexkap"
 
 [functions.import-medicines]
-verify_jwt = false
+verify_jwt = true
 
 [functions.process-prescription]
-verify_jwt = false
+verify_jwt = true
 
 [functions.process-prescription-v2]
-verify_jwt = false
+verify_jwt = true
