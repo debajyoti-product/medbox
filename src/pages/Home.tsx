@@ -39,23 +39,90 @@ const Home = () => {
     setIsProcessing(true);
     
     try {
-      const response = await supabase.functions.invoke('process-prescription-v2', {
-        body: { imageBase64: imageData }
+      // Direct call to Groq API to bypass Supabase Edge Function deployment issues
+      const groqKey = import.meta.env.VITE_GROQ_API_KEY;
+      
+      if (!groqKey) {
+        throw new Error("VITE_GROQ_API_KEY is not set in your .env file.");
+      }
+      
+      const ensureDataUrl = (base64OrDataUrl: string) => {
+        if (base64OrDataUrl.startsWith('data:')) return base64OrDataUrl;
+        return `data:image/jpeg;base64,${base64OrDataUrl}`;
+      };
+
+      const imageUrl = ensureDataUrl(imageData);
+      const ocrSystemPrompt = `You are an EXPERT medical data validator. I will provide you with a medical prescription image.
+
+Your goal:
+1. Extract ALL readable text from this prescription image.
+2. Map the messy OCR text to real-world pharmaceutical names.
+3. Extract dosage instructions (e.g., '1-0-1' or 'twice daily').
+4. Format as JSON
+5. CRITICAL: If a drug name looks like a dangerous misspelling or the text is too garbled to be at least 90% sure, set the accurate flag to false & append a warning.
+
+Return a JSON array of medicines with this exact structure:
+[
+  {
+    "name": "Medicine Name",
+    "strength": "500mg or unknown",
+    "type": "tablet|capsule|syrup|injection|cream|drops|inhaler|other",
+    "dosage": "1-0-1 or twice daily",
+    "frequency": "after meals|before meals|with meals|as needed",
+    "duration": "7 days or as prescribed",
+    "accurate": true,
+    "warning": null
+  }
+]
+
+ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
+
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${groqKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'qwen/qwen3.6-27b',
+          messages: [
+            { role: 'system', content: ocrSystemPrompt },
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: 'Extract medicine information from this prescription image.' },
+                { type: 'image_url', image_url: { url: imageUrl } },
+              ],
+            },
+          ],
+          temperature: 0.1,
+        }),
       });
 
-      if (response.error) {
-        throw new Error(response.error.message || 'Failed to process image');
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Groq API error: ${response.status} ${errorText}`);
       }
 
-      const { medicines, error } = response.data;
+      const groqData = await response.json();
+      const content = groqData.choices?.[0]?.message?.content;
+      
+      if (!content) {
+        throw new Error("No content received from Groq");
+      }
 
-      if (error) {
-        toast({
-          title: "Processing Error",
-          description: error,
-          variant: "destructive",
-        });
-        return;
+      let medicines = [];
+      try {
+        let cleanedContent = content.trim();
+        if (cleanedContent.startsWith('```json')) cleanedContent = cleanedContent.slice(7);
+        else if (cleanedContent.startsWith('```')) cleanedContent = cleanedContent.slice(3);
+        if (cleanedContent.endsWith('```')) cleanedContent = cleanedContent.slice(0, -3);
+        cleanedContent = cleanedContent.trim();
+        medicines = JSON.parse(cleanedContent);
+        if (!Array.isArray(medicines)) medicines = [medicines];
+      } catch (e) {
+        console.error("Parse error:", e);
+        throw new Error("Failed to parse OCR response");
       }
 
       if (!medicines || medicines.length === 0) {
@@ -73,7 +140,7 @@ const Home = () => {
       console.error("Error processing prescription:", error);
       toast({
         title: "Error",
-        description: "Failed to process prescription. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to process prescription.",
         variant: "destructive",
       });
     } finally {
