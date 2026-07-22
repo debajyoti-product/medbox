@@ -37,12 +37,6 @@ const Home = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
   useEffect(() => {
-    if (!loading && !user) {
-      navigate("/signup");
-    }
-  }, [user, loading, navigate]);
-
-  useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
         const {

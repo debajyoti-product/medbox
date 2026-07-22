@@ -31,7 +31,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Welcome />} />
+              <Route path="/" element={<Home />} />
               <Route path="/signup" element={<PhoneSignup />} />
               <Route path="/verify-otp" element={<VerifyOTP />} />
               <Route path="/name-entry" element={<NameEntry />} />

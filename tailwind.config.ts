@@ -15,8 +15,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Libre Caslon Text', 'Georgia', 'serif'],
-        stylish: ['Allura', 'cursive'],
+        sans: ['Inter', 'sans-serif'],
+        stylish: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
