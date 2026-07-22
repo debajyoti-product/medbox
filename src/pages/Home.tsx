@@ -111,14 +111,26 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
       let medicines = [];
       try {
         let cleanedContent = content.trim();
-        if (cleanedContent.startsWith('```json')) cleanedContent = cleanedContent.slice(7);
-        else if (cleanedContent.startsWith('```')) cleanedContent = cleanedContent.slice(3);
-        if (cleanedContent.endsWith('```')) cleanedContent = cleanedContent.slice(0, -3);
-        cleanedContent = cleanedContent.trim();
+        
+        // Remove <think> tags if the model outputs reasoning
+        cleanedContent = cleanedContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+        
+        // Try to extract a JSON array directly to avoid markdown formatting issues
+        const jsonMatch = cleanedContent.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          cleanedContent = jsonMatch[0];
+        } else {
+          if (cleanedContent.startsWith('```json')) cleanedContent = cleanedContent.slice(7);
+          else if (cleanedContent.startsWith('```')) cleanedContent = cleanedContent.slice(3);
+          if (cleanedContent.endsWith('```')) cleanedContent = cleanedContent.slice(0, -3);
+          cleanedContent = cleanedContent.trim();
+        }
+        
         medicines = JSON.parse(cleanedContent);
         if (!Array.isArray(medicines)) medicines = [medicines];
       } catch (e) {
         console.error("Parse error:", e);
+        console.error("Raw content from Groq:", content);
         throw new Error("Failed to parse OCR response");
       }
 
