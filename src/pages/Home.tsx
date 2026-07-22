@@ -93,6 +93,7 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
             },
           ],
           temperature: 0.1,
+          thinking: { type: 'disabled' },
         }),
       });
 
@@ -112,26 +113,41 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
       try {
         let cleanedContent = content.trim();
         
-        // Remove <think> tags if the model outputs reasoning
-        cleanedContent = cleanedContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+        // Remove <think>...</think> reasoning blocks
+        cleanedContent = cleanedContent.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
         
-        // Try to extract a JSON array directly to avoid markdown formatting issues
-        const jsonMatch = cleanedContent.match(/\[[\s\S]*\]/);
-        if (jsonMatch) {
-          cleanedContent = jsonMatch[0];
+        // Strategy 1: extract JSON array between [ and ]
+        const arrayMatch = cleanedContent.match(/\[\s*\{[\s\S]*\}\s*\]/);
+        if (arrayMatch) {
+          cleanedContent = arrayMatch[0];
         } else {
-          if (cleanedContent.startsWith('```json')) cleanedContent = cleanedContent.slice(7);
-          else if (cleanedContent.startsWith('```')) cleanedContent = cleanedContent.slice(3);
-          if (cleanedContent.endsWith('```')) cleanedContent = cleanedContent.slice(0, -3);
-          cleanedContent = cleanedContent.trim();
+          // Strategy 2: strip markdown code fences
+          cleanedContent = cleanedContent
+            .replace(/^```json\s*/i, '')
+            .replace(/^```\s*/i, '')
+            .replace(/\s*```$/i, '')
+            .trim();
+          // Strategy 3: extract from first [ to last ]
+          const start = cleanedContent.indexOf('[');
+          const end = cleanedContent.lastIndexOf(']');
+          if (start !== -1 && end !== -1 && end > start) {
+            cleanedContent = cleanedContent.slice(start, end + 1);
+          }
         }
         
         medicines = JSON.parse(cleanedContent);
         if (!Array.isArray(medicines)) medicines = [medicines];
       } catch (e) {
         console.error("Parse error:", e);
-        console.error("Raw content from Groq:", content);
-        throw new Error("Failed to parse OCR response");
+        console.error("Raw content from Groq:", content?.substring(0, 500));
+        // Instead of throwing, navigate to add-medicine as fallback
+        toast({
+          title: "Could not read prescription",
+          description: "Please add medicines manually.",
+          variant: "destructive",
+        });
+        navigate("/add-medicine");
+        return;
       }
 
       if (!medicines || medicines.length === 0) {
