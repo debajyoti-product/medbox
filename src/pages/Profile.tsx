@@ -14,11 +14,7 @@ const Profile = () => {
   const [userName, setUserName] = useState("User");
   const [userPhone, setUserPhone] = useState("");
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/signup");
-    }
-  }, [user, loading, navigate]);
+
 
   useEffect(() => {
     const fetchProfile = async () => {

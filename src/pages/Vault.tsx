@@ -27,11 +27,7 @@ const Vault = () => {
   const { user, loading: authLoading } = useAuth();
   const { medicines, loading: medicinesLoading } = useMedicines();
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/signup");
-    }
-  }, [user, authLoading, navigate]);
+
 
   const loading = authLoading || medicinesLoading;
 

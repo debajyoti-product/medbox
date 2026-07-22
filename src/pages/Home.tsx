@@ -162,7 +162,7 @@ const Home = () => {
         </div>
       </div>
       
-      <BottomNav onCameraClick={() => setIsCameraOpen(true)} />
+      <BottomNav />
       
       <CameraCapture 
         isOpen={isCameraOpen} 

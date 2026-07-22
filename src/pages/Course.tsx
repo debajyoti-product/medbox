@@ -39,11 +39,7 @@ const Course = () => {
   const { medicines, loading: medicinesLoading } = useMedicines();
   const [courseFilter, setCourseFilter] = useState("active");
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/signup");
-    }
-  }, [user, authLoading, navigate]);
+
 
   const calculateProgress = (medicine: Medicine) => {
     const elapsed = calculateDaysElapsed(medicine.startDate);
