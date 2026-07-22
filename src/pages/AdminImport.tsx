@@ -1,3 +1,5 @@
+// TODO: BLOCKER - This route is currently reachable by ANY authenticated user.
+// DO NOT ship to production without implementing Role-Based Access Control (RBAC) to restrict this to admins only.
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";

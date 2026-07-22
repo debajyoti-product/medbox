@@ -1,3 +1,5 @@
+// TODO: BLOCKER - This function is currently reachable by ANY authenticated user.
+// DO NOT ship to production without implementing Role-Based Access Control (RBAC) to restrict this to admins only.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
