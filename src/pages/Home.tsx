@@ -1,4 +1,4 @@
-import { Bell, Search, Sun, Moon, Camera, Loader2, FileText } from "lucide-react";
+import { Bell, Camera, Loader2, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
@@ -8,21 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import medboxLogo from "@/assets/medbox-logo-new.png";
-const getGreeting = () => {
-  const hour = new Date().getHours();
-  if (hour < 12) return {
-    text: "Good Morning",
-    icon: Sun
-  };
-  if (hour < 17) return {
-    text: "Good Afternoon",
-    icon: Sun
-  };
-  return {
-    text: "Good Evening",
-    icon: Moon
-  };
-};
 const Home = () => {
   const navigate = useNavigate();
   const {
@@ -119,8 +104,6 @@ const Home = () => {
         <p className="text-muted-foreground">Loading...</p>
       </div>;
   }
-  const greeting = getGreeting();
-  const GreetingIcon = greeting.icon;
   return <div className="h-screen bg-gradient-to-b from-background via-background to-card pb-32 overflow-hidden fixed inset-0">
       <div className="max-w-2xl mx-auto p-6 h-full animate-fade-in flex flex-col pt-6">
         <div className="w-full space-y-4">
@@ -128,7 +111,7 @@ const Home = () => {
             <img src={medboxLogo} alt="MedBox Logo" className="w-16 h-16 object-contain" />
             <div className="flex items-center gap-3">
               <button onClick={() => navigate("/language")} className="flex items-center gap-2 px-4 py-2 rounded-full bg-card hover:bg-secondary transition-colors">
-                <span className="text-sm font-medium text-foreground font-caslon">{t("currentLanguage")}</span>
+                <span className="text-sm font-medium text-foreground font-sans">{t("currentLanguage")}</span>
                 <span className="text-muted-foreground">›</span>
               </button>
               <button className="w-10 h-10 rounded-full bg-card flex items-center justify-center hover:bg-secondary transition-colors">
@@ -137,71 +120,44 @@ const Home = () => {
             </div>
           </div>
           
-          <div className="text-left">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-foreground">{greeting.text}</span>
-              <GreetingIcon className="w-4 h-4 text-foreground" />
-            </div>
-            <h1 className="text-2xl font-semibold text-foreground capitalize">
-              {userName}
-            </h1>
-          </div>
         </div>
 
         {/* Prescription section */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-4">
-          {/* Header with lines */}
-          <div className="flex items-center gap-4 w-full max-w-xs">
-            <div className="flex-1 h-px bg-border/60" />
-            <span className="text-muted-foreground text-xs font-medium">Add Your Prescription</span>
-            <div className="flex-1 h-px bg-border/60" />
+        <div className="flex-1 flex flex-col items-start justify-center gap-6 w-full mt-8">
+          <h2 className="text-2xl font-bold text-foreground">
+            Add Your Prescription
+          </h2>
+
+          {/* Primary Option: Camera (Large Rectangle) */}
+          <div className="w-full relative">
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-primary/20 blur-xl opacity-60" />
+            <button 
+              onClick={() => setIsCameraOpen(true)}
+              className="relative w-full aspect-[4/3] max-h-64 rounded-3xl flex flex-col items-center justify-center gap-5 transition-all active:scale-[0.98] bg-white border border-border shadow-sm hover:shadow-md"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+                <Camera className="w-8 h-8 text-white" />
+              </div>
+              <span className="text-foreground font-semibold text-lg">Take Photo</span>
+            </button>
           </div>
 
-          {/* Two option boxes */}
-          <div className="w-full max-w-xs flex gap-3">
-            {/* Camera option */}
-            <div className="flex-1 relative">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
-              <button 
-                onClick={() => setIsCameraOpen(true)}
-                className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.06)]"
-              >
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
-                  <Camera className="w-5 h-5 text-white" />
+          {/* Secondary Option: Upload (Horizontal Bar) */}
+          <div className="w-full mt-2">
+            <label className="relative w-full py-4 px-6 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] bg-white border border-border shadow-sm cursor-pointer hover:bg-secondary/50">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-foreground" />
                 </div>
-                <span className="text-muted-foreground font-medium text-xs text-center px-2">Take Photo</span>
-              </button>
-            </div>
-
-            {/* File option */}
-            <div className="flex-1 relative">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl opacity-60" />
-              <label className="relative w-full py-6 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98] bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.06)] cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-400 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_2px_8px_0_rgba(236,72,153,0.4)]">
-                  <FileText className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-muted-foreground font-medium text-xs text-center px-2">Upload File</span>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="hidden" 
-                  onChange={handleGallerySelect}
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Separator with "or" */}
-          <div className="flex items-center gap-4 w-full max-w-xs">
-            <div className="flex-1 h-px bg-border/60" />
-            <span className="text-muted-foreground/50 text-xs">or</span>
-            <div className="flex-1 h-px bg-border/60" />
-          </div>
-
-          {/* Search bar */}
-          <div onClick={() => navigate("/search")} className="w-full max-w-xs flex items-center gap-3 px-4 py-3 h-12 bg-background rounded-full cursor-pointer hover:bg-background/80 transition-all border border-border shadow-sm">
-            <Search className="w-5 h-5 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Search Your Medicines Here</span>
+                <span className="text-foreground font-medium text-base">Upload File</span>
+              </div>
+              <input 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                onChange={handleGallerySelect}
+              />
+            </label>
           </div>
         </div>
       </div>
