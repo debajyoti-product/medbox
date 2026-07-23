@@ -1,4 +1,4 @@
-import { Bell, Camera, Loader2, FileText } from "lucide-react";
+import { Bell, Camera, Loader2, FileText, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
@@ -233,22 +233,17 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
             </button>
           </div>
 
-          {/* Secondary Option: Upload (Horizontal Bar) */}
+          {/* Secondary Option: Search (Horizontal Bar) */}
           <div className="w-full mt-2">
-            <label className="relative w-full py-4 px-6 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] bg-white border border-border shadow-sm cursor-pointer hover:bg-secondary/50">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-foreground" />
-                </div>
-                <span className="text-foreground font-medium text-base">Upload File</span>
+            <div 
+              onClick={() => navigate("/search")}
+              className="relative w-full py-4 px-6 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98] bg-white border border-border shadow-sm cursor-pointer hover:bg-secondary/50"
+            >
+              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+                <Search className="w-5 h-5 text-foreground" />
               </div>
-              <input 
-                type="file" 
-                accept="image/*" 
-                className="hidden" 
-                onChange={handleGallerySelect}
-              />
-            </label>
+              <span className="text-foreground font-medium text-base">Search Medicines</span>
+            </div>
           </div>
         </div>
       </div>
