@@ -93,7 +93,6 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
             },
           ],
           temperature: 0.1,
-          thinking: { type: 'disabled' },
         }),
       });
 
