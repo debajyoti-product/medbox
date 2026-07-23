@@ -233,16 +233,14 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
             </button>
           </div>
 
-          {/* Secondary Option: Search (Horizontal Bar) */}
+          {/* Secondary Option: Search */}
           <div className="w-full mt-2">
             <div 
               onClick={() => navigate("/search")}
-              className="relative w-full py-4 px-6 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98] bg-white border border-border shadow-sm cursor-pointer hover:bg-secondary/50"
+              className="relative w-full py-4 px-6 rounded-full flex items-center gap-3 transition-all active:scale-[0.98] bg-white border border-border shadow-sm cursor-pointer hover:bg-secondary/50"
             >
-              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
-                <Search className="w-5 h-5 text-foreground" />
-              </div>
-              <span className="text-foreground font-medium text-base">Search Medicines</span>
+              <Search className="w-5 h-5 text-muted-foreground" />
+              <span className="text-muted-foreground font-medium text-base">Search medicines...</span>
             </div>
           </div>
         </div>
