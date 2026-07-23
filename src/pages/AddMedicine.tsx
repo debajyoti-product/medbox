@@ -54,12 +54,39 @@ const AddMedicine = () => {
   const [ailment, setAilment] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-  // Get preselected medicines from navigation state
-  const preselectedMedicines = (location.state as { preselectedMedicines?: { name: string; type: string }[] })?.preselectedMedicines;
+  const state = location.state as any;
+  const preselectedMedicines = state?.preselectedMedicines;
+  const existingDrafts = state?.existingDrafts;
+  const activeIndex = state?.activeIndex;
+  const newSelections = state?.newSelections;
 
   const [medicines, setMedicines] = useState<Medicine[]>(() => {
+    if (existingDrafts && newSelections) {
+      const drafts = [...existingDrafts];
+      let selectionIdx = 0;
+      
+      if (activeIndex !== undefined && newSelections.length > 0) {
+        drafts[activeIndex].name = newSelections[0].name;
+        drafts[activeIndex].type = newSelections[0].type;
+        selectionIdx++;
+      }
+      
+      while (selectionIdx < newSelections.length) {
+        drafts.push({
+          name: newSelections[selectionIdx].name,
+          type: newSelections[selectionIdx].type,
+          perServing: 1,
+          timesPerDay: 1,
+          days: 1,
+          selectedDays: [],
+        });
+        selectionIdx++;
+      }
+      return drafts.length > 0 ? drafts : existingDrafts;
+    }
+
     if (preselectedMedicines && preselectedMedicines.length > 0) {
-      return preselectedMedicines.map((m) => ({
+      return preselectedMedicines.map((m: any) => ({
         name: m.name,
         type: m.type,
         perServing: 1,
@@ -68,6 +95,7 @@ const AddMedicine = () => {
         selectedDays: [],
       }));
     }
+    
     return [
       {
         name: "",
@@ -239,7 +267,7 @@ const AddMedicine = () => {
                     placeholder="Medicine Name"
                     value={medicine.name}
                     onChange={(e) => updateMedicine(index, "name", e.target.value)}
-                    onClick={() => navigate("/search")}
+                    onClick={() => navigate("/search", { state: { existingDrafts: medicines, activeIndex: index } })}
                     readOnly
                     className="h-12 flex-1 bg-card border-border cursor-pointer"
                   />

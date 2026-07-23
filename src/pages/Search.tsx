@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Search as SearchIcon, ArrowLeft, Pill, CircleDot, Syringe, Droplets, Check, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,7 @@ const getMedicineIcon = (type: string) => {
 
 const Search = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { medicines: existingMedicines } = useMedicines();
   const [searchQuery, setSearchQuery] = useState("");
@@ -167,7 +168,18 @@ const Search = () => {
   };
 
   const handleContinue = () => {
-    navigate("/add-medicine", { state: { preselectedMedicines: selectedMedicines } });
+    const state = location.state as any;
+    const existingDrafts = state?.existingDrafts;
+    const activeIndex = state?.activeIndex;
+    
+    navigate("/add-medicine", { 
+      state: { 
+        preselectedMedicines: selectedMedicines,
+        existingDrafts,
+        activeIndex,
+        newSelections: selectedMedicines
+      } 
+    });
   };
 
   if (authLoading) {
