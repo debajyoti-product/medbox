@@ -54,6 +54,7 @@ const AddMedicine = () => {
   const [ailment, setAilment] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const state = location.state as any;
   const preselectedMedicines = state?.preselectedMedicines;
   const existingDrafts = state?.existingDrafts;
@@ -86,6 +87,7 @@ const AddMedicine = () => {
     }
 
     if (preselectedMedicines && preselectedMedicines.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return preselectedMedicines.map((m: any) => ({
         name: m.name,
         type: m.type,

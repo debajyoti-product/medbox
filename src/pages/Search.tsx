@@ -168,6 +168,7 @@ const Search = () => {
   };
 
   const handleContinue = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const state = location.state as any;
     const existingDrafts = state?.existingDrafts;
     const activeIndex = state?.activeIndex;
