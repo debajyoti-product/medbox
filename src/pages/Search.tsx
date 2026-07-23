@@ -80,9 +80,7 @@ const Search = () => {
   }>({ open: false, medicine: null, matchedName: "" });
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/signup");
-    }
+    // Auth redirect disabled for preview
   }, [user, authLoading, navigate]);
 
   useEffect(() => {

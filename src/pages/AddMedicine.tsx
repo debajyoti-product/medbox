@@ -84,9 +84,7 @@ const AddMedicine = () => {
   const [selectedMedicineIndex, setSelectedMedicineIndex] = useState(0);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/signup");
-    }
+    // Auth redirect disabled for preview
   }, [user, authLoading, navigate]);
 
   const addMedicine = () => {
