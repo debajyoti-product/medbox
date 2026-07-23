@@ -238,9 +238,9 @@ const DayPickerDialog = ({
                     ${!isCurrentMonth ? 'opacity-30 cursor-not-allowed' : ''}
                     ${isPast && isCurrentMonth ? 'opacity-40 cursor-not-allowed' : ''}
                     ${isSelected 
-                      ? "bg-[hsl(20,25%,25%)] text-white" 
+                      ? "bg-primary text-primary-foreground" 
                       : isTodayDate && isCurrentMonth
-                        ? "ring-2 ring-[hsl(20,25%,25%)] text-foreground"
+                        ? "ring-2 ring-primary text-foreground"
                         : "text-foreground"
                     }
                   `}

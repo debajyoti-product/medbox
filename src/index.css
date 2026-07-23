@@ -17,8 +17,8 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 15%;
 
-    /* Airbnb-style vibrant red/orange */
-    --primary: 350 89% 60%;
+    /* Orange and Red Palette */
+    --primary: 24 100% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 96%;
@@ -27,7 +27,7 @@ All colors MUST be HSL.
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 15 90% 60%;
+    --accent: 0 84% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -40,9 +40,9 @@ All colors MUST be HSL.
     --radius: 1.25rem;
 
     /* Gradient colors - orange to red */
-    --gradient-start: 15 95% 55%;
-    --gradient-mid: 350 89% 60%;
-    --gradient-end: 335 85% 55%;
+    --gradient-start: 24 100% 55%;
+    --gradient-mid: 12 95% 58%;
+    --gradient-end: 0 84% 60%;
 
     /* Glassmorphism / Liquid Glass */
     --glass-bg: 0 0% 100%;
@@ -71,7 +71,7 @@ All colors MUST be HSL.
     --popover: 0 0% 8%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 350 89% 60%;
+    --primary: 24 100% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 15%;
@@ -80,7 +80,7 @@ All colors MUST be HSL.
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 15 90% 60%;
+    --accent: 0 84% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 63% 31%;
@@ -90,9 +90,9 @@ All colors MUST be HSL.
     --input: 0 0% 20%;
     --ring: 350 89% 60%;
     
-    --gradient-start: 15 95% 55%;
-    --gradient-mid: 350 89% 60%;
-    --gradient-end: 335 85% 55%;
+    --gradient-start: 24 100% 55%;
+    --gradient-mid: 12 95% 58%;
+    --gradient-end: 0 84% 60%;
     
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 98%;

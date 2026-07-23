@@ -264,7 +264,7 @@ const AddMedicine = () => {
                   <div className="flex items-center gap-3 flex-1">
                     <button
                       onClick={() => adjustValue(index, "perServing", false)}
-                      className="w-8 h-8 rounded-full bg-[hsl(20,25%,25%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                      className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white hover:opacity-90 shrink-0"
                     >
                       <span className="text-lg font-medium">−</span>
                     </button>
@@ -285,7 +285,7 @@ const AddMedicine = () => {
                     />
                     <button
                       onClick={() => adjustValue(index, "perServing", true)}
-                      className="w-8 h-8 rounded-full bg-[hsl(20,25%,25%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                      className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white hover:opacity-90 shrink-0"
                     >
                       <span className="text-lg font-medium">+</span>
                     </button>
@@ -297,7 +297,7 @@ const AddMedicine = () => {
                   <div className="flex items-center gap-3 flex-1">
                     <button
                       onClick={() => adjustValue(index, "timesPerDay", false)}
-                      className="w-8 h-8 rounded-full bg-[hsl(20,25%,25%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                      className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white hover:opacity-90 shrink-0"
                     >
                       <span className="text-lg font-medium">−</span>
                     </button>
@@ -318,7 +318,7 @@ const AddMedicine = () => {
                     />
                     <button
                       onClick={() => adjustValue(index, "timesPerDay", true)}
-                      className="w-8 h-8 rounded-full bg-[hsl(20,25%,25%)] flex items-center justify-center text-white hover:opacity-90 shrink-0"
+                      className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white hover:opacity-90 shrink-0"
                     >
                       <span className="text-lg font-medium">+</span>
                     </button>
@@ -360,7 +360,7 @@ const AddMedicine = () => {
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => openTimePicker(index)}
-                        className="px-3 py-2 rounded-full text-xs font-medium bg-[hsl(20,25%,25%)] text-white hover:opacity-90 transition-all"
+                        className="px-3 py-2 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all"
                       >
                         {formatTime(medicine.scheduleTime)}
                       </button>

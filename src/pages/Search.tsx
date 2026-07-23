@@ -240,7 +240,7 @@ const Search = () => {
                   }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                     selected
-                      ? "bg-[hsl(20,25%,25%)] text-white"
+                      ? "bg-primary text-primary-foreground"
                       : "bg-card text-foreground"
                   }`}
                   style={
@@ -312,7 +312,7 @@ const Search = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-row gap-3">
-            <AlertDialogCancel className="flex-1 m-0 bg-[hsl(20,25%,25%)] text-white hover:bg-[hsl(20,25%,30%)]">
+            <AlertDialogCancel className="flex-1 m-0 bg-primary text-primary-foreground hover:bg-primary/90">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
