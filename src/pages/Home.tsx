@@ -214,27 +214,37 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
         </div>
 
         {/* Prescription section */}
-        <div className="flex-1 flex flex-col items-start justify-center gap-6 w-full mt-8">
-          <h2 className="text-2xl font-bold text-foreground">
-            Add Your Prescription
-          </h2>
+        <div className="flex-1 flex flex-col justify-center w-full mt-4">
+          
+          <div className="w-full space-y-6 mb-12">
+            <h2 className="text-2xl font-bold text-foreground">
+              Add Your Prescription
+            </h2>
 
-          {/* Primary Option: Camera (Large Rectangle) */}
-          <div className="w-full relative">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-primary/20 blur-xl opacity-60" />
-            <button 
-              onClick={() => setIsCameraOpen(true)}
-              className="relative w-full aspect-[4/3] max-h-64 rounded-3xl flex flex-col items-center justify-center gap-5 transition-all active:scale-[0.98] bg-white border border-border shadow-sm hover:shadow-md"
-            >
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
-                <Camera className="w-8 h-8 text-white" />
-              </div>
-              <span className="text-foreground font-semibold text-lg">Take Photo</span>
-            </button>
+            {/* Primary Option: Camera (Large Rectangle) */}
+            <div className="w-full relative">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-primary/20 blur-xl opacity-60" />
+              <button 
+                onClick={() => setIsCameraOpen(true)}
+                className="relative w-full aspect-[4/3] max-h-64 rounded-3xl flex flex-col items-center justify-center gap-5 transition-all active:scale-[0.98] bg-white border border-border shadow-sm hover:shadow-md"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Camera className="w-8 h-8 text-white" />
+                </div>
+                <span className="text-foreground font-semibold text-lg">Take Photo</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Separator with "or" */}
+          <div className="flex items-center gap-4 w-full mb-6 px-4">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-muted-foreground/60 font-medium text-sm">or</span>
+            <div className="flex-1 h-px bg-border" />
           </div>
 
           {/* Secondary Option: Search */}
-          <div className="w-full mt-2">
+          <div className="w-full">
             <div 
               onClick={() => navigate("/search")}
               className="relative w-full py-4 px-6 rounded-full flex items-center gap-3 transition-all active:scale-[0.98] bg-white border border-border shadow-sm cursor-pointer hover:bg-secondary/50"
