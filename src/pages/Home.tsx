@@ -7,7 +7,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import medboxLogo from "@/assets/medbox-logo-new.png";
+
 const Home = () => {
   const navigate = useNavigate();
   const {
@@ -199,7 +199,7 @@ ONLY return valid JSON. No markdown, no explanation, just the JSON array.`;
       <div className="max-w-2xl mx-auto p-6 h-full animate-fade-in flex flex-col pt-6">
         <div className="w-full space-y-4">
           <div className="w-full flex items-center justify-between">
-            <img src={medboxLogo} alt="MedBox Logo" className="w-16 h-16 object-contain" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent lowercase tracking-tight">medbox</span>
             <div className="flex items-center gap-3">
               <button onClick={() => navigate("/language")} className="flex items-center gap-2 px-4 py-2 rounded-full bg-card hover:bg-secondary transition-colors">
                 <span className="text-sm font-medium text-foreground font-sans">{t("currentLanguage")}</span>
